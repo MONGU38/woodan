@@ -24,13 +24,10 @@
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);color:var(--text);max-width:480px;margin:0 auto;min-height:100vh;position:relative;overflow-x:hidden;}
-
-/* ── SECTIONS ── */
 .section{display:none;min-height:100vh;padding-bottom:calc(68px + var(--safe-bottom));}
 .section.active{display:block;}
-
-/* ── SPLASH ── */
-#splashSection{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 32px;background:#fff;}
+#splashSection{display:none;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 32px;background:#fff;}
+#splashSection.active{display:flex;}
 .splash-logo{width:72px;height:72px;background:var(--orange);border-radius:22px;display:flex;align-items:center;justify-content:center;margin-bottom:20px;box-shadow:0 8px 24px rgba(255,107,53,0.3);}
 .splash-logo svg{width:38px;height:38px;fill:white;}
 .splash-title{font-size:28px;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-1px;}
@@ -40,9 +37,8 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .btn-primary:active{background:var(--orange-dark);}
 .btn-secondary{width:100%;background:white;color:var(--text);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;font-size:16px;font-weight:500;cursor:pointer;margin-top:10px;transition:background 0.15s;}
 .btn-secondary:active{background:var(--bg);}
-
-/* ── FORMS ── */
-#loginSection,#joinSection{display:flex;flex-direction:column;min-height:100vh;padding:0;background:#fff;}
+#loginSection,#joinSection{display:none;flex-direction:column;min-height:100vh;padding:0;background:#fff;}
+#loginSection.active,#joinSection.active{display:flex;}
 .form-header{padding:56px 24px 24px;border-bottom:1px solid var(--border);}
 .form-header h2{font-size:22px;font-weight:700;letter-spacing:-0.5px;}
 .form-header p{font-size:14px;color:var(--text2);margin-top:6px;}
@@ -56,8 +52,6 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .form-footer{padding:20px 24px calc(20px + var(--safe-bottom));border-top:1px solid var(--border);}
 .back-btn{background:none;border:none;font-size:15px;color:var(--text2);cursor:pointer;padding:8px 0;margin-bottom:12px;display:flex;align-items:center;gap:6px;}
 .back-btn::before{content:'←';}
-
-/* ── TOP BAR ── */
 .topbar{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid var(--border);padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;}
 .topbar-title{font-size:18px;font-weight:700;letter-spacing:-0.5px;}
 .topbar-logo{display:flex;align-items:center;gap:8px;}
@@ -65,24 +59,15 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .topbar-icon svg{width:16px;height:16px;fill:white;}
 .topbar-badge{background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;}
 .icon-btn{background:none;border:none;cursor:pointer;padding:6px;font-size:20px;display:flex;align-items:center;color:var(--text);}
-
-/* ── BOTTOM TAB ── */
 .tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:200;}
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0;border:none;background:none;cursor:pointer;gap:3px;transition:color 0.15s;}
 .tab-btn .tab-ico{font-size:22px;line-height:1;}
 .tab-btn .tab-lbl{font-size:10px;font-weight:500;color:var(--text3);}
 .tab-btn.active .tab-lbl{color:var(--orange);}
-.tab-btn.active .tab-ico{filter:drop-shadow(0 0 0px #FF6B35);}
-
-/* ── LIST ── */
 .list-section{padding:16px;}
-.section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
-.section-head h3{font-size:15px;font-weight:700;}
-.section-head a{font-size:13px;color:var(--orange);cursor:pointer;}
 .item-card{background:var(--card);border-radius:var(--radius);border:1px solid var(--border);padding:14px;display:flex;gap:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
 .item-card:active{border-color:var(--orange);}
 .item-thumb{width:80px;height:80px;border-radius:10px;background:var(--bg);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:32px;}
-.item-thumb img{width:100%;height:100%;object-fit:cover;}
 .item-info{flex:1;min-width:0;}
 .item-title{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;}
 .item-meta{font-size:12px;color:var(--text3);margin-bottom:6px;}
@@ -92,18 +77,12 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;}
 .badge.new{background:var(--orange-light);color:var(--orange);}
 .badge.done{background:#F0F0F0;color:var(--text3);}
-.badge.chat{background:#EEF6FF;color:#3B7DD8;}
-
-/* ── FAB ── */
 .fab{position:fixed;bottom:calc(76px + var(--safe-bottom));right:20px;width:52px;height:52px;background:var(--orange);border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(255,107,53,0.4);z-index:150;transition:transform 0.15s;}
 .fab:active{transform:scale(0.93);}
 .fab svg{width:24px;height:24px;fill:white;}
-
-/* ── WRITE FORM ── */
 #writeSection{background:#fff;}
 .write-body{padding:20px 24px;}
-.write-photo-area{border:2px dashed var(--border);border-radius:var(--radius);height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:20px;transition:border-color 0.15s;}
-.write-photo-area:active{border-color:var(--orange);}
+.write-photo-area{border:2px dashed var(--border);border-radius:var(--radius);height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;margin-bottom:20px;}
 .write-photo-area span{font-size:13px;color:var(--text3);}
 .write-input{width:100%;border:none;border-bottom:1.5px solid var(--border);padding:14px 0;font-size:16px;color:var(--text);outline:none;background:transparent;margin-bottom:4px;}
 .write-input:focus{border-bottom-color:var(--orange);}
@@ -118,8 +97,6 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .price-row input:focus{border-color:var(--orange);}
 .free-toggle{background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;}
 .free-toggle.on{border-color:var(--orange);color:var(--orange);background:var(--orange-light);}
-
-/* ── DETAIL ── */
 #detailSection{background:#fff;}
 .detail-img{width:100%;aspect-ratio:1;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:72px;}
 .detail-body{padding:20px 24px;}
@@ -134,11 +111,9 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .seller-name{font-size:15px;font-weight:600;}
 .seller-unit{font-size:13px;color:var(--text3);}
 .detail-actions{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);padding:12px 20px calc(12px + var(--safe-bottom));display:flex;gap:10px;}
-.btn-wish{border:1.5px solid var(--border);background:#fff;border-radius:12px;padding:14px 18px;font-size:20px;cursor:pointer;transition:border-color 0.15s;}
+.btn-wish{border:1.5px solid var(--border);background:#fff;border-radius:12px;padding:14px 18px;font-size:20px;cursor:pointer;}
 .btn-wish.on{border-color:#FF4757;color:#FF4757;}
 .btn-chat{flex:1;background:var(--orange);color:white;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;}
-
-/* ── CHAT LIST ── */
 .chat-item{display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid var(--border);cursor:pointer;background:#fff;}
 .chat-item:active{background:var(--bg);}
 .chat-avatar{width:48px;height:48px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--orange);flex-shrink:0;}
@@ -147,9 +122,6 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .chat-last{font-size:13px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .chat-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;}
 .chat-time{font-size:12px;color:var(--text3);}
-.chat-unread{background:var(--orange);color:white;font-size:11px;font-weight:700;border-radius:10px;padding:2px 7px;min-width:18px;text-align:center;}
-
-/* ── CHAT ROOM ── */
 #chatRoomSection{display:none;flex-direction:column;height:100vh;background:#F5F5F5;}
 #chatRoomSection.active{display:flex;}
 .chatroom-header{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
@@ -164,15 +136,12 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .msg-bubble{max-width:70%;padding:10px 14px;border-radius:18px;font-size:15px;line-height:1.5;}
 .msg-row.other .msg-bubble{background:#fff;border-bottom-left-radius:4px;}
 .msg-row.mine .msg-bubble{background:var(--orange);color:white;border-bottom-right-radius:4px;}
-.msg-name{font-size:12px;color:var(--text3);margin-bottom:3px;}
 .msg-time{font-size:11px;color:var(--text3);align-self:flex-end;flex-shrink:0;}
 .chat-input-bar{background:#fff;border-top:1px solid var(--border);padding:10px 12px calc(10px + var(--safe-bottom));display:flex;gap:8px;align-items:flex-end;flex-shrink:0;}
 .chat-input{flex:1;border:1.5px solid var(--border);border-radius:22px;padding:10px 16px;font-size:15px;outline:none;resize:none;max-height:120px;line-height:1.5;}
 .chat-input:focus{border-color:var(--orange);}
 .send-btn{width:40px;height:40px;background:var(--orange);border:none;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .send-btn svg{width:18px;height:18px;fill:white;}
-
-/* ── MYPAGE ── */
 .my-header{background:#fff;padding:32px 24px 24px;border-bottom:1px solid var(--border);}
 .my-avatar{width:64px;height:64px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;color:var(--orange);margin-bottom:12px;}
 .my-name{font-size:20px;font-weight:700;margin-bottom:4px;}
@@ -185,17 +154,11 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .menu-txt{flex:1;font-size:15px;font-weight:500;}
 .menu-arrow{color:var(--text3);font-size:14px;}
 .menu-section-title{font-size:12px;font-weight:700;color:var(--text3);padding:20px 24px 8px;letter-spacing:0.5px;}
-
-/* ── EMPTY ── */
 .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;}
 .empty-state .ico{font-size:48px;margin-bottom:16px;}
 .empty-state p{font-size:16px;color:var(--text2);line-height:1.6;}
-
-/* ── TOAST ── */
 .toast{position:fixed;bottom:calc(80px + var(--safe-bottom));left:50%;transform:translateX(-50%) translateY(20px);background:#1A1A1A;color:white;padding:12px 20px;border-radius:24px;font-size:14px;font-weight:500;z-index:9999;opacity:0;transition:all 0.3s;white-space:nowrap;pointer-events:none;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-
-/* ── COMMUNITY ── */
 .comm-item{background:#fff;border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin:0 16px 10px;cursor:pointer;}
 .comm-type{font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;display:inline-block;margin-bottom:8px;}
 .comm-type.notice{background:#FFF3CD;color:#856404;}
@@ -203,22 +166,17 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .comm-type.free{background:var(--orange-light);color:var(--orange);}
 .comm-title{font-size:15px;font-weight:600;margin-bottom:4px;}
 .comm-meta{font-size:12px;color:var(--text3);}
-
-/* ── LOADING ── */
-.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.85);display:flex;align-items:center;justify-content:center;z-index:9999;display:none;}
+.loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.85);display:none;align-items:center;justify-content:center;z-index:9999;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
-<!-- ════ SPLASH ════ -->
+<!-- SPLASH -->
 <div id="splashSection" class="active">
   <div class="splash-logo">
     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -229,21 +187,12 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <button class="btn-secondary" onclick="showSection('joinSection')">처음이에요 (회원가입)</button>
 </div>
 
-<!-- ════ LOGIN ════ -->
-<div id="loginSection" class="section">
-  <div class="form-header">
-    <h2>로그인</h2>
-    <p>별명과 비밀번호를 입력해주세요</p>
-  </div>
+<!-- LOGIN -->
+<div id="loginSection">
+  <div class="form-header"><h2>로그인</h2><p>별명과 비밀번호를 입력해주세요</p></div>
   <div class="form-body">
-    <div class="field">
-      <label>별명</label>
-      <input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>비밀번호 (숫자 4자리)</label>
-      <input type="text" inputmode="numeric" id="loginPw" placeholder="0000" maxlength="4" autocomplete="off">
-    </div>
+    <div class="field"><label>별명</label><input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off"></div>
+    <div class="field"><label>비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="loginPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
   </div>
   <div class="form-footer">
     <button class="back-btn" onclick="showSection('splashSection')">이전</button>
@@ -251,53 +200,29 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
 </div>
 
-<!-- ════ JOIN ════ -->
-<div id="joinSection" class="section">
-  <div class="form-header">
-    <h2>회원가입</h2>
-    <p>별명과 우리 단지를 선택해주세요</p>
-  </div>
+<!-- JOIN -->
+<div id="joinSection">
+  <div class="form-header"><h2>회원가입</h2><p>별명과 우리 단지를 선택해주세요</p></div>
   <div class="form-body">
+    <div class="field"><label>별명</label><input type="text" id="joinNick" placeholder="예: 하늘별 / 곰돌이" autocomplete="off" maxlength="10"></div>
+    <div class="field"><label>비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="joinPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
     <div class="field">
-      <label>별명</label>
-      <input type="text" id="joinNick" placeholder="예: 하늘별 / 곰돌이" autocomplete="off" maxlength="10">
+      <label>아파트 단지 검색</label>
+      <button type="button" onclick="openDanjiSearch()"
+        style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;font-size:16px;color:var(--text2);background:#fff;text-align:left;cursor:pointer;">
+        📍 주소로 단지 검색하기
+      </button>
     </div>
-    <div class="field">
-      <label>비밀번호 (숫자 4자리)</label>
-      <input type="text" inputmode="numeric" id="joinPw" placeholder="0000" maxlength="4" autocomplete="off">
-    </div>
-    <div class="field">
-      <label>시/도</label>
-      <select id="joinSido" onchange="loadSigungu()">
-        <option value="">선택</option>
-        <option>서울특별시</option><option>경기도</option><option>인천광역시</option>
-        <option>부산광역시</option><option>대구광역시</option><option>광주광역시</option>
-        <option>대전광역시</option><option>울산광역시</option><option>세종특별자치시</option>
-        <option>강원특별자치도</option><option>충청북도</option><option>충청남도</option>
-        <option>전북특별자치도</option><option>전라남도</option><option>경상북도</option>
-        <option>경상남도</option><option>제주특별자치도</option>
-      </select>
-    </div>
-    <div class="field-row">
-      <div class="field">
-        <label>시/군/구</label>
-        <select id="joinSigungu" onchange="loadDong()">
-          <option value="">선택</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>읍/면/동</label>
-        <select id="joinDong" onchange="loadDanji()">
-          <option value="">선택</option>
-        </select>
+    <div class="field" id="danjiSelectedField" style="display:none;">
+      <label>선택된 단지</label>
+      <div id="danjiSelectedBox"
+        style="border:1.5px solid var(--orange);border-radius:10px;padding:14px 16px;font-size:15px;color:var(--text);background:var(--orange-light);">
       </div>
     </div>
-    <div class="field">
-      <label>아파트 단지</label>
-      <select id="joinDanji">
-        <option value="">동까지 선택 후 나타납니다</option>
-      </select>
-    </div>
+    <input type="hidden" id="joinDanji">
+    <input type="hidden" id="joinSido">
+    <input type="hidden" id="joinSigungu">
+    <input type="hidden" id="joinDong">
   </div>
   <div class="form-footer">
     <button class="back-btn" onclick="showSection('splashSection')">이전</button>
@@ -305,31 +230,20 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
 </div>
 
-<!-- ════ MAIN (거래목록) ════ -->
+<!-- MAIN -->
 <div id="mainSection" class="section">
   <div class="topbar">
     <div class="topbar-logo">
-      <div class="topbar-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-      </div>
+      <div class="topbar-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
       <span class="topbar-title">우단앱</span>
     </div>
     <span class="topbar-badge" id="danjiLabel">단지 로딩중</span>
   </div>
-  <div class="list-section">
-    <div id="itemList">
-      <div class="empty-state">
-        <div class="ico">📦</div>
-        <p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p>
-      </div>
-    </div>
-  </div>
-  <button class="fab" onclick="showSection('writeSection')">
-    <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
-  </button>
+  <div class="list-section"><div id="itemList"><div class="empty-state"><div class="ico">📦</div><p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div></div></div>
+  <button class="fab" onclick="showSection('writeSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
 </div>
 
-<!-- ════ WRITE ════ -->
+<!-- WRITE -->
 <div id="writeSection" class="section">
   <div class="topbar">
     <button class="back-btn" style="margin:0" onclick="showSection('mainSection')">← 취소</button>
@@ -337,9 +251,10 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitItem()">등록</button>
   </div>
   <div class="write-body">
-    <div class="write-photo-area" onclick="showToast('사진 기능은 곧 추가돼요 📸')">
-      <span style="font-size:32px">📷</span>
-      <span>사진 추가 (최대 5장)</span>
+    <input type="file" id="photoInput" accept="image/*" multiple style="display:none;" onchange="addPhotos(this)">
+    <div id="photoPreviewArea" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;"></div>
+    <div class="write-photo-area" onclick="document.getElementById('photoInput').click()" id="photoAddBtn">
+      <span style="font-size:32px">📷</span><span>사진 추가 (최대 5장)</span>
     </div>
     <input class="write-input" id="writeTitle" placeholder="제목 (예: 아이패드 7세대 팔아요)" maxlength="40">
     <div class="write-label">카테고리</div>
@@ -357,11 +272,11 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
       <input type="text" inputmode="numeric" id="writePrice" placeholder="가격 입력" oninput="formatPrice(this)">
       <button class="free-toggle" id="freeToggle" onclick="toggleFree()">나눔</button>
     </div>
-    <textarea class="write-textarea" id="writeDesc" placeholder="물건 설명을 입력해주세요.&#10;상태, 구매 시기, 하자 여부 등을 알려주면 거래가 빨라져요." rows="5"></textarea>
+    <textarea class="write-textarea" id="writeDesc" placeholder="물건 설명을 입력해주세요." rows="5"></textarea>
   </div>
 </div>
 
-<!-- ════ DETAIL ════ -->
+<!-- DETAIL -->
 <div id="detailSection" class="section">
   <div class="topbar">
     <button class="icon-btn" onclick="showSection('mainSection')">←</button>
@@ -371,62 +286,37 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <div id="detailContent"></div>
 </div>
 
-<!-- ════ CHAT LIST ════ -->
+<!-- CHAT LIST -->
 <div id="chatSection" class="section">
-  <div class="topbar">
-    <div class="topbar-title">채팅</div>
-  </div>
-  <div id="chatList">
-    <div class="empty-state">
-      <div class="ico">💬</div>
-      <p>아직 채팅 내역이 없어요.<br>마음에 드는 물건에 채팅을 보내보세요.</p>
-    </div>
-  </div>
+  <div class="topbar"><div class="topbar-title">채팅</div></div>
+  <div id="chatList"><div class="empty-state"><div class="ico">💬</div><p>아직 채팅 내역이 없어요.</p></div></div>
 </div>
 
-<!-- ════ CHAT ROOM ════ -->
+<!-- CHAT ROOM -->
 <div id="chatRoomSection">
   <div class="chatroom-header">
     <button class="icon-btn" onclick="showSection('chatSection')">←</button>
     <span class="chatroom-title" id="chatRoomTitle">상대 별명</span>
-    <button class="icon-btn">⋯</button>
   </div>
   <div class="chatroom-item-preview" id="chatRoomPreview"></div>
   <div class="messages" id="messages"></div>
   <div class="chat-input-bar">
     <textarea class="chat-input" id="chatInput" placeholder="메시지 입력" rows="1" onkeydown="chatEnter(event)"></textarea>
-    <button class="send-btn" onclick="sendMsg()">
-      <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-    </button>
+    <button class="send-btn" onclick="sendMsg()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
   </div>
 </div>
 
-<!-- ════ COMMUNITY ════ -->
+<!-- COMMUNITY -->
 <div id="commSection" class="section">
-  <div class="topbar">
-    <div class="topbar-title">우리 단지 소식</div>
-    <button class="icon-btn" onclick="showToast('공지/분실물/나눔 글쓰기 준비중 ✏️')">✏️</button>
-  </div>
-  <div style="padding:12px 0;" id="commList">
-    <div class="comm-item">
-      <span class="comm-type notice">📢 공지</span>
-      <div class="comm-title">지하주차장 도색 공사 안내 (4/15~16)</div>
-      <div class="comm-meta">관리사무소 · 2시간 전</div>
-    </div>
-    <div class="comm-item">
-      <span class="comm-type lost">🔍 분실물</span>
-      <div class="comm-title">검정 우산 잃어버리신 분 계세요?</div>
-      <div class="comm-meta">1203호 · 어제</div>
-    </div>
-    <div class="comm-item">
-      <span class="comm-type free">🎁 나눔</span>
-      <div class="comm-title">에어프라이어 무료나눔 (선착순)</div>
-      <div class="comm-meta">해피맘 · 3일 전</div>
-    </div>
+  <div class="topbar"><div class="topbar-title">우리 단지 소식</div></div>
+  <div style="padding:12px 0;">
+    <div class="comm-item"><span class="comm-type notice">📢 공지</span><div class="comm-title">지하주차장 도색 공사 안내 (4/15~16)</div><div class="comm-meta">관리사무소 · 2시간 전</div></div>
+    <div class="comm-item"><span class="comm-type lost">🔍 분실물</span><div class="comm-title">검정 우산 잃어버리신 분 계세요?</div><div class="comm-meta">1203호 · 어제</div></div>
+    <div class="comm-item"><span class="comm-type free">🎁 나눔</span><div class="comm-title">에어프라이어 무료나눔 (선착순)</div><div class="comm-meta">해피맘 · 3일 전</div></div>
   </div>
 </div>
 
-<!-- ════ MYPAGE ════ -->
+<!-- MYPAGE -->
 <div id="mypageSection" class="section">
   <div class="my-header">
     <div class="my-avatar" id="myAvatar">🏠</div>
@@ -435,93 +325,57 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
   <div class="menu-section-title">거래 활동</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="showToast('내가 올린 물건')">
-      <span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span>
-    </div>
-    <div class="menu-item" onclick="showToast('관심 목록')">
-      <span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span>
-    </div>
-    <div class="menu-item" onclick="switchTab('chatSection')">
-      <span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span>
-    </div>
+    <div class="menu-item" onclick="showToast('내가 올린 물건')"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="showToast('관심 목록')"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
   <div class="menu-section-title">설정</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="showToast('별명 변경 준비중')">
-      <span class="menu-ico">✏️</span><span class="menu-txt">별명 변경</span><span class="menu-arrow">›</span>
-    </div>
-    <div class="menu-item" onclick="fbLogout()">
-      <span class="menu-ico">🚪</span><span class="menu-txt" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span>
-    </div>
+    <div class="menu-item" onclick="showToast('별명 변경 준비중')"><span class="menu-ico">✏️</span><span class="menu-txt">별명 변경</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="fbLogout()"><span class="menu-ico">🚪</span><span class="menu-txt" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="fbWithdraw()"><span class="menu-ico">❌</span><span class="menu-txt" style="color:#FF4757;">회원탈퇴</span><span class="menu-arrow">›</span></div>
   </div>
 </div>
 
-<!-- ════ TABBAR ════ -->
+<!-- TABBAR -->
 <nav class="tabbar" id="tabbar" style="display:none;">
-  <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')">
-    <span class="tab-ico">🏠</span><span class="tab-lbl">거래</span>
-  </button>
-  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')">
-    <span class="tab-ico">📋</span><span class="tab-lbl">소식</span>
-  </button>
-  <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')">
-    <span class="tab-ico">💬</span><span class="tab-lbl">채팅</span>
-  </button>
-  <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')">
-    <span class="tab-ico">👤</span><span class="tab-lbl">내정보</span>
-  </button>
+  <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl">거래</span></button>
+  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">📋</span><span class="tab-lbl">소식</span></button>
+  <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl">채팅</span></button>
+  <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl">내정보</span></button>
 </nav>
 
-<!-- ════ FIREBASE ════ -->
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
-         signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-import { getFirestore, doc, setDoc, getDoc, collection,
-         addDoc, getDocs, query, where, orderBy, onSnapshot,
-         serverTimestamp, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, doc, setDoc, getDoc, deleteDoc, collection, addDoc, getDocs, query, where, orderBy, onSnapshot, serverTimestamp, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-// ── Firebase 설정 (실제 프로젝트 config로 교체하세요) ──
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyBZwxLXSTjkZkOJt7nKkcxd5j8gulKF5Yk",
+  authDomain: "woodan-639a0.firebaseapp.com",
+  projectId: "woodan-639a0",
+  storageBucket: "woodan-639a0.firebasestorage.app",
+  messagingSenderId: "623126216456",
+  appId: "1:623126216456:web:386038868d19c5343bf6bd"
 };
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// ── 전역 상태 ──
-let fbUser = null;
-let fbProfile = {};
-let selectedCat = '';
-let isFree = false;
-let currentChatId = null;
-let unsubMessages = null;
+let fbUser = null, fbProfile = {}, selectedCat = '', isFree = false, currentChatId = null, unsubMessages = null;
+window.fbUser = null; window.fbProfile = {};
 
-window.fbUser = null;
-window.fbProfile = {};
-
-// ── Auth 상태 감지 ──
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    fbUser = user;
-    window.fbUser = user;
+    fbUser = user; window.fbUser = user;
     const snap = await getDoc(doc(db, 'users', user.uid));
     if (snap.exists()) {
-      fbProfile = snap.data();
-      window.fbProfile = fbProfile;
-      updateMypage();
-      loadItems();
+      fbProfile = snap.data(); window.fbProfile = fbProfile;
+      updateMypage(); loadItems();
       document.getElementById('tabbar').style.display = 'flex';
       showSection('mainSection');
-    } else {
-      showSection('joinSection');
-    }
+    } else { showSection('joinSection'); }
   } else {
     fbUser = null;
     document.getElementById('tabbar').style.display = 'none';
@@ -529,7 +383,6 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-// ── 회원가입 ──
 window.fbJoin = async function() {
   const nick = document.getElementById('joinNick').value.trim();
   const pw = document.getElementById('joinPw').value.trim();
@@ -537,9 +390,7 @@ window.fbJoin = async function() {
   const sigungu = document.getElementById('joinSigungu').value;
   const dong = document.getElementById('joinDong').value;
   const danji = document.getElementById('joinDanji').value;
-  if (!nick || !pw || pw.length !== 4 || !danji) {
-    showToast('모든 항목을 입력해주세요'); return;
-  }
+  if (!nick || !pw || pw.length !== 4 || !danji) { showToast('모든 항목을 입력해주세요'); return; }
   const email = nick.toLowerCase().replace(/[^a-z0-9]/g,'') + pw + '@udan.app';
   showLoading(true);
   try {
@@ -550,34 +401,37 @@ window.fbJoin = async function() {
       createdAt: serverTimestamp()
     });
     showToast('가입 완료! 환영해요 🎉');
-  } catch(e) {
-    showToast(e.code === 'auth/email-already-in-use' ? '이미 사용 중인 별명이에요' : '가입 실패: '+e.message);
-  }
+  } catch(e) { showToast(e.code === 'auth/email-already-in-use' ? '이미 사용 중인 별명이에요' : '가입 실패: '+e.message); }
   showLoading(false);
 };
 
-// ── 로그인 ──
 window.fbLogin = async function() {
   const nick = document.getElementById('loginNick').value.trim();
   const pw = document.getElementById('loginPw').value.trim();
   if (!nick || pw.length !== 4) { showToast('별명과 4자리 비밀번호를 입력해주세요'); return; }
   const email = nick.toLowerCase().replace(/[^a-z0-9]/g,'') + pw + '@udan.app';
   showLoading(true);
-  try {
-    await signInWithEmailAndPassword(auth, email, pw + '0000');
-  } catch(e) {
-    showToast('별명 또는 비밀번호가 틀렸어요');
-  }
+  try { await signInWithEmailAndPassword(auth, email, pw + '0000'); }
+  catch(e) { showToast('별명 또는 비밀번호가 틀렸어요'); }
   showLoading(false);
 };
 
-// ── 로그아웃 ──
-window.fbLogout = async function() {
-  await signOut(auth);
-  showToast('로그아웃 되었어요');
+window.fbLogout = async function() { await signOut(auth); showToast('로그아웃 되었어요'); };
+window.fbWithdraw = async function() {
+  if (!confirm('정말 탈퇴하시겠어요?\n모든 데이터가 삭제됩니다.')) return;
+  const pw = prompt('비밀번호 4자리를 입력해주세요:');
+  if (!pw || pw.length !== 4) { showToast('비밀번호가 올바르지 않아요'); return; }
+  showLoading(true);
+  try {
+    const { EmailAuthProvider, reauthenticateWithCredential } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
+    const credential = EmailAuthProvider.credential(fbUser.email, pw + '0000');
+    await reauthenticateWithCredential(fbUser, credential);
+    await deleteDoc(doc(db, 'users', fbUser.uid));
+    await fbUser.delete();
+    showToast('탈퇴 완료됐어요');
+  } catch(e) { showToast('탈퇴 실패: '+e.message); }
+  showLoading(false);
 };
-
-// ── 물건 등록 ──
 window.submitItem = async function() {
   if (!fbUser) { showToast('로그인이 필요해요'); return; }
   const title = document.getElementById('writeTitle').value.trim();
@@ -585,23 +439,22 @@ window.submitItem = async function() {
   const priceRaw = document.getElementById('writePrice').value.replace(/,/g,'');
   const price = isFree ? 0 : parseInt(priceRaw) || 0;
   if (!title) { showToast('제목을 입력해주세요'); return; }
-  if (!selectedCat) { showToast('카테고리를 선택해주세요'); return; }
+  if (!window.selectedCat) { showToast('카테고리를 선택해주세요'); return; }
   showLoading(true);
   try {
     await addDoc(collection(db, 'items'), {
-      title, desc, price, isFree, cat: selectedCat,
+      title, desc, price, isFree, cat: window.selectedCat,
       nick: fbProfile.nick, uid: fbUser.uid,
       danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
-      emoji: catEmoji(selectedCat),
-      status: 'sale',
+      emoji: catEmoji(window.selectedCat), status: 'sale',
+      photos: writePhotos,
       createdAt: serverTimestamp()
     });
     showToast('등록 완료! 🎉');
     document.getElementById('writeTitle').value = '';
     document.getElementById('writeDesc').value = '';
     document.getElementById('writePrice').value = '';
-    selectedCat = '';
-    isFree = false;
+    selectedCat = ''; isFree = false;
     document.querySelectorAll('.cat-tag').forEach(b => b.classList.remove('on'));
     document.getElementById('freeToggle').classList.remove('on');
     switchTab('mainSection');
@@ -609,101 +462,48 @@ window.submitItem = async function() {
   showLoading(false);
 };
 
-// ── 물건 목록 로드 ──
 window.loadItems = async function() {
   if (!fbProfile.danjiKey) return;
   document.getElementById('danjiLabel').textContent = fbProfile.danji || '내 단지';
   try {
-    const q = query(
-      collection(db, 'items'),
-      where('danjiKey', '==', fbProfile.danjiKey),
-      orderBy('createdAt', 'desc')
-    );
+    const q = query(collection(db, 'items'), where('danjiKey', '==', fbProfile.danjiKey), orderBy('createdAt', 'desc'));
     onSnapshot(q, (snap) => {
-      if (snap.empty) {
-        document.getElementById('itemList').innerHTML = `
-          <div class="empty-state"><div class="ico">📦</div>
-          <p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div>`;
-        return;
-      }
+      if (snap.empty) { document.getElementById('itemList').innerHTML = '<div class="empty-state"><div class="ico">📦</div><p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div>'; return; }
       let html = '';
       snap.forEach(d => {
         const it = d.data();
         const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-        html += `<div class="item-card" onclick="openDetail('${d.id}')">
-          <div class="item-thumb">${it.emoji||'📦'}</div>
-          <div class="item-info">
-            <div class="item-title">${it.title}</div>
-            <div class="item-meta">${it.nick} · ${timeAgo(t)}</div>
-            <div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div>
-            <div class="item-badges">
-              ${it.status==='sale'?'<span class="badge new">판매중</span>':'<span class="badge done">거래완료</span>'}
-            </div>
-          </div>
-        </div>`;
+        html += `<div class="item-card" onclick="openDetail('${d.id}')"><div class="item-thumb">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="item-info"><div class="item-title">${it.title}</div><div class="item-meta">${it.nick} · ${timeAgo(t)}</div><div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="item-badges">${it.status==='sale'?'<span class="badge new">판매중</span>':'<span class="badge done">거래완료</span>'}</div></div></div>`;
       });
       document.getElementById('itemList').innerHTML = html;
     });
   } catch(e) { console.log(e); }
 };
 
-// ── 상품 상세 ──
 window.openDetail = async function(itemId) {
   showLoading(true);
   const snap = await getDoc(doc(db, 'items', itemId));
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-  document.getElementById('detailContent').innerHTML = `
-    <div class="detail-img">${it.emoji||'📦'}</div>
-    <div class="detail-body">
-      <div class="detail-cat">${it.cat}</div>
-      <div class="detail-title">${it.title}</div>
-      <div class="detail-meta">${timeAgo(t)} · ${it.danji}</div>
-      <div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div>
-      <div class="detail-desc">${it.desc||'설명이 없어요.'}</div>
-      <div class="seller-row">
-        <div class="seller-avatar">${it.nick?.[0]||'?'}</div>
-        <div>
-          <div class="seller-name">${it.nick}</div>
-          <div class="seller-unit">${it.danji}</div>
-        </div>
-      </div>
-    </div>
-    <div style="height:80px;"></div>
-    <div class="detail-actions">
-      <button class="btn-wish" id="wishBtn" onclick="toggleWish('${itemId}')">♡</button>
-      <button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button>
-    </div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:80px;"></div><div class="detail-actions"><button class="btn-wish" id="wishBtn" onclick="toggleWish('${itemId}')">♡</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button></div>`;
   showLoading(false);
   showSection('detailSection');
 };
 
-// ── 채팅 시작 ──
 window.startChat = async function(itemId, sellerUid, sellerNick, itemTitle, itemPrice, itemEmoji) {
   if (!fbUser) { showToast('로그인이 필요해요'); return; }
   if (fbUser.uid === sellerUid) { showToast('내 물건이에요'); return; }
   const chatId = [fbUser.uid, sellerUid].sort().join('_') + '_' + itemId;
   showLoading(true);
-  await setDoc(doc(db, 'chats', chatId), {
-    users: [fbUser.uid, sellerUid],
-    itemId, itemTitle, itemPrice, itemEmoji,
-    nicks: { [fbUser.uid]: fbProfile.nick, [sellerUid]: sellerNick },
-    updatedAt: serverTimestamp()
-  }, { merge: true });
+  await setDoc(doc(db, 'chats', chatId), { users: [fbUser.uid, sellerUid], itemId, itemTitle, itemPrice, itemEmoji, nicks: { [fbUser.uid]: fbProfile.nick, [sellerUid]: sellerNick }, updatedAt: serverTimestamp() }, { merge: true });
   showLoading(false);
   openChatRoom(chatId, sellerNick, itemTitle, itemPrice, itemEmoji);
 };
 
-// ── 채팅방 열기 ──
 window.openChatRoom = function(chatId, otherNick, itemTitle, itemPrice, itemEmoji) {
   currentChatId = chatId;
   document.getElementById('chatRoomTitle').textContent = otherNick;
-  document.getElementById('chatRoomPreview').innerHTML = `
-    <div class="chatroom-item-emoji">${itemEmoji}</div>
-    <div class="chatroom-item-info">
-      <div class="title">${itemTitle}</div>
-      <div class="price">${itemPrice}</div>
-    </div>`;
+  document.getElementById('chatRoomPreview').innerHTML = `<div class="chatroom-item-emoji">${itemEmoji}</div><div class="chatroom-item-info"><div class="title">${itemTitle}</div><div class="price">${itemPrice}</div></div>`;
   document.getElementById('messages').innerHTML = '';
   if (unsubMessages) unsubMessages();
   const q = query(collection(db, 'chats', chatId, 'messages'), orderBy('createdAt'));
@@ -712,87 +512,60 @@ window.openChatRoom = function(chatId, otherNick, itemTitle, itemPrice, itemEmoj
     snap.forEach(d => {
       const m = d.data();
       const isMine = m.uid === fbUser?.uid;
-      html += `<div class="msg-row ${isMine?'mine':'other'}">
-        <div class="msg-bubble">${m.text}</div>
-        <div class="msg-time">${m.createdAt?.toDate ? formatTime(m.createdAt.toDate()) : ''}</div>
-      </div>`;
+      html += `<div class="msg-row ${isMine?'mine':'other'}"><div class="msg-bubble">${m.text}</div><div class="msg-time">${m.createdAt?.toDate ? formatTime(m.createdAt.toDate()) : ''}</div></div>`;
     });
     document.getElementById('messages').innerHTML = html;
-    const el = document.getElementById('messages');
-    el.scrollTop = el.scrollHeight;
+    document.getElementById('messages').scrollTop = 999999;
   });
   document.getElementById('chatRoomSection').classList.add('active');
   document.getElementById('tabbar').style.display = 'none';
 };
 
-// ── 메시지 전송 ──
 window.sendMsg = async function() {
   if (!currentChatId || !fbUser) return;
   const input = document.getElementById('chatInput');
   const text = input.value.trim();
   if (!text) return;
   input.value = '';
-  input.style.height = 'auto';
-  await addDoc(collection(db, 'chats', currentChatId, 'messages'), {
-    text, uid: fbUser.uid, nick: fbProfile.nick, createdAt: serverTimestamp()
-  });
-  await updateDoc(doc(db, 'chats', currentChatId), {
-    lastMsg: text, lastMsgNick: fbProfile.nick, updatedAt: serverTimestamp()
-  });
+  await addDoc(collection(db, 'chats', currentChatId, 'messages'), { text, uid: fbUser.uid, nick: fbProfile.nick, createdAt: serverTimestamp() });
+  await updateDoc(doc(db, 'chats', currentChatId), { lastMsg: text, lastMsgNick: fbProfile.nick, updatedAt: serverTimestamp() });
 };
 
-window.chatEnter = function(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.sendMsg(); }
-};
+window.chatEnter = function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); window.sendMsg(); } };
 
-// ── 채팅 목록 ──
 window.loadChatList = async function() {
   if (!fbUser) return;
   const q = query(collection(db, 'chats'), where('users', 'array-contains', fbUser.uid), orderBy('updatedAt', 'desc'));
   onSnapshot(q, snap => {
-    if (snap.empty) {
-      document.getElementById('chatList').innerHTML = `<div class="empty-state"><div class="ico">💬</div><p>아직 채팅 내역이 없어요.</p></div>`;
-      return;
-    }
+    if (snap.empty) { document.getElementById('chatList').innerHTML = '<div class="empty-state"><div class="ico">💬</div><p>아직 채팅 내역이 없어요.</p></div>'; return; }
     let html = '';
     snap.forEach(d => {
       const c = d.data();
       const otherUid = c.users.find(u => u !== fbUser.uid);
       const otherNick = c.nicks?.[otherUid] || '상대방';
-      html += `<div class="chat-item" onclick="openChatRoom('${d.id}','${otherNick}','${c.itemTitle}','${c.itemPrice}','${c.itemEmoji||'📦'}')">
-        <div class="chat-avatar">${otherNick[0]}</div>
-        <div class="chat-info">
-          <div class="chat-name">${otherNick}</div>
-          <div class="chat-last">${c.itemTitle} · ${c.lastMsg||'채팅을 시작해보세요'}</div>
-        </div>
-        <div class="chat-right"><div class="chat-time">${c.updatedAt?.toDate?formatTime(c.updatedAt.toDate()):''}</div></div>
-      </div>`;
+      html += `<div class="chat-item" onclick="openChatRoom('${d.id}','${otherNick}','${c.itemTitle}','${c.itemPrice}','${c.itemEmoji||'📦'}')"><div class="chat-avatar">${otherNick[0]}</div><div class="chat-info"><div class="chat-name">${otherNick}</div><div class="chat-last">${c.itemTitle} · ${c.lastMsg||'채팅을 시작해보세요'}</div></div><div class="chat-right"><div class="chat-time">${c.updatedAt?.toDate?formatTime(c.updatedAt.toDate()):''}</div></div></div>`;
     });
     document.getElementById('chatList').innerHTML = html;
   });
 };
 
-// ── 마이페이지 업데이트 ──
 window.updateMypage = function() {
   document.getElementById('myName').textContent = fbProfile.nick || '-';
   document.getElementById('myDanji').textContent = fbProfile.danji || '-';
   document.getElementById('myAvatar').textContent = fbProfile.nick?.[0] || '🏠';
 };
 
-// ── 유틸 ──
 window.toggleWish = function(id) {
   const btn = document.getElementById('wishBtn');
   if (btn.classList.toggle('on')) { btn.textContent = '♥'; showToast('관심 목록에 추가됐어요 ❤️'); }
   else { btn.textContent = '♡'; showToast('관심 목록에서 제거됐어요'); }
 };
-
 window.shareItem = function() { showToast('공유 기능 준비중 📤'); };
 
 function catEmoji(cat) {
   const map = {'디지털/가전':'📱','가구/인테리어':'🛋','의류/잡화':'👗','도서/취미':'📚','식품/생활':'🧴','유아/아동':'🧸','스포츠/레저':'⚽','기타':'📦'};
   return map[cat] || '📦';
 }
-
 function timeAgo(date) {
   const s = Math.floor((Date.now() - date) / 1000);
   if (s < 60) return '방금 전';
@@ -800,44 +573,56 @@ function timeAgo(date) {
   if (s < 86400) return Math.floor(s/3600) + '시간 전';
   return Math.floor(s/86400) + '일 전';
 }
-
 function formatTime(date) {
   return date.getHours().toString().padStart(2,'0') + ':' + date.getMinutes().toString().padStart(2,'0');
 }
 </script>
 
-<!-- ── 비Firebase JS ── -->
 <script>
-// ── 섹션 전환 ──
 const AUTH_SECTIONS = ['loginSection','joinSection','splashSection'];
 function showSection(id) {
   if (id === 'chatRoomSection') return;
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.section, #loginSection, #joinSection, #splashSection').forEach(s => s.classList.remove('active'));
+  document.getElementById('chatRoomSection').classList.remove('active');
   const el = document.getElementById(id);
   if (el) { el.classList.add('active'); el.scrollTop = 0; }
-  document.getElementById('chatRoomSection').classList.remove('active');
+  if (id === 'writeSection') {
+    window.selectedCat = '';
+    isFree = false;
+    writePhotos = [];
+    document.querySelectorAll('.cat-tag').forEach(b => b.classList.remove('on'));
+    document.getElementById('freeToggle').classList.remove('on');
+    document.getElementById('writeTitle').value = '';
+    document.getElementById('writePrice').value = '';
+    document.getElementById('writeDesc').value = '';
+    document.getElementById('photoPreviewArea').innerHTML = '';
+    document.getElementById('photoAddBtn').style.display = 'flex';
+  }
+  if (id === 'joinSection') {
+    document.getElementById('joinNick').value = '';
+    document.getElementById('joinPw').value = '';
+    document.getElementById('joinDanji').value = '';
+    document.getElementById('joinSido').value = '';
+    document.getElementById('joinSigungu').value = '';
+    document.getElementById('joinDong').value = '';
+    document.getElementById('danjiSelectedBox').textContent = '';
+    document.getElementById('danjiSelectedField').style.display = 'none';
+  }
   const tabbar = document.getElementById('tabbar');
   tabbar.style.display = AUTH_SECTIONS.includes(id) ? 'none' : 'flex';
-  if (!AUTH_SECTIONS.includes(id)) {
-    if (id === 'chatSection') loadChatList && loadChatList();
-  }
+  if (id === 'chatSection') { if(typeof loadChatList === 'function') loadChatList(); }
 }
-
 function switchTab(id) {
   showSection(id);
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   const map = {mainSection:'tab-main',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
   if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
-
-// ── 카테고리 선택 ──
 window.selectCat = function(el, cat) {
   document.querySelectorAll('.cat-tag').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
-  selectedCat = cat;
+  window.selectedCat = cat;
 };
-
-// ── 나눔 토글 ──
 window.toggleFree = function() {
   isFree = !isFree;
   const btn = document.getElementById('freeToggle');
@@ -847,83 +632,143 @@ window.toggleFree = function() {
   priceInput.value = isFree ? '' : priceInput.value;
   priceInput.placeholder = isFree ? '가격 없음 (나눔)' : '가격 입력';
 };
-
-// ── 가격 포맷 ──
 window.formatPrice = function(input) {
   const v = input.value.replace(/[^0-9]/g,'');
   input.value = v ? parseInt(v).toLocaleString() : '';
 };
-
-// ── 토스트 ──
 window.showToast = function(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 };
-
-// ── 로딩 ──
+document.addEventListener('click', function(e) {
+  const dd = document.getElementById('danjiDropdown');
+  if (dd && !dd.contains(e.target) && e.target.id !== 'joinDanji') {
+    dd.style.display = 'none';
+  }
+});
 window.showLoading = function(v) {
   document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
 };
-
-// ── 단지 드릴다운 (샘플 데이터, 실제는 API 연동 권장) ──
-const areaData = {
-  '서울특별시': {
-    '양천구': { '신정동':['목동신시가지1단지','목동신시가지2단지','목동신시가지3단지','신트리파크','신정이펜하우스'],
-                '목동':['목동현대','목동신시가지4단지','목동신시가지5단지'],
-                '신월동':['신월아이파크','대림e편한세상'] },
-    '강서구': { '화곡동':['강서힐스테이트','화곡푸르지오','강서롯데캐슬'],
-                '등촌동':['등촌현대','강서마이스터'] },
-    '마포구': { '상암동':['DMC파크뷰자이','상암월드컵파크2단지'],
-                '공덕동':['공덕파크자이','마포래미안푸르지오'] }
-  },
-  '경기도': {
-    '성남시 분당구': { '정자동':['정자삼성래미안','파크뷰','정든마을'],
-                      '서현동':['시범삼성','시범한양','효자촌'] },
-    '수원시 영통구': { '망포동':['망포역더샵','영통아이파크'],
-                      '영통동':['벽적골현대','삼성래미안'] }
+let writePhotos = [];
+window.addPhotos = async function(input) {
+  
+  const files = Array.from(input.files);
+  const remain = 5 - writePhotos.length;
+  if (remain <= 0) { showToast('사진은 최대 5장이에요'); return; }
+  const toAdd = files.slice(0, remain);
+  for (const file of toAdd) {
+    const base64 = await compressImage(file, 100);
+    writePhotos.push(base64);
   }
+  renderPhotoPreview();
+  input.value = '';
 };
-
-window.loadSigungu = function() {
+function compressImage(file, maxKB) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let w = img.width, h = img.height;
+        const max = 800;
+        if (w > max || h > max) {
+          if (w > h) { h = Math.round(h * max / w); w = max; }
+          else { w = Math.round(w * max / h); h = max; }
+        }
+        canvas.width = w; canvas.height = h;
+        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+        let q = 0.8;
+        let result = canvas.toDataURL('image/jpeg', q);
+        while (result.length > maxKB * 1024 * 1.37 && q > 0.1) {
+          q -= 0.1;
+          result = canvas.toDataURL('image/jpeg', q);
+        }
+        resolve(result);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+function renderPhotoPreview() {
+  const area = document.getElementById('photoPreviewArea');
+  area.innerHTML = writePhotos.map((b64, i) =>
+    `<div style="position:relative;width:80px;height:80px;">
+      <img src="${b64}" style="width:80px;height:80px;object-fit:cover;border-radius:10px;border:1.5px solid var(--border);">
+      <button onclick="removePhoto(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:#FF4757;border:none;color:white;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+    </div>`
+  ).join('');
+  document.getElementById('photoAddBtn').style.display = writePhotos.length >= 5 ? 'none' : 'flex';
+}
+window.removePhoto = function(i) {
+  writePhotos.splice(i, 1);
+  renderPhotoPreview();
+};
+  
+window.loadSigungu = async function() {
   const sido = document.getElementById('joinSido').value;
   const sg = document.getElementById('joinSigungu');
   const dong = document.getElementById('joinDong');
-  const danji = document.getElementById('joinDanji');
   sg.innerHTML = '<option value="">선택</option>';
   dong.innerHTML = '<option value="">선택</option>';
-  danji.innerHTML = '<option value="">동까지 선택 후 나타납니다</option>';
-  if (areaData[sido]) {
-    Object.keys(areaData[sido]).forEach(k => sg.innerHTML += `<option>${k}</option>`);
-  } else {
-    sg.innerHTML += '<option value="">데이터 준비중</option>';
-  }
+  document.getElementById('joinDanji').value = '';
+  if (!sido) return;
+  const url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=' + encodeURIComponent(sido + ' 구') + '&size=15';
+  try {
+    const res = await fetch(url, { headers: { Authorization: 'KakaoAK 3fa7f8af2171cb4ab1263f0a46876025' } });
+    const data = await res.json();
+    const set = new Set();
+    (data.documents || []).forEach(d => {
+      const addr = d.address_name || '';
+      const parts = addr.split(' ');
+      if (parts[1]) set.add(parts[1]);
+    });
+    set.forEach(k => sg.innerHTML += `<option>${k}</option>`);
+  } catch(e) {}
 };
-
-window.loadDong = function() {
+window.loadDong = async function() {
   const sido = document.getElementById('joinSido').value;
   const sg = document.getElementById('joinSigungu').value;
   const dong = document.getElementById('joinDong');
-  const danji = document.getElementById('joinDanji');
   dong.innerHTML = '<option value="">선택</option>';
-  danji.innerHTML = '<option value="">동까지 선택 후 나타납니다</option>';
-  if (areaData[sido]?.[sg]) {
-    Object.keys(areaData[sido][sg]).forEach(k => dong.innerHTML += `<option>${k}</option>`);
-  }
-};
-
-window.loadDanji = function() {
-  const sido = document.getElementById('joinSido').value;
-  const sg = document.getElementById('joinSigungu').value;
-  const dong = document.getElementById('joinDong').value;
-  const danji = document.getElementById('joinDanji');
-  danji.innerHTML = '<option value="">선택</option>';
-  const list = areaData[sido]?.[sg]?.[dong];
-  if (list) list.forEach(k => danji.innerHTML += `<option>${k}</option>`);
-  else danji.innerHTML = '<option value="">해당 지역 단지 데이터 준비중</option>';
+  document.getElementById('joinDanji').value = '';
+  if (!sg) return;
+  const url = 'https://dapi.kakao.com/v2/local/search/keyword.json?query=' + encodeURIComponent(sido + ' ' + sg + ' 동') + '&size=15';
+  try {
+    const res = await fetch(url, { headers: { Authorization: 'KakaoAK 3fa7f8af2171cb4ab1263f0a46876025' } });
+    const data = await res.json();
+    const set = new Set();
+    (data.documents || []).forEach(d => {
+      const addr = d.address_name || '';
+      const parts = addr.split(' ');
+      if (parts[2]) set.add(parts[2]);
+    });
+    set.forEach(k => dong.innerHTML += `<option>${k}</option>`);
+  } catch(e) {}
 };
 </script>
-
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+window.openDanjiSearch = function() {
+  new daum.Postcode({
+    oncomplete: function(data) {
+      const sido = data.sido;
+      const sigungu = data.sigungu || data.gungu || '';
+      const dong = data.bname || '';
+      const roadAddr = data.roadAddress || data.jibunAddress || '';
+      const buildingName = data.buildingName || '';
+      const danjiName = buildingName ? buildingName + ' (' + roadAddr + ')' : roadAddr;
+      document.getElementById('joinSido').value = sido;
+      document.getElementById('joinSigungu').value = sigungu;
+      document.getElementById('joinDong').value = dong;
+      document.getElementById('joinDanji').value = danjiName;
+      document.getElementById('danjiSelectedBox').textContent = danjiName;
+      document.getElementById('danjiSelectedField').style.display = 'block';
+    }
+  }).open();
+};
+</script>
 </body>
 </html>
