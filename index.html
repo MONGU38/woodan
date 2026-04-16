@@ -390,8 +390,9 @@ window.fbJoin = async function() {
   const sigungu = document.getElementById('joinSigungu').value;
   const dong = document.getElementById('joinDong').value;
   const danji = document.getElementById('joinDanji').value;
-  if (!nick || !pw || pw.length !== 4 || !danji) { showToast('모든 항목을 입력해주세요'); return; }
-  const email = nick.toLowerCase().replace(/[^a-z0-9]/g,'') + pw + '@udan.app';
+  if (!nick || nick.length > 4) { showToast('별명은 4자 이내로 입력해주세요'); return; }
+  if (!pw || pw.length !== 4 || !danji) { showToast('모든 항목을 입력해주세요'); return; }
+  const email = encodeURIComponent(nick).replace(/%/g,'') + pw + '@udan.app';
   showLoading(true);
   try {
     const cred = await createUserWithEmailAndPassword(auth, email, pw + '0000');
@@ -409,7 +410,7 @@ window.fbLogin = async function() {
   const nick = document.getElementById('loginNick').value.trim();
   const pw = document.getElementById('loginPw').value.trim();
   if (!nick || pw.length !== 4) { showToast('별명과 4자리 비밀번호를 입력해주세요'); return; }
-  const email = nick.toLowerCase().replace(/[^a-z0-9]/g,'') + pw + '@udan.app';
+  const email = encodeURIComponent(nick).replace(/%/g,'') + pw + '@udan.app';
   showLoading(true);
   try { await signInWithEmailAndPassword(auth, email, pw + '0000'); }
   catch(e) { showToast('별명 또는 비밀번호가 틀렸어요'); }
