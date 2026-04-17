@@ -110,7 +110,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .seller-avatar{width:42px;height:42px;border-radius:50%;background:var(--orange-light);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:var(--orange);flex-shrink:0;}
 .seller-name{font-size:15px;font-weight:600;}
 .seller-unit{font-size:13px;color:var(--text3);}
-.detail-actions{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);padding:12px 20px calc(12px + var(--safe-bottom));display:flex;gap:10px;}
+.detail-actions{position:fixed;bottom:calc(68px + var(--safe-bottom));left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);padding:12px 20px;display:flex;gap:10px;}
 .btn-wish{border:1.5px solid var(--border);background:#fff;border-radius:12px;padding:14px 18px;font-size:20px;cursor:pointer;}
 .btn-wish.on{border-color:#FF4757;color:#FF4757;}
 .btn-chat{flex:1;background:var(--orange);color:white;border:none;border-radius:12px;padding:14px;font-size:16px;font-weight:700;cursor:pointer;}
@@ -191,7 +191,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <div id="loginSection">
   <div class="form-header"><h2>로그인</h2><p>별명과 비밀번호를 입력해주세요</p></div>
   <div class="form-body">
-    <div class="field"><label>별명</label><input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off"></div>
+    <div class="field"><label>별명</label><input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off" oninput="filterNickList()" onfocus="showNickList()"><div id="nickDropdown" style="display:none;border:1.5px solid var(--border);border-radius:10px;margin-top:4px;background:#fff;overflow:hidden;"></div></div>
     <div class="field"><label>비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="loginPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
   </div>
   <div class="form-footer">
@@ -316,6 +316,36 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
 </div>
 
+<!-- MY ITEMS -->
+<div id="myItemsSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">내가 올린 물건</span>
+  </div>
+  <div class="list-section" id="myItemList"><div class="empty-state"><div class="ico">📦</div><p>올린 물건이 없어요.</p></div></div>
+</div>
+
+<!-- WISH LIST -->
+<div id="wishSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">관심 목록</span>
+  </div>
+  <div class="list-section" id="wishList"><div class="empty-state"><div class="ico">❤️</div><p>관심 목록이 없어요.</p></div></div>
+</div>
+
+<!-- NICK CHANGE -->
+<div id="nickSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">별명 변경</span>
+  </div>
+  <div class="form-body">
+    <div class="field"><label>새 별명</label><input type="text" id="newNick" placeholder="새 별명 입력 (4자 이내)" autocomplete="off" maxlength="4"></div>
+    <button class="btn-primary" onclick="changeNick()">변경 완료</button>
+  </div>
+</div>
+
 <!-- MYPAGE -->
 <div id="mypageSection" class="section">
   <div class="my-header">
@@ -325,13 +355,13 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
   <div class="menu-section-title">거래 활동</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="showToast('내가 올린 물건')"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="showToast('관심 목록')"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
   <div class="menu-section-title">설정</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="showToast('별명 변경 준비중')"><span class="menu-ico">✏️</span><span class="menu-txt">별명 변경</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="showSection('nickSection')"><span class="menu-ico">✏️</span><span class="menu-txt">별명 변경</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="fbLogout()"><span class="menu-ico">🚪</span><span class="menu-txt" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="fbWithdraw()"><span class="menu-ico">❌</span><span class="menu-txt" style="color:#FF4757;">회원탈퇴</span><span class="menu-arrow">›</span></div>
   </div>
@@ -365,6 +395,7 @@ const db = getFirestore(app);
 
 let fbUser = null, fbProfile = {}, selectedCat = '', isFree = false, currentChatId = null, unsubMessages = null;
 window.fbUser = null; window.fbProfile = {};
+window._fbCollection = collection; window._fbQuery = query; window._fbWhere = where; window._fbOrderBy = orderBy; window._fbGetDocs = getDocs; window._fbGetDoc = getDoc; window._fbDoc = doc; window._db = db;
 
 onAuthStateChanged(auth, async (user) => {
   if (user) {
@@ -412,7 +443,7 @@ window.fbLogin = async function() {
   if (!nick || pw.length !== 4) { showToast('별명과 4자리 비밀번호를 입력해주세요'); return; }
   const email = encodeURIComponent(nick).replace(/%/g,'') + pw + '@udan.app';
   showLoading(true);
-  try { await signInWithEmailAndPassword(auth, email, pw + '0000'); }
+  try { await signInWithEmailAndPassword(auth, email, pw + '0000'); saveNick(nick); }
   catch(e) { showToast('별명 또는 비밀번호가 틀렸어요'); }
   showLoading(false);
 };
@@ -427,6 +458,9 @@ window.fbWithdraw = async function() {
     const { EmailAuthProvider, reauthenticateWithCredential } = await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js');
     const credential = EmailAuthProvider.credential(fbUser.email, pw + '0000');
     await reauthenticateWithCredential(fbUser, credential);
+    const itemsQ = query(collection(db, 'items'), where('uid', '==', fbUser.uid));
+    const itemsSnap = await getDocs(itemsQ);
+    for (const d of itemsSnap.docs) { await deleteDoc(doc(db, 'items', d.id)); }
     await deleteDoc(doc(db, 'users', fbUser.uid));
     await fbUser.delete();
     showToast('탈퇴 완료됐어요');
@@ -474,7 +508,8 @@ window.loadItems = async function() {
       snap.forEach(d => {
         const it = d.data();
         const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-        html += `<div class="item-card" onclick="openDetail('${d.id}')"><div class="item-thumb">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="item-info"><div class="item-title">${it.title}</div><div class="item-meta">${it.nick} · ${timeAgo(t)}</div><div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="item-badges">${it.status==='sale'?'<span class="badge new">판매중</span>':'<span class="badge done">거래완료</span>'}</div></div></div>`;
+        const wished = (JSON.parse(localStorage.getItem('wishes_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
+        html += `<div class="item-card" style="position:relative;" onclick="openDetail('${d.id}')"><div class="item-thumb">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="item-info"><div class="item-title">${it.title}</div><div class="item-meta">${it.nick} · ${timeAgo(t)}</div><div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="item-badges">${it.status==='sale'?'<span class="badge new">판매중</span>':'<span class="badge done">거래완료</span>'}</div></div><button data-wish-id="${d.id}" onclick="event.stopPropagation();toggleWishCard('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${wished?'#FF4757':'#ccc'};">${wished?'♥':'♡'}</button></div>`;
       });
       document.getElementById('itemList').innerHTML = html;
     });
@@ -486,7 +521,8 @@ window.openDetail = async function(itemId) {
   const snap = await getDoc(doc(db, 'items', itemId));
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:80px;"></div><div class="detail-actions"><button class="btn-wish" id="wishBtn" onclick="toggleWish('${itemId}')">♡</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button></div>`;
+  const wished = (JSON.parse(localStorage.getItem('wishes_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
+  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-wish ${wished?'on':''}" id="wishBtn" onclick="toggleWish('${itemId}')">${wished?'♥':'♡'}</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button></div>`;
   showLoading(false);
   showSection('detailSection');
 };
@@ -558,8 +594,20 @@ window.updateMypage = function() {
 
 window.toggleWish = function(id) {
   const btn = document.getElementById('wishBtn');
-  if (btn.classList.toggle('on')) { btn.textContent = '♥'; showToast('관심 목록에 추가됐어요 ❤️'); }
-  else { btn.textContent = '♡'; showToast('관심 목록에서 제거됐어요'); }
+  const key = 'wishes_' + fbUser.uid;
+  let wishes = JSON.parse(localStorage.getItem(key) || '[]');
+  if (wishes.includes(id)) {
+    wishes = wishes.filter(w => w !== id);
+    btn.classList.remove('on'); btn.textContent = '♡';
+    showToast('관심 목록에서 제거됐어요');
+    document.querySelectorAll(`[data-wish-id="${id}"]`).forEach(b => { b.textContent = '♡'; b.style.color = '#ccc'; });
+  } else {
+    wishes.push(id);
+    btn.classList.add('on'); btn.textContent = '♥';
+    showToast('관심 목록에 추가됐어요 ❤️');
+    document.querySelectorAll(`[data-wish-id="${id}"]`).forEach(b => { b.textContent = '♥'; b.style.color = '#FF4757'; });
+  }
+  localStorage.setItem(key, JSON.stringify(wishes));
 };
 window.shareItem = function() { showToast('공유 기능 준비중 📤'); };
 
@@ -642,15 +690,117 @@ window.showToast = function(msg) {
   t.textContent = msg; t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
 };
+window.showLoading = function(v) {
+  document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
+};
+function getSavedNicks() {
+  return JSON.parse(localStorage.getItem('savedNicks') || '[]');
+}
+function saveNick(nick) {
+  const nicks = getSavedNicks();
+  if (!nicks.includes(nick)) { nicks.unshift(nick); localStorage.setItem('savedNicks', JSON.stringify(nicks)); }
+}
+function renderNickDropdown(nicks) {
+  const dd = document.getElementById('nickDropdown');
+  if (!nicks.length) { dd.style.display = 'none'; return; }
+  dd.innerHTML = nicks.map(n => `<div style="display:flex;align-items:center;border-bottom:1px solid var(--border);"><span onclick="selectNick('${n}')" style="flex:1;padding:12px 16px;font-size:15px;cursor:pointer;">${n}</span><span onclick="deleteNick('${n}')" style="padding:12px 14px;color:var(--text3);font-size:16px;cursor:pointer;">✕</span></div>`).join('');
+  dd.style.display = 'block';
+}
+window.showNickList = function() {
+  renderNickDropdown(getSavedNicks());
+};
+window.filterNickList = function() {
+  const val = document.getElementById('loginNick').value.trim();
+  renderNickDropdown(getSavedNicks().filter(n => n.includes(val)));
+};
+window.selectNick = function(nick) {
+  document.getElementById('loginNick').value = nick;
+  document.getElementById('nickDropdown').style.display = 'none';
+};
+window.deleteNick = function(nick) {
+  const nicks = getSavedNicks().filter(n => n !== nick);
+  localStorage.setItem('savedNicks', JSON.stringify(nicks));
+  renderNickDropdown(nicks);
+};
+window.openMyItems = async function() {
+  function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  showSection('myItemsSection');
+  showLoading(true);
+  try {
+    const q = window._fbQuery(window._fbCollection(window._db, 'items'), window._fbWhere('uid', '==', window.fbUser.uid), window._fbOrderBy('createdAt', 'desc'));
+    const snap = await window._fbGetDocs(q);
+    if (snap.empty) { document.getElementById('myItemList').innerHTML = '<div class="empty-state"><div class="ico">📦</div><p>올린 물건이 없어요.</p></div>'; showLoading(false); return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="item-card" onclick="openDetail('${d.id}')"><div class="item-thumb">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="item-info"><div class="item-title">${it.title}</div><div class="item-meta">${timeAgo(t)}</div><div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="item-badges">${it.status==='sale'?'<span class="badge new">판매중</span>':'<span class="badge done">거래완료</span>'}</div></div></div>`;
+    });
+    document.getElementById('myItemList').innerHTML = html;
+  } catch(e) { console.log(e); }
+  showLoading(false);
+};
+window.toggleWishCard = function(id, btn) {
+  if (!window.fbUser) { showToast('로그인이 필요해요'); return; }
+  const key = 'wishes_' + window.fbUser.uid;
+  let wishes = JSON.parse(localStorage.getItem(key) || '[]');
+  if (wishes.includes(id)) {
+    wishes = wishes.filter(w => w !== id);
+    btn.textContent = '♡'; btn.style.color = '#ccc';
+    showToast('관심 목록에서 제거됐어요');
+    document.querySelectorAll(`[data-wish-id="${id}"]`).forEach(b => { b.textContent = '♡'; b.style.color = '#ccc'; });
+  } else {
+    wishes.push(id);
+    btn.textContent = '♥'; btn.style.color = '#FF4757';
+    showToast('관심 목록에 추가됐어요 ❤️');
+    document.querySelectorAll(`[data-wish-id="${id}"]`).forEach(b => { b.textContent = '♥'; b.style.color = '#FF4757'; });
+  }
+  localStorage.setItem(key, JSON.stringify(wishes));
+};
+window.openWishList = async function() {
+  function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  showSection('wishSection');
+  const wishes = JSON.parse(localStorage.getItem('wishes_' + window.fbUser.uid) || '[]');
+  if (!wishes.length) { document.getElementById('wishList').innerHTML = '<div class="empty-state"><div class="ico">❤️</div><p>관심 목록이 없어요.</p></div>'; return; }
+  showLoading(true);
+  try {
+    let html = '';
+    for (const itemId of wishes) {
+      const snap = await window._fbGetDoc(window._fbDoc(window._db, 'items', itemId));
+      if (!snap.exists()) continue;
+      const it = snap.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="item-card" style="position:relative;" onclick="openDetail('${snap.id}')"><div class="item-thumb">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="item-info"><div class="item-title">${it.title}</div><div class="item-meta">${it.nick} · ${timeAgo(t)}</div><div class="item-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div></div><button onclick="event.stopPropagation();toggleWishCard('${snap.id}',this);this.closest('.item-card').style.opacity='0.3';setTimeout(()=>this.closest('.item-card').remove(),400);" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:#FF4757;">♥</button></div>`;
+    }
+    document.getElementById('wishList').innerHTML = html || '<div class="empty-state"><div class="ico">❤️</div><p>관심 목록이 없어요.</p></div>';
+  } catch(e) { console.log(e); }
+  showLoading(false);
+};
+window.changeNick = async function() {
+  const newNick = document.getElementById('newNick').value.trim();
+  if (!newNick || newNick.length > 4) { showToast('별명은 4자 이내로 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'users', fbUser.uid), { nick: newNick });
+    fbProfile.nick = newNick;
+    window.fbProfile.nick = newNick;
+    updateMypage();
+    showToast('별명이 변경됐어요 ✅');
+    showSection('mypageSection');
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 document.addEventListener('click', function(e) {
   const dd = document.getElementById('danjiDropdown');
   if (dd && !dd.contains(e.target) && e.target.id !== 'joinDanji') {
     dd.style.display = 'none';
   }
+  const nd = document.getElementById('nickDropdown');
+  if (nd && !nd.contains(e.target) && e.target.id !== 'loginNick') {
+    nd.style.display = 'none';
+  }
 });
-window.showLoading = function(v) {
-  document.getElementById('loadingOverlay').style.display = v ? 'flex' : 'none';
-};
+
 let writePhotos = [];
 window.addPhotos = async function(input) {
   
