@@ -167,12 +167,27 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .comm-title{font-size:15px;font-weight:600;margin-bottom:4px;}
 .comm-meta{font-size:12px;color:var(--text3);}
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.85);display:none;align-items:center;justify-content:center;z-index:9999;}
+#introScreen{position:fixed;inset:0;background:var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;padding:40px 32px;}
+#introScreen h1{font-size:32px;font-weight:800;color:white;margin-bottom:32px;letter-spacing:-1px;}
+#introScreen ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
+#introScreen ul li{font-size:15px;color:rgba(255,255,255,0.9);line-height:1.5;padding-left:20px;position:relative;}
+#introScreen ul li::before{content:'✓';position:absolute;left:0;font-weight:700;}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 </style>
 </head>
 <body>
 
+<div id="introScreen">
+  <h1>🏠 우단앱</h1>
+  <ul>
+    <li>같은 아파트 단지 주민끼리만 거래</li>
+    <li>단지내 직거래로 안전하며 배송비 제로</li>
+    <li>주소 입력만으로 단지내 커뮤니티 생성</li>
+    <li>별명+4자리 비번으로 간편 가입</li>
+    <li>실시간 1:1 거래 채팅</li>
+  </ul>
+</div>
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -522,7 +537,8 @@ window.openDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const wished = (JSON.parse(localStorage.getItem('wishes_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-wish ${wished?'on':''}" id="wishBtn" onclick="toggleWish('${itemId}')">${wished?'♥':'♡'}</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button></div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-wish ${wished?'on':''}" id="wishBtn" onclick="toggleWish('${itemId}')">${wished?'♥':'♡'}</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#333'};" onclick="toggleSaleStatus('${itemId}','${it.status}')">${it.status==='done'?'판매중으로변경':'거래완료'}</button>`:''}
+</div>`;
   showLoading(false);
   showSection('detailSection');
 };
@@ -538,6 +554,7 @@ window.startChat = async function(itemId, sellerUid, sellerNick, itemTitle, item
 };
 
 window.openChatRoom = function(chatId, otherNick, itemTitle, itemPrice, itemEmoji) {
+  document.querySelectorAll('.section, #loginSection, #joinSection, #splashSection').forEach(s => s.classList.remove('active'));
   currentChatId = chatId;
   document.getElementById('chatRoomTitle').textContent = otherNick;
   document.getElementById('chatRoomPreview').innerHTML = `<div class="chatroom-item-emoji">${itemEmoji}</div><div class="chatroom-item-info"><div class="title">${itemTitle}</div><div class="price">${itemPrice}</div></div>`;
@@ -610,6 +627,16 @@ window.toggleWish = function(id) {
   localStorage.setItem(key, JSON.stringify(wishes));
 };
 window.shareItem = function() { showToast('공유 기능 준비중 📤'); };
+window.toggleSaleStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'sale' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'items', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '거래완료로 변경됐어요 ✅' : '판매중으로 변경됐어요');
+    openDetail(itemId);
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 
 function catEmoji(cat) {
   const map = {'디지털/가전':'📱','가구/인테리어':'🛋','의류/잡화':'👗','도서/취미':'📚','식품/생활':'🧴','유아/아동':'🧸','스포츠/레저':'⚽','기타':'📦'};
@@ -628,6 +655,7 @@ function formatTime(date) {
 </script>
 
 <script>
+setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; }, 3000);
 const AUTH_SECTIONS = ['loginSection','joinSection','splashSection'];
 function showSection(id) {
   if (id === 'chatRoomSection') return;
