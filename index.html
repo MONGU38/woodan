@@ -166,6 +166,8 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .comm-type.free{background:var(--orange-light);color:var(--orange);}
 .comm-title{font-size:15px;font-weight:600;margin-bottom:4px;}
 .comm-meta{font-size:12px;color:var(--text3);}
+.comm-tab-btn{border:1.5px solid var(--border);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--text2);}
+.comm-tab-btn.active{border-color:var(--orange);color:var(--orange);background:var(--orange-light);}
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.85);display:none;align-items:center;justify-content:center;z-index:9999;}
 #introScreen{position:fixed;inset:0;background:var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;padding:40px 32px;}
 #introScreen h1{font-size:32px;font-weight:800;color:white;margin-bottom:32px;letter-spacing:-1px;}
@@ -196,8 +198,8 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <div class="splash-logo">
     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
   </div>
-  <div class="splash-title">우단앱</div>
-  <div class="splash-sub">우리 <span>단지</span> 이웃끼리만<br>배송비 0원 직거래</div>
+  <div class="splash-title"><span style="color:#DC143C;font-size:34px;">우</span><span style="color:#DC143C;font-size:34px;">단</span><span style="color:#DC143C;font-size:34px;">앱</span></div>
+  <div class="splash-sub"><span style="color:#DC143C;font-weight:700;font-size:18px;">우</span>리 <span style="color:#DC143C;font-weight:700;font-size:18px;">단</span>지 중고거래<span style="color:#DC143C;font-weight:700;font-size:18px;">앱</span><br>배송비 0원 직거래<br><span style="font-size:13px;color:#999;">별명, 도로명주소로 가입<br>(동호수 불필요)</span></div>
   <button class="btn-primary" onclick="showSection('loginSection')">로그인</button>
   <button class="btn-secondary" onclick="showSection('joinSection')">처음이에요 (회원가입)</button>
 </div>
@@ -254,6 +256,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     </div>
     <span class="topbar-badge" id="danjiLabel">단지 로딩중</span>
   </div>
+  <div style="padding:12px 16px 0;"><input type="text" id="searchInput" placeholder="🔍 단지 내 매물 검색" oninput="filterItems(this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:15px;outline:none;background:#fff;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'"></div>
   <div class="list-section"><div id="itemList"><div class="empty-state"><div class="ico">📦</div><p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div></div></div>
   <button class="fab" onclick="showSection('writeSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
 </div>
@@ -324,10 +327,25 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <!-- COMMUNITY -->
 <div id="commSection" class="section">
   <div class="topbar"><div class="topbar-title">우리 단지 소식</div></div>
-  <div style="padding:12px 0;">
-    <div class="comm-item"><span class="comm-type notice">📢 공지</span><div class="comm-title">지하주차장 도색 공사 안내 (4/15~16)</div><div class="comm-meta">관리사무소 · 2시간 전</div></div>
-    <div class="comm-item"><span class="comm-type lost">🔍 분실물</span><div class="comm-title">검정 우산 잃어버리신 분 계세요?</div><div class="comm-meta">1203호 · 어제</div></div>
-    <div class="comm-item"><span class="comm-type free">🎁 나눔</span><div class="comm-title">에어프라이어 무료나눔 (선착순)</div><div class="comm-meta">해피맘 · 3일 전</div></div>
+  <div style="padding:12px 16px 0;display:flex;gap:8px;">
+    <button class="comm-tab-btn active" id="commTab-lost" onclick="switchCommTab('lost')">🔍 분실물</button>
+  </div>
+  <div id="commList" style="padding:12px 0;"></div>
+  <button class="fab" id="commFab" onclick="showSection('lostWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
+</div>
+
+<!-- LOST WRITE -->
+<div id="lostWriteSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('commSection')">←</button>
+    <span class="topbar-title">분실물 등록</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitLost()">등록</button>
+  </div>
+  <div class="write-body">
+    <input class="write-input" id="lostTitle" placeholder="분실물 제목 (예: 검정 지갑 분실)" maxlength="40">
+    <input class="write-input" id="lostWhere" placeholder="분실 장소 (예: 101동 엘리베이터)" maxlength="40" style="margin-top:8px;">
+    <input class="write-input" id="lostWhen" placeholder="분실 일시 (예: 4/18 오후 3시경)" maxlength="40" style="margin-top:8px;">
+    <textarea class="write-textarea" id="lostDesc" placeholder="상세 설명 (색상, 특징 등)" rows="4"></textarea>
   </div>
 </div>
 
@@ -385,7 +403,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <!-- TABBAR -->
 <nav class="tabbar" id="tabbar" style="display:none;">
   <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl">거래</span></button>
-  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">📋</span><span class="tab-lbl">소식</span></button>
+  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl">분실물</span></button>
   <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl">채팅</span></button>
   <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl">내정보</span></button>
 </nav>
@@ -627,6 +645,66 @@ window.toggleWish = function(id) {
   localStorage.setItem(key, JSON.stringify(wishes));
 };
 window.shareItem = function() { showToast('공유 기능 준비중 📤'); };
+window.switchCommTab = function(tab) {
+  document.querySelectorAll('.comm-tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('commTab-' + tab).classList.add('active');
+  loadCommList(tab);
+};
+window.loadCommList = async function(tab) {
+  if (!fbProfile.danjiKey) return;
+  const q = query(collection(db, 'lost'), where('danjiKey', '==', fbProfile.danjiKey), orderBy('createdAt', 'desc'));
+  onSnapshot(q, snap => {
+    if (snap.empty) { document.getElementById('commList').innerHTML = '<div class="empty-state"><div class="ico">🔍</div><p>등록된 분실물이 없어요.</p></div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span><div class="comm-title">${it.title}</div><div class="comm-meta">${it.nick} · ${it.where} · ${timeAgo(t)}</div></div>`;
+    });
+    document.getElementById('commList').innerHTML = html;
+  });
+};
+window.submitLost = async function() {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const title = document.getElementById('lostTitle').value.trim();
+  const where = document.getElementById('lostWhere').value.trim();
+  const when = document.getElementById('lostWhen').value.trim();
+  const desc = document.getElementById('lostDesc').value.trim();
+  if (!title || !where) { showToast('제목과 장소를 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await addDoc(collection(db, 'lost'), {
+      title, where, when, desc,
+      nick: fbProfile.nick, uid: fbUser.uid,
+      danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
+      createdAt: serverTimestamp()
+    });
+    showToast('분실물 등록 완료 🔍');
+    document.getElementById('lostTitle').value = '';
+    document.getElementById('lostWhere').value = '';
+    document.getElementById('lostWhen').value = '';
+    document.getElementById('lostDesc').value = '';
+    showSection('commSection');
+  } catch(e) { showToast('등록 실패: '+e.message); }
+  showLoading(false);
+};
+window.openLostDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'lost', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔍 분실물</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;"><b>장소:</b> ${it.where}<br><b>일시:</b> ${it.when||'미기재'}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('commSection')">목록으로</button>${fbUser&&fbUser.uid!==it.uid?`<button class="btn-chat" onclick="startChat('lost_${itemId}','${it.uid}','${it.nick}','${it.title}','분실물','🔍')">채팅하기</button>`:''}
+</div>`;
+  showLoading(false);
+  showSection('detailSection');
+};
+window.filterItems = function(val) {
+  const cards = document.querySelectorAll('#itemList .item-card');
+  cards.forEach(card => {
+    const title = card.querySelector('.item-title').textContent;
+    card.style.display = title.includes(val) ? 'flex' : 'none';
+  });
+};
 window.toggleSaleStatus = async function(itemId, currentStatus) {
   const newStatus = currentStatus === 'done' ? 'sale' : 'done';
   showLoading(true);
@@ -688,6 +766,7 @@ function showSection(id) {
   const tabbar = document.getElementById('tabbar');
   tabbar.style.display = AUTH_SECTIONS.includes(id) ? 'none' : 'flex';
   if (id === 'chatSection') { if(typeof loadChatList === 'function') loadChatList(); }
+  if (id === 'commSection') { if(typeof loadCommList === 'function') loadCommList('lost'); }
 }
 function switchTab(id) {
   showSection(id);
