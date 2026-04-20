@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>우단앱 관리자</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:#f5f5f5;color:#1a1a1a;}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;}
+.login-box{background:#fff;border-radius:16px;padding:40px;width:320px;box-shadow:0 4px 24px rgba(0,0,0,0.1);}
+.login-box h2{font-size:22px;font-weight:700;margin-bottom:8px;color:#A51C30;}
+.login-box p{font-size:14px;color:#666;margin-bottom:24px;}
+.login-box input{width:100%;border:1.5px solid #eee;border-radius:10px;padding:14px 16px;font-size:16px;outline:none;margin-bottom:12px;}
+.login-box input:focus{border-color:#A51C30;}
+.login-box button{width:100%;background:#A51C30;color:white;border:none;border-radius:10px;padding:14px;font-size:16px;font-weight:600;cursor:pointer;}
+.header{background:#A51C30;color:white;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;}
+.header h1{font-size:20px;font-weight:700;}
+.header button{background:rgba(255,255,255,0.2);border:none;color:white;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:14px;}
+.container{max-width:1200px;margin:0 auto;padding:24px;}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+.stat-card{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.stat-card .label{font-size:13px;color:#999;margin-bottom:8px;}
+.stat-card .value{font-size:32px;font-weight:700;color:#A51C30;}
+.section{background:#fff;border-radius:12px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.06);margin-bottom:24px;}
+.section h3{font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #eee;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-size:13px;color:#999;font-weight:600;padding:8px 12px;border-bottom:1px solid #eee;}
+td{padding:12px;font-size:14px;border-bottom:1px solid #f5f5f5;}
+tr:last-child td{border-bottom:none;}
+.badge{font-size:11px;padding:3px 8px;border-radius:20px;font-weight:600;display:inline-block;}
+.badge.items{background:#FFF0EB;color:#FF6B35;}
+.badge.talent{background:#FCEAEC;color:#A51C30;}
+.spinner{text-align:center;padding:40px;color:#999;}
+</style>
+</head>
+<body>
+
+<div id="loginWrap" class="login-wrap">
+  <div class="login-box">
+    <h2>🏠 우단앱</h2>
+    <p>관리자 페이지입니다</p>
+    <input type="password" id="adminPw" placeholder="비밀번호 입력" maxlength="10" onkeydown="if(event.key==='Enter')checkLogin()">
+    <button onclick="checkLogin()">로그인</button>
+  </div>
+</div>
+
+<div id="dashboard" style="display:none;">
+  <div class="header">
+    <h1>🏠 우단앱 관리자 대시보드</h1>
+    <button onclick="logout()">로그아웃</button>
+  </div>
+  <div class="container">
+    <div class="stats">
+      <div class="stat-card"><div class="label">전체 회원수</div><div class="value" id="totalUsers">-</div></div>
+      <div class="stat-card"><div class="label">전체 단지수</div><div class="value" id="totalDanji">-</div></div>
+      <div class="stat-card"><div class="label">전체 매물수</div><div class="value" id="totalItems">-</div></div>
+      <div class="stat-card"><div class="label">전체 재능마켓</div><div class="value" id="totalTalents">-</div></div>
+      <div class="stat-card"><div class="label">전체 분실물</div><div class="value" id="totalLost">-</div></div>
+      <div class="stat-card"><div class="label">전체 채팅방</div><div class="value" id="totalChats">-</div></div>
+    </div>
+
+    <div class="section">
+      <h3>단지별 현황</h3>
+      <table>
+        <thead><tr><th>단지명</th><th>지역</th><th>회원수</th><th>매물</th><th>재능마켓</th><th>분실물</th></tr></thead>
+        <tbody id="danjiTable"><tr><td colspan="6" class="spinner">로딩중...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>최근 가입 회원</h3>
+      <table>
+        <thead><tr><th>별명</th><th>단지</th><th>지역</th><th>가입일</th></tr></thead>
+        <tbody id="userTable"><tr><td colspan="4" class="spinner">로딩중...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>최근 등록 매물</h3>
+      <table>
+        <thead><tr><th>제목</th><th>카테고리</th><th>가격</th><th>단지</th><th>등록자</th><th>등록일</th></tr></thead>
+        <tbody id="itemTable"><tr><td colspan="6" class="spinner">로딩중...</td></tr></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>최근 재능마켓</h3>
+      <table>
+        <thead><tr><th>제목</th><th>카테고리</th><th>단지</th><th>등록자</th><th>등록일</th></tr></thead>
+        <tbody id="talentTable"><tr><td colspan="5" class="spinner">로딩중...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZwxLXSTjkZkOJt7nKkcxd5j8gulKF5Yk",
+  authDomain: "woodan-639a0.firebaseapp.com",
+  projectId: "woodan-639a0",
+  storageBucket: "woodan-639a0.firebasestorage.app",
+  messagingSenderId: "623126216456",
+  appId: "1:623126216456:web:386038868d19c5343bf6bd"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+window.checkLogin = function() {
+  const pw = document.getElementById('adminPw').value;
+  if (pw === '3154') {
+    document.getElementById('loginWrap').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadData();
+  } else {
+    alert('비밀번호가 틀렸어요');
+  }
+};
+
+window.logout = function() {
+  document.getElementById('loginWrap').style.display = 'flex';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('adminPw').value = '';
+};
+
+function timeAgo(date) {
+  if (!date) return '-';
+  const s = Math.floor((Date.now() - date) / 1000);
+  if (s < 60) return '방금 전';
+  if (s < 3600) return Math.floor(s/60) + '분 전';
+  if (s < 86400) return Math.floor(s/3600) + '시간 전';
+  return Math.floor(s/86400) + '일 전';
+}
+
+async function loadData() {
+  const [usersSnap, itemsSnap, talentsSnap, lostSnap, chatsSnap] = await Promise.all([
+    getDocs(collection(db, 'users')),
+    getDocs(collection(db, 'items')),
+    getDocs(collection(db, 'talents')),
+    getDocs(collection(db, 'lost')),
+    getDocs(collection(db, 'chats'))
+  ]);
+
+  const users = usersSnap.docs.map(d => ({id:d.id,...d.data()}));
+  const items = itemsSnap.docs.map(d => ({id:d.id,...d.data()}));
+  const talents = talentsSnap.docs.map(d => ({id:d.id,...d.data()}));
+  const lost = lostSnap.docs.map(d => ({id:d.id,...d.data()}));
+
+  document.getElementById('totalUsers').textContent = users.length;
+  document.getElementById('totalItems').textContent = items.length;
+  document.getElementById('totalTalents').textContent = talents.length;
+  document.getElementById('totalLost').textContent = lost.length;
+  document.getElementById('totalChats').textContent = chatsSnap.size;
+
+  const danjiMap = {};
+  users.forEach(u => {
+    const key = u.danjiKey;
+    if (!danjiMap[key]) danjiMap[key] = { danji: u.danji, sido: u.sido, sigungu: u.sigungu, users: 0, items: 0, talents: 0, lost: 0 };
+    danjiMap[key].users++;
+  });
+  items.forEach(it => { if (danjiMap[it.danjiKey]) danjiMap[it.danjiKey].items++; });
+  talents.forEach(t => { if (danjiMap[t.danjiKey]) danjiMap[t.danjiKey].talents++; });
+  lost.forEach(l => { if (danjiMap[l.danjiKey]) danjiMap[l.danjiKey].lost++; });
+
+  document.getElementById('totalDanji').textContent = Object.keys(danjiMap).length;
+
+  const danjiRows = Object.values(danjiMap).sort((a,b) => b.users - a.users).map(d =>
+    `<tr><td>${d.danji||'-'}</td><td>${d.sido||''} ${d.sigungu||''}</td><td>${d.users}</td><td>${d.items}</td><td>${d.talents}</td><td>${d.lost}</td></tr>`
+  ).join('');
+  document.getElementById('danjiTable').innerHTML = danjiRows || '<tr><td colspan="6">데이터 없음</td></tr>';
+
+  const recentUsers = [...users].sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0)).slice(0,20);
+  document.getElementById('userTable').innerHTML = recentUsers.map(u =>
+    `<tr><td>${u.nick||'-'}</td><td>${u.danji||'-'}</td><td>${u.sido||''} ${u.sigungu||''}</td><td>${timeAgo(u.createdAt?.toDate ? u.createdAt.toDate() : null)}</td></tr>`
+  ).join('') || '<tr><td colspan="4">데이터 없음</td></tr>';
+
+  const recentItems = [...items].sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0)).slice(0,20);
+  document.getElementById('itemTable').innerHTML = recentItems.map(it =>
+    `<tr><td>${it.title||'-'}</td><td><span class="badge items">${it.cat||'-'}</span></td><td>${it.isFree?'나눔':(it.price||0).toLocaleString()+'원'}</td><td>${it.danji||'-'}</td><td>${it.nick||'-'}</td><td>${timeAgo(it.createdAt?.toDate ? it.createdAt.toDate() : null)}</td></tr>`
+  ).join('') || '<tr><td colspan="6">데이터 없음</td></tr>';
+
+  const recentTalents = [...talents].sort((a,b) => (b.createdAt?.seconds||0) - (a.createdAt?.seconds||0)).slice(0,20);
+  document.getElementById('talentTable').innerHTML = recentTalents.map(t =>
+    `<tr><td>${t.title||'-'}</td><td><span class="badge talent">${t.cat||'-'}</span></td><td>${t.danji||'-'}</td><td>${t.nick||'-'}</td><td>${timeAgo(t.createdAt?.toDate ? t.createdAt.toDate() : null)}</td></tr>`
+  ).join('') || '<tr><td colspan="5">데이터 없음</td></tr>';
+}
+</script>
+</body>
+</html>
