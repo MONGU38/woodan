@@ -6,14 +6,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#FF6B35">
+<meta name="theme-color" content="#A51C30">
 <title>우단앱</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
-  --orange:#FF6B35;
-  --orange-light:#FFF0EB;
-  --orange-dark:#E55A26;
+  --orange:#A51C30;
+  --orange-light:#FCEAEC;
+  --orange-dark:#7A1020;
   --bg:#FAFAFA;
   --card:#FFFFFF;
   --text:#1A1A1A;
@@ -174,6 +174,9 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 #introScreen ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
 #introScreen ul li{font-size:15px;color:rgba(255,255,255,0.9);line-height:1.5;padding-left:20px;position:relative;}
 #introScreen ul li::before{content:'✓';position:absolute;left:0;font-weight:700;}
+#introScreen .progress-bar{width:100%;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;margin-top:40px;overflow:hidden;}
+#introScreen .progress-fill{height:100%;width:0%;background:white;border-radius:2px;animation:progressAnim 3s linear forwards;}
+@keyframes progressAnim{to{width:100%;}}
 .spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin 0.8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
 </style>
@@ -185,10 +188,12 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <ul>
     <li>같은 아파트 단지 주민끼리만 거래</li>
     <li>단지내 직거래로 안전하며 배송비 제로</li>
+    <li>단지 주민 간 재능마켓 (가전수리, 돌봄, 교육 등)</li>
     <li>주소 입력만으로 단지내 커뮤니티 생성</li>
     <li>별명+4자리 비번으로 간편 가입</li>
     <li>실시간 1:1 거래 채팅</li>
   </ul>
+  <div class="progress-bar"><div class="progress-fill"></div></div>
 </div>
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
@@ -324,6 +329,53 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   </div>
 </div>
 
+<!-- TALENT -->
+<div id="talentSection" class="section">
+  <div class="topbar"><div class="topbar-title">단지 재능마켓</div></div>
+  <div style="padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:8px;" id="talentCatFilter">
+    <button class="comm-tab-btn active" onclick="filterTalent(this,'')">전체</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'가전수리')">🔌 가전수리</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'주거수리')">🔨 주거수리</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'돌봄')">👶 돌봄</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'교육')">📚 교육</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'생활서비스')">🧹 생활서비스</button>
+    <button class="comm-tab-btn" onclick="filterTalent(this,'기타')">📦 기타</button>
+  </div>
+  <div id="talentList" style="padding:12px 0;"></div>
+  <button class="fab" onclick="showSection('talentWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
+</div>
+
+<!-- TALENT WRITE -->
+<div id="talentWriteSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('talentSection')">←</button>
+    <span class="topbar-title">재능마켓 등록</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitTalent()">등록</button>
+  </div>
+  <div class="write-body">
+    <div class="write-label">카테고리</div>
+    <div class="cat-tags" id="talentCatTags">
+      <button class="cat-tag" onclick="selectTalentCat(this,'가전수리')">🔌 가전수리</button>
+      <button class="cat-tag" onclick="selectTalentCat(this,'주거수리')">🔨 주거수리</button>
+      <button class="cat-tag" onclick="selectTalentCat(this,'돌봄')">👶 돌봄</button>
+      <button class="cat-tag" onclick="selectTalentCat(this,'교육')">📚 교육</button>
+      <button class="cat-tag" onclick="selectTalentCat(this,'생활서비스')">🧹 생활서비스</button>
+      <button class="cat-tag" onclick="selectTalentCat(this,'기타')">📦 기타</button>
+    </div>
+    <input class="write-input" id="talentTitle" placeholder="제목 (예: 청소기·세탁기 수리해드려요)" maxlength="40" style="margin-top:16px;">
+    <textarea class="write-textarea" id="talentDesc" placeholder="상세 설명 (경력, 가능한 수리 범위 등)" rows="4"></textarea>
+  </div>
+</div>
+
+<!-- TALENT DETAIL -->
+<div id="talentDetailSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('talentSection')">←</button>
+    <span class="topbar-title">재능마켓 상세</span>
+  </div>
+  <div id="talentDetailContent"></div>
+</div>
+
 <!-- COMMUNITY -->
 <div id="commSection" class="section">
   <div class="topbar"><div class="topbar-title">우리 단지 소식</div></div>
@@ -347,6 +399,15 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <input class="write-input" id="lostWhen" placeholder="분실 일시 (예: 4/18 오후 3시경)" maxlength="40" style="margin-top:8px;">
     <textarea class="write-textarea" id="lostDesc" placeholder="상세 설명 (색상, 특징 등)" rows="4"></textarea>
   </div>
+</div>
+
+<!-- MY TALENTS -->
+<div id="myTalentsSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">나의 재능마켓</span>
+  </div>
+  <div class="list-section" id="myTalentList"><div class="empty-state"><div class="ico">🔧</div><p>등록된 재능이 없어요.</p></div></div>
 </div>
 
 <!-- MY ITEMS -->
@@ -389,6 +450,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <div class="menu-section-title">거래 활동</div>
   <div class="menu-list">
     <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt">나의 재능마켓</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
@@ -403,6 +465,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <!-- TABBAR -->
 <nav class="tabbar" id="tabbar" style="display:none;">
   <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl">거래</span></button>
+  <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl">재능마켓</span></button>
   <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl">분실물</span></button>
   <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl">채팅</span></button>
   <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl">내정보</span></button>
@@ -555,7 +618,7 @@ window.openDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const wished = (JSON.parse(localStorage.getItem('wishes_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-wish ${wished?'on':''}" id="wishBtn" onclick="toggleWish('${itemId}')">${wished?'♥':'♡'}</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#333'};" onclick="toggleSaleStatus('${itemId}','${it.status}')">${it.status==='done'?'판매중으로변경':'거래완료'}</button>`:''}
+  document.getElementById('detailContent').innerHTML = `<div class="detail-img">${it.photos&&it.photos[0]?`<img src="${it.photos[0]}" style="width:100%;height:100%;object-fit:cover;">`:it.emoji||'📦'}</div><div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${timeAgo(t)} · ${it.danji}</div><div class="detail-price ${it.isFree?'free':''}">${it.isFree?'나눔':it.price.toLocaleString()+'원'}</div><div class="detail-desc">${it.desc||'설명이 없어요.'}</div><div class="seller-row"><div class="seller-avatar">${it.nick?.[0]||'?'}</div><div><div class="seller-name">${it.nick}</div><div class="seller-unit">${it.danji}</div></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-wish ${wished?'on':''}" id="wishBtn" onclick="toggleWish('${itemId}')">${wished?'♥':'♡'}</button><button class="btn-chat" onclick="startChat('${itemId}','${it.uid}','${it.nick}','${it.title}','${it.isFree?'나눔':it.price.toLocaleString()+'원'}','${it.emoji||'📦'}')">채팅하기</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#333'};" onclick="toggleSaleStatus('${itemId}','${it.status}')">${it.status==='done'?'판매중으로변경':'거래완료'}</button><button class="btn-chat" style="background:#555;" onclick="editItem('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteItem('${itemId}')">삭제</button>`:''}
 </div>`;
   showLoading(false);
   showSection('detailSection');
@@ -693,10 +756,183 @@ window.openLostDetail = async function(itemId) {
   const snap = await getDoc(doc(db, 'lost', itemId));
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔍 분실물</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;"><b>장소:</b> ${it.where}<br><b>일시:</b> ${it.when||'미기재'}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('commSection')">목록으로</button>${fbUser&&fbUser.uid!==it.uid?`<button class="btn-chat" onclick="startChat('lost_${itemId}','${it.uid}','${it.nick}','${it.title}','분실물','🔍')">채팅하기</button>`:''}
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔍 분실물</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;"><b>장소:</b> ${it.where}<br><b>일시:</b> ${it.when||'미기재'}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('commSection')">목록으로</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editLost('${itemId}','${it.title}','${it.where}','${it.when||''}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLost('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lost_${itemId}','${it.uid}','${it.nick}','${it.title}','분실물','🔍')">채팅하기</button>`}
 </div>`;
   showLoading(false);
   showSection('detailSection');
+};
+window.editLost = async function(itemId, title, where, when) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'lost', itemId));
+  const it = snap.data();
+  showLoading(false);
+  document.getElementById('lostTitle').value = title;
+  document.getElementById('lostWhere').value = where;
+  document.getElementById('lostWhen').value = when;
+  document.getElementById('lostDesc').value = it.desc || '';
+  showSection('lostWriteSection');
+  document.querySelector('#lostWriteSection .topbar .btn-primary').onclick = async function() {
+    const newTitle = document.getElementById('lostTitle').value.trim();
+    const newWhere = document.getElementById('lostWhere').value.trim();
+    const newWhen = document.getElementById('lostWhen').value.trim();
+    const newDesc = document.getElementById('lostDesc').value.trim();
+    if (!newTitle || !newWhere) { showToast('제목과 장소를 입력해주세요'); return; }
+    showLoading(true);
+    try {
+      await updateDoc(doc(db, 'lost', itemId), { title: newTitle, where: newWhere, when: newWhen, desc: newDesc });
+      showToast('수정 완료 ✅');
+      showSection('commSection');
+    } catch(e) { showToast('수정 실패: '+e.message); }
+    showLoading(false);
+  };
+};
+window.editItem = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'items', itemId));
+  const it = snap.data();
+  showLoading(false);
+  showSection('writeSection');
+  document.getElementById('writeTitle').value = it.title || '';
+  document.getElementById('writePrice').value = it.price ? it.price.toLocaleString() : '';
+  document.getElementById('writeDesc').value = it.desc || '';
+  isFree = it.isFree || false;
+  const freeToggle = document.getElementById('freeToggle');
+  const priceInput = document.getElementById('writePrice');
+  freeToggle.classList.toggle('on', isFree);
+  priceInput.disabled = isFree;
+  priceInput.placeholder = isFree ? '가격 없음 (나눔)' : '가격 입력';
+  window.selectedCat = it.cat || '';
+  document.querySelectorAll('.cat-tag').forEach(b => {
+    b.classList.toggle('on', b.textContent.includes(it.cat));
+  });
+  document.querySelector('#writeSection .topbar .btn-primary').onclick = async function() {
+    const newTitle = document.getElementById('writeTitle').value.trim();
+    const newDesc = document.getElementById('writeDesc').value.trim();
+    const newPriceRaw = document.getElementById('writePrice').value.replace(/,/g,'');
+    const newPrice = isFree ? 0 : parseInt(newPriceRaw) || 0;
+    if (!newTitle) { showToast('제목을 입력해주세요'); return; }
+    showLoading(true);
+    try {
+      await updateDoc(doc(db, 'items', itemId), { title: newTitle, desc: newDesc, price: newPrice, isFree });
+      showToast('수정 완료 ✅');
+      switchTab('mainSection');
+    } catch(e) { showToast('수정 실패: '+e.message); }
+    showLoading(false);
+  };
+};
+window.deleteItem = async function(itemId) {
+  if (!confirm('물건을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'items', itemId));
+    showToast('삭제됐어요');
+    switchTab('mainSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
+};
+window.deleteLost = async function(itemId) {
+  if (!confirm('분실물 게시글을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'lost', itemId));
+    showToast('삭제됐어요');
+    showSection('commSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
+};
+let currentTalentCat = '';
+window.filterTalent = function(el, cat) {
+  document.querySelectorAll('#talentCatFilter .comm-tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  currentTalentCat = cat;
+  loadTalentList(cat);
+};
+window.loadTalentList = async function(cat) {
+  if (!fbProfile.danjiKey) return;
+  const q = query(collection(db, 'talents'), where('danjiKey', '==', fbProfile.danjiKey), orderBy('createdAt', 'desc'));
+  onSnapshot(q, snap => {
+    if (snap.empty) { document.getElementById('talentList').innerHTML = '<div class="empty-state"><div class="ico">🔧</div><p>등록된 재능이 없어요.<br>첫 번째로 등록해보세요!</p></div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      if (cat && it.cat !== cat) return;
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span><div class="comm-title">${it.title}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editTalent('${d.id}','${it.cat}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteTalent('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}</div>`;
+    });
+    document.getElementById('talentList').innerHTML = html || '<div class="empty-state"><div class="ico">🔧</div><p>해당 카테고리에 등록된 재능이 없어요.</p></div>';
+  });
+};
+window.selectTalentCat = function(el, cat) {
+  document.querySelectorAll('#talentCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  window.selectedTalentCat = cat;
+};
+window.submitTalent = async function() {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const title = document.getElementById('talentTitle').value.trim();
+  const desc = document.getElementById('talentDesc').value.trim();
+  if (!window.selectedTalentCat) { showToast('카테고리를 선택해주세요'); return; }
+  if (!title) { showToast('제목을 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await addDoc(collection(db, 'talents'), {
+      title, desc, cat: window.selectedTalentCat,
+      nick: fbProfile.nick, uid: fbUser.uid,
+      danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
+      createdAt: serverTimestamp()
+    });
+    showToast('재능마켓 등록 완료 🔧');
+    document.getElementById('talentTitle').value = '';
+    document.getElementById('talentDesc').value = '';
+    window.selectedTalentCat = '';
+    document.querySelectorAll('#talentCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+    showSection('talentSection');
+  } catch(e) { showToast('등록 실패: '+e.message); }
+  showLoading(false);
+};
+window.openTalentDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'talents', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  document.getElementById('talentDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('talentSection')">목록으로</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editTalent('${itemId}','${it.cat}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteTalent('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('talent_${itemId}','${it.uid}','${it.nick}','${it.title}','재능마켓','🔧')">채팅하기</button>`}</div>`;
+  showLoading(false);
+  showSection('talentDetailSection');
+};
+window.editTalent = async function(itemId, cat) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'talents', itemId));
+  const it = snap.data();
+  showLoading(false);
+  showSection('talentWriteSection');
+  document.getElementById('talentTitle').value = it.title || '';
+  document.getElementById('talentDesc').value = it.desc || '';
+  window.selectedTalentCat = it.cat || '';
+  document.querySelectorAll('#talentCatTags .cat-tag').forEach(b => {
+    b.classList.toggle('on', b.textContent.includes(it.cat));
+  });
+  document.querySelector('#talentWriteSection .topbar .btn-primary').onclick = async function() {
+    const newTitle = document.getElementById('talentTitle').value.trim();
+    const newDesc = document.getElementById('talentDesc').value.trim();
+    if (!newTitle) { showToast('제목을 입력해주세요'); return; }
+    showLoading(true);
+    try {
+      await updateDoc(doc(db, 'talents', itemId), { title: newTitle, desc: newDesc, cat: window.selectedTalentCat });
+      showToast('수정 완료 ✅');
+      showSection('talentSection');
+    } catch(e) { showToast('수정 실패: '+e.message); }
+    showLoading(false);
+  };
+};
+window.deleteTalent = async function(itemId) {
+  if (!confirm('재능마켓 글을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'talents', itemId));
+    showToast('삭제됐어요');
+    showSection('talentSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
 };
 window.filterItems = function(val) {
   const cards = document.querySelectorAll('#itemList .item-card');
@@ -767,11 +1003,18 @@ function showSection(id) {
   tabbar.style.display = AUTH_SECTIONS.includes(id) ? 'none' : 'flex';
   if (id === 'chatSection') { if(typeof loadChatList === 'function') loadChatList(); }
   if (id === 'commSection') { if(typeof loadCommList === 'function') loadCommList('lost'); }
+  if (id === 'talentSection') { if(typeof loadTalentList === 'function') loadTalentList(''); }
+  if (id === 'talentWriteSection') {
+    window.selectedTalentCat = '';
+    document.querySelectorAll('#talentCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+    document.getElementById('talentTitle').value = '';
+    document.getElementById('talentDesc').value = '';
+  }
 }
 function switchTab(id) {
   showSection(id);
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const map = {mainSection:'tab-main',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
+  const map = {mainSection:'tab-main',talentSection:'tab-talent',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
   if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
 window.selectCat = function(el, cat) {
@@ -828,6 +1071,24 @@ window.deleteNick = function(nick) {
   const nicks = getSavedNicks().filter(n => n !== nick);
   localStorage.setItem('savedNicks', JSON.stringify(nicks));
   renderNickDropdown(nicks);
+};
+window.openMyTalents = async function() {
+  function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  showSection('myTalentsSection');
+  showLoading(true);
+  try {
+    const q = window._fbQuery(window._fbCollection(window._db, 'talents'), window._fbWhere('uid', '==', window.fbUser.uid));
+    const snap = await window._fbGetDocs(q);
+    if (snap.empty) { document.getElementById('myTalentList').innerHTML = '<div class="empty-state"><div class="ico">🔧</div><p>등록된 재능이 없어요.</p></div>'; showLoading(false); return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span><div class="comm-title">${it.title}</div><div class="comm-meta">${timeAgo(t)}</div><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editTalent('${d.id}','${it.cat}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteTalent('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div></div>`;
+    });
+    document.getElementById('myTalentList').innerHTML = html;
+  } catch(e) { console.log(e); }
+  showLoading(false);
 };
 window.openMyItems = async function() {
   function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
