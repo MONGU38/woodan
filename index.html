@@ -973,6 +973,27 @@ function formatTime(date) {
 
 <script>
 setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; }, 3000);
+window.addEventListener('popstate', function() {
+  const sections = ['talentDetailSection','talentWriteSection','talentSection','lostWriteSection','commSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','chatSection','mypageSection','mainSection'];
+  for (const id of sections) {
+    const el = document.getElementById(id);
+    if (el && el.classList.contains('active')) {
+      if (id === 'talentDetailSection') { showSection('talentSection'); return; }
+      if (id === 'talentWriteSection') { showSection('talentSection'); return; }
+      if (id === 'lostWriteSection') { showSection('commSection'); return; }
+      if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection') { showSection('mypageSection'); return; }
+      if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
+      if (id === 'commSection' || id === 'chatSection' || id === 'mypageSection' || id === 'talentSection') { switchTab('mainSection'); return; }
+      return;
+    }
+  }
+  if (document.getElementById('chatRoomSection').classList.contains('active')) {
+    document.getElementById('chatRoomSection').classList.remove('active');
+    document.getElementById('tabbar').style.display = 'flex';
+    switchTab('chatSection');
+  }
+});
+history.pushState(null, '', location.href);
 const AUTH_SECTIONS = ['loginSection','joinSection','splashSection'];
 function showSection(id) {
   if (id === 'chatRoomSection') return;
