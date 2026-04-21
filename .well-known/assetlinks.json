@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "io.github.mongu38.twa",
+        "sha256_cert_fingerprints": ["21:A9:C1:45:2C:A3:66:8E:07:1D:79:6C:99:33:6A:9B:76:81:35:EE:0B:10:6D:7D:83:A9:2D:CD:36:86:7F:29"]
+      }
+    }]
