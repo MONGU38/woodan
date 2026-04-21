@@ -1,0 +1,23 @@
+{
+  "name": "우단앱",
+  "short_name": "우단앱",
+  "description": "우리 단지 중고거래앱 - 배송비 0원 직거래",
+  "start_url": "/woodan/",
+  "scope": "/woodan/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#A51C30",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/woodan/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/woodan/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
