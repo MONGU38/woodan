@@ -59,7 +59,9 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .topbar-icon svg{width:16px;height:16px;fill:white;}
 .topbar-badge{background:var(--orange-light);color:var(--orange);font-size:11px;font-weight:700;padding:3px 8px;border-radius:20px;}
 .icon-btn{background:none;border:none;cursor:pointer;padding:6px;font-size:20px;display:flex;align-items:center;color:var(--text);}
-.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:200;}
+.tabbar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:#fff;border-top:1px solid var(--border);display:flex;padding-bottom:var(--safe-bottom);z-index:200;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.tabbar::-webkit-scrollbar{display:none;}
+.tab-btn{flex:0 0 20%;min-width:64px;}
 .tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0;border:none;background:none;cursor:pointer;gap:3px;transition:color 0.15s;}
 .tab-btn .tab-ico{font-size:22px;line-height:1;}
 .tab-btn .tab-lbl{font-size:10px;font-weight:500;color:var(--text3);}
@@ -378,6 +380,56 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <div id="talentDetailContent"></div>
 </div>
 
+<!-- HELP -->
+<div id="helpSection" class="section">
+  <div class="topbar"><div class="topbar-title">도움이 필요해요</div></div>
+  <div style="padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:8px;" id="helpCatFilter">
+    <button class="comm-tab-btn active" onclick="filterHelp(this,'')">전체</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'가전수리')">🔌 가전수리</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'주거수리')">🔨 주거수리</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'이사/운반')">📦 이사/운반</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'돌봄')">👶 돌봄</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'교육')">📚 교육</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'생활서비스')">🧹 생활서비스</button>
+    <button class="comm-tab-btn" onclick="filterHelp(this,'기타')">📦 기타</button>
+  </div>
+  <div id="helpList" style="padding:12px 0;"></div>
+  <button class="fab" onclick="showSection('helpWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
+</div>
+
+<!-- HELP WRITE -->
+<div id="helpWriteSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('helpSection')">←</button>
+    <span class="topbar-title">도움 요청 등록</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitHelp()">등록</button>
+  </div>
+  <div class="write-body">
+    <div class="write-label">카테고리</div>
+    <div class="cat-tags" id="helpCatTags">
+      <button class="cat-tag" onclick="selectHelpCat(this,'가전수리')">🔌 가전수리</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'주거수리')">🔨 주거수리</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'이사/운반')">📦 이사/운반</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'돌봄')">👶 돌봄</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'교육')">📚 교육</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'생활서비스')">🧹 생활서비스</button>
+      <button class="cat-tag" onclick="selectHelpCat(this,'기타')">📦 기타</button>
+    </div>
+    <input class="write-input" id="helpTitle" placeholder="제목 (예: 청소기 고장났어요 고쳐주실 분)" maxlength="40" style="margin-top:16px;">
+    <input class="write-input" id="helpReward" placeholder="희망 보수 (예: 2만원, 협의)" maxlength="30" style="margin-top:8px;">
+    <textarea class="write-textarea" id="helpDesc" placeholder="상세 설명 (증상, 모델명 등)" rows="4"></textarea>
+  </div>
+</div>
+
+<!-- HELP DETAIL -->
+<div id="helpDetailSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('helpSection')">←</button>
+    <span class="topbar-title">도움 요청 상세</span>
+  </div>
+  <div id="helpDetailContent"></div>
+</div>
+
 <!-- COMMUNITY -->
 <div id="commSection" class="section">
   <div class="topbar"><div class="topbar-title">우리 단지 소식</div></div>
@@ -401,6 +453,15 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <input class="write-input" id="lostWhen" placeholder="분실 일시 (예: 4/18 오후 3시경)" maxlength="40" style="margin-top:8px;">
     <textarea class="write-textarea" id="lostDesc" placeholder="상세 설명 (색상, 특징 등)" rows="4"></textarea>
   </div>
+</div>
+
+<!-- MY HELPS -->
+<div id="myHelpsSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">나의 도움요청</span>
+  </div>
+  <div class="list-section" id="myHelpList"><div class="empty-state"><div class="ico">🙋</div><p>등록된 도움요청이 없어요.</p></div></div>
 </div>
 
 <!-- MY TALENTS -->
@@ -453,6 +514,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <div class="menu-list">
     <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt">나의 재능마켓</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyHelps()"><span class="menu-ico">🙋</span><span class="menu-txt">나의 도움요청</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
@@ -471,6 +533,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
   <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl">재능마켓</span></button>
   <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl">분실물</span></button>
   <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl">채팅</span></button>
+  <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl">도움요청</span></button>
   <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl">내정보</span></button>
 </nav>
 
@@ -937,6 +1000,97 @@ window.deleteTalent = async function(itemId) {
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
 };
+window.filterHelp = function(el, cat) {
+  document.querySelectorAll('#helpCatFilter .comm-tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  loadHelpList(cat);
+};
+window.loadHelpList = async function(cat) {
+  if (!fbProfile.danjiKey) return;
+  const q = query(collection(db, 'helps'), where('danjiKey', '==', fbProfile.danjiKey));
+  onSnapshot(q, snap => {
+    if (snap.empty) { document.getElementById('helpList').innerHTML = '<div class="empty-state"><div class="ico">🙋</div><p>도움 요청이 없어요.<br>첫 번째로 요청해보세요!</p></div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      if (cat && it.cat !== cat) return;
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span><div class="comm-title">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editHelp('${d.id}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteHelp('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}</div>`;
+    });
+    document.getElementById('helpList').innerHTML = html || '<div class="empty-state"><div class="ico">🙋</div><p>해당 카테고리에 도움 요청이 없어요.</p></div>';
+  });
+};
+window.selectHelpCat = function(el, cat) {
+  document.querySelectorAll('#helpCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  window.selectedHelpCat = cat;
+};
+window.submitHelp = async function() {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const title = document.getElementById('helpTitle').value.trim();
+  const reward = document.getElementById('helpReward').value.trim();
+  const desc = document.getElementById('helpDesc').value.trim();
+  if (!window.selectedHelpCat) { showToast('카테고리를 선택해주세요'); return; }
+  if (!title) { showToast('제목을 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await addDoc(collection(db, 'helps'), {
+      title, reward, desc, cat: window.selectedHelpCat,
+      nick: fbProfile.nick, uid: fbUser.uid,
+      danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
+      createdAt: serverTimestamp()
+    });
+    showToast('도움 요청 등록 완료 🙋');
+    showSection('helpSection');
+  } catch(e) { showToast('등록 실패: '+e.message); }
+  showLoading(false);
+};
+window.openHelpDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'helps', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  document.getElementById('helpDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.reward||'보수 협의'}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('helpSection')">목록으로</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editHelp('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteHelp('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('help_${itemId}','${it.uid}','${it.nick}','${it.title}','도움요청','🙋')">채팅하기</button>`}</div>`;
+  showLoading(false);
+  showSection('helpDetailSection');
+};
+window.editHelp = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'helps', itemId));
+  const it = snap.data();
+  showLoading(false);
+  showSection('helpWriteSection');
+  document.getElementById('helpTitle').value = it.title || '';
+  document.getElementById('helpReward').value = it.reward || '';
+  document.getElementById('helpDesc').value = it.desc || '';
+  window.selectedHelpCat = it.cat || '';
+  document.querySelectorAll('#helpCatTags .cat-tag').forEach(b => {
+    b.classList.toggle('on', b.textContent.includes(it.cat));
+  });
+  document.querySelector('#helpWriteSection .topbar .btn-primary').onclick = async function() {
+    const newTitle = document.getElementById('helpTitle').value.trim();
+    const newReward = document.getElementById('helpReward').value.trim();
+    const newDesc = document.getElementById('helpDesc').value.trim();
+    if (!newTitle) { showToast('제목을 입력해주세요'); return; }
+    showLoading(true);
+    try {
+      await updateDoc(doc(db, 'helps', itemId), { title: newTitle, reward: newReward, desc: newDesc, cat: window.selectedHelpCat });
+      showToast('수정 완료 ✅');
+      showSection('helpSection');
+    } catch(e) { showToast('수정 실패: '+e.message); }
+    showLoading(false);
+  };
+};
+window.deleteHelp = async function(itemId) {
+  if (!confirm('도움 요청을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'helps', itemId));
+    showToast('삭제됐어요');
+    showSection('helpSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
+};
 window.filterItems = function(val) {
   const cards = document.querySelectorAll('#itemList .item-card');
   cards.forEach(card => {
@@ -974,7 +1128,14 @@ function formatTime(date) {
 <script>
 setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; }, 3000);
 window.addEventListener('popstate', function() {
-  const sections = ['talentDetailSection','talentWriteSection','talentSection','lostWriteSection','commSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','chatSection','mypageSection','mainSection'];
+  history.pushState(null, '', location.href);
+  if (document.getElementById('chatRoomSection').classList.contains('active')) {
+    document.getElementById('chatRoomSection').classList.remove('active');
+    document.getElementById('tabbar').style.display = 'flex';
+    switchTab('chatSection');
+    return;
+  }
+  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','chatSection','mypageSection','mainSection'];
   for (const id of sections) {
     const el = document.getElementById(id);
     if (el && el.classList.contains('active')) {
@@ -983,20 +1144,17 @@ window.addEventListener('popstate', function() {
       if (id === 'lostWriteSection') { showSection('commSection'); return; }
       if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection') { showSection('mypageSection'); return; }
       if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
-      if (id === 'commSection' || id === 'chatSection' || id === 'mypageSection' || id === 'talentSection') { switchTab('mainSection'); return; }
+      if (id === 'talentSection' || id === 'commSection' || id === 'chatSection' || id === 'mypageSection') { switchTab('mainSection'); return; }
+      if (id === 'mainSection') { if (confirm('앱을 종료할까요?')) { history.back(); } return; }
       return;
     }
-  }
-  if (document.getElementById('chatRoomSection').classList.contains('active')) {
-    document.getElementById('chatRoomSection').classList.remove('active');
-    document.getElementById('tabbar').style.display = 'flex';
-    switchTab('chatSection');
   }
 });
 history.pushState(null, '', location.href);
 const AUTH_SECTIONS = ['loginSection','joinSection','splashSection'];
 function showSection(id) {
   if (id === 'chatRoomSection') return;
+  history.pushState({section: id}, '', location.href);
   document.querySelectorAll('.section, #loginSection, #joinSection, #splashSection').forEach(s => s.classList.remove('active'));
   document.getElementById('chatRoomSection').classList.remove('active');
   const el = document.getElementById(id);
@@ -1028,6 +1186,14 @@ function showSection(id) {
   if (id === 'chatSection') { if(typeof loadChatList === 'function') loadChatList(); }
   if (id === 'commSection') { if(typeof loadCommList === 'function') loadCommList('lost'); }
   if (id === 'talentSection') { if(typeof loadTalentList === 'function') loadTalentList(''); }
+  if (id === 'helpSection') { if(typeof loadHelpList === 'function') loadHelpList(''); }
+  if (id === 'helpWriteSection') {
+    window.selectedHelpCat = '';
+    document.querySelectorAll('#helpCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+    document.getElementById('helpTitle').value = '';
+    document.getElementById('helpReward').value = '';
+    document.getElementById('helpDesc').value = '';
+  }
   if (id === 'talentWriteSection') {
     window.selectedTalentCat = '';
     document.querySelectorAll('#talentCatTags .cat-tag').forEach(b => b.classList.remove('on'));
@@ -1036,9 +1202,10 @@ function showSection(id) {
   }
 }
 function switchTab(id) {
+  history.pushState({section: id}, '', location.href);
   showSection(id);
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const map = {mainSection:'tab-main',talentSection:'tab-talent',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
+  const map = {mainSection:'tab-main',talentSection:'tab-talent',helpSection:'tab-help',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
   if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
 window.selectCat = function(el, cat) {
@@ -1095,6 +1262,24 @@ window.deleteNick = function(nick) {
   const nicks = getSavedNicks().filter(n => n !== nick);
   localStorage.setItem('savedNicks', JSON.stringify(nicks));
   renderNickDropdown(nicks);
+};
+window.openMyHelps = async function() {
+  function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  showSection('myHelpsSection');
+  showLoading(true);
+  try {
+    const q = window._fbQuery(window._fbCollection(window._db, 'helps'), window._fbWhere('uid', '==', window.fbUser.uid));
+    const snap = await window._fbGetDocs(q);
+    if (snap.empty) { document.getElementById('myHelpList').innerHTML = '<div class="empty-state"><div class="ico">🙋</div><p>등록된 도움요청이 없어요.</p></div>'; showLoading(false); return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span><div class="comm-title">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${timeAgo(t)}</div><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editHelp('${d.id}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteHelp('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div></div>`;
+    });
+    document.getElementById('myHelpList').innerHTML = html;
+  } catch(e) { console.log(e); }
+  showLoading(false);
 };
 window.openMyTalents = async function() {
   function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
