@@ -171,7 +171,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 .comm-tab-btn{border:1.5px solid var(--border);border-radius:20px;padding:7px 16px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--text2);}
 .comm-tab-btn.active{border-color:var(--orange);color:var(--orange);background:var(--orange-light);}
 .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,0.85);display:none;align-items:center;justify-content:center;z-index:9999;}
-#introScreen{position:fixed;inset:0;background:var(--orange);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;padding:40px 32px;}
+#introScreen{position:fixed;inset:0;background:var(--orange);display:flex;flex-direction:column;align-items:center;z-index:99999;padding:40px 32px;overflow-y:auto;}
 #introScreen h1{font-size:32px;font-weight:800;color:white;margin-bottom:32px;letter-spacing:-1px;}
 #introScreen ul{list-style:none;display:flex;flex-direction:column;gap:14px;}
 #introScreen ul li{font-size:15px;color:rgba(255,255,255,0.9);line-height:1.5;padding-left:20px;position:relative;}
@@ -188,17 +188,230 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <body>
 
 <div id="introScreen">
-  <h1>🏠 우단앱</h1>
-  <ul>
-    <li>같은 아파트 단지 주민끼리만 거래</li>
-    <li>단지내 직거래로 안전하며 배송비 제로</li>
-    <li>단지 주민 간 재능마켓 (가전수리, 돌봄, 교육 등)</li>
-    <li>주소 입력만으로 단지내 커뮤니티 생성</li>
-    <li>별명+4자리 비번으로 간편 가입</li>
-    <li>실시간 1:1 거래 채팅</li>
-  </ul>
-  <div class="progress-bar"><div class="progress-fill"></div></div>
+  <div style="display:flex;justify-content:center;gap:8px;margin-bottom:20px;">
+    <button onclick="setLang('ko')" id="langBtn-ko" style="background:white;color:#A51C30;border:none;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:800;cursor:pointer;">한국어</button>
+    <button onclick="setLang('en')" id="langBtn-en" style="background:rgba(255,255,255,0.25);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;">English</button>
+    <button onclick="setLang('ja')" id="langBtn-ja" style="background:rgba(255,255,255,0.25);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;">日本語</button>
+    <button onclick="setLang('zh')" id="langBtn-zh" style="background:rgba(255,255,255,0.25);color:white;border:none;border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;cursor:pointer;">中文</button>
+  </div>
+  <div style="text-align:center;margin-bottom:28px;">
+    <div style="font-size:52px;margin-bottom:8px;">🏠</div>
+    <div style="font-size:34px;font-weight:800;color:white;letter-spacing:-1px;" id="intro-title">우단앱</div>
+    <div style="font-size:14px;color:rgba(255,255,255,0.75);margin-top:6px;" id="intro-sub">우리 단지 이웃과 함께하는 커뮤니티</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:32px;" id="intro-features">
+  </div>
+  <button onclick="document.getElementById('introScreen').style.display='none';" id="intro-confirm" style="width:100%;background:white;color:#A51C30;border:none;border-radius:14px;padding:16px;font-size:17px;font-weight:800;cursor:pointer;letter-spacing:-0.3px;">확인</button>
 </div>
+<script>
+const introTexts = {
+  ko: {
+    title: '우단앱',
+    sub: '우리 단지 이웃과 함께하는 커뮤니티',
+    confirm: '확인',
+    ui: {
+      login: '로그인', join: '처음이에요 (회원가입)',
+      loginTitle: '로그인', loginSub: '별명과 비밀번호를 입력해주세요',
+      joinTitle: '회원가입', joinSub: '별명과 우리 단지를 선택해주세요',
+      nick: '별명', pw: '비밀번호 (숫자 4자리)',
+      danjiLabel: '아파트 단지 검색', danjiBtn: '📍 주소로 단지 검색하기',
+      selectedDanji: '선택된 단지', back: '이전', joinBtn: '가입 완료',
+      tabMain: '거래', tabTalent: '재능마켓', tabComm: '분실물',
+      tabChat: '채팅', tabHelp: '도움요청', tabMy: '내정보',
+      talentTitle: '단지 재능마켓', helpTitle: '도움이 필요해요',
+      commTitle: '우리 단지 소식', chatTitle: '채팅',
+      searchPlaceholder: '🔍 단지 내 매물 검색',
+      sectionTrade: '거래 활동', sectionSetting: '설정',
+      menuItems: '내가 올린 물건', menuTalents: '나의 재능마켓',
+      menuHelps: '나의 도움요청', menuWish: '관심 목록',
+      menuChat: '채팅 내역', menuNick: '별명 변경',
+      menuLogout: '로그아웃', menuWithdraw: '회원탈퇴',
+      writeTitle: '내 물건 팔기', cancel: '← 취소', submit: '등록',
+      detailTitle: '상품 상세', nickTitle: '별명 변경',
+      nickLabel: '새 별명', nickBtn: '변경 완료'
+    },
+    features: [
+      { icon: '⚡', title: '간편 가입', desc: '도로명 주소(동호수 불필요),<br>별명, 비번으로 30초 가입.<br>1:1 실시간 채팅으로 바로 거래해요!' },
+      { icon: '🛍️', title: '단지 내 중고거래', desc: '같은 단지 주민끼리만 거래해요.<br>배송비 0원, 직접 만나서 안전하게!' },
+      { icon: '🔧', title: '이웃 재능마켓', desc: '가전수리, 돌봄, 교육, 생활서비스까지.<br>이웃의 재능을 우리 단지에서 나눠요!' },
+      { icon: '🙋', title: '도와주세요', desc: '이사, 수리, 생활 문제를 이웃에게 부탁하고<br>적절한 보수로 해결해보세요!' },
+      { icon: '🔍', title: '분실물 찾기', desc: '단지 내 분실물을 이웃과 함께 찾아드려요.' }
+    ]
+  },
+  en: {
+    title: 'UdanApp',
+    sub: 'A community app for apartment neighbors',
+    confirm: 'OK',
+    ui: {
+      login: 'Login', join: 'Sign Up',
+      loginTitle: 'Login', loginSub: 'Enter your nickname and password',
+      joinTitle: 'Sign Up', joinSub: 'Choose your nickname and apartment',
+      nick: 'Nickname', pw: 'Password (4 digits)',
+      danjiLabel: 'Apartment Search', danjiBtn: '📍 Search by address',
+      selectedDanji: 'Selected Apartment', back: 'Back', joinBtn: 'Complete',
+      tabMain: 'Trade', tabTalent: 'Skills', tabComm: 'Lost', 
+      tabChat: 'Chat', tabHelp: 'Help', tabMy: 'My',
+      talentTitle: 'Neighbor Skills', helpTitle: 'Need Help',
+      commTitle: 'Complex News', chatTitle: 'Chat',
+      searchPlaceholder: '🔍 Search items',
+      sectionTrade: 'Trade Activity', sectionSetting: 'Settings',
+      menuItems: 'My Listings', menuTalents: 'My Skills',
+      menuHelps: 'My Help Requests', menuWish: 'Wishlist',
+      menuChat: 'Chat History', menuNick: 'Change Nickname',
+      menuLogout: 'Logout', menuWithdraw: 'Delete Account',
+      writeTitle: 'Sell My Item', cancel: '← Cancel', submit: 'Post',
+      detailTitle: 'Item Detail', nickTitle: 'Change Nickname',
+      nickLabel: 'New Nickname', nickBtn: 'Confirm'
+    },
+    features: [
+      { icon: '⚡', title: 'Easy Sign Up', desc: 'Sign up in 30 sec with road address (no unit number needed),<br>nickname & PIN.<br>Chat 1:1 in real time!' },
+      { icon: '🛍️', title: 'Local Secondhand Market', desc: 'Trade only with neighbors in your complex.<br>Zero delivery fee, safe face-to-face deals!' },
+      { icon: '🔧', title: 'Neighbor Talent Market', desc: 'Appliance repair, childcare, tutoring & more.<br>Share your skills with your neighbors!' },
+      { icon: '🙋', title: 'Help Needed', desc: 'Ask neighbors for help with moving, repairs & daily tasks.<br>Offer a fair reward and get it done!' },
+      { icon: '🔍', title: 'Lost & Found', desc: 'Find lost items with the help of your neighbors.' }
+    ]
+  },
+  ja: {
+    title: 'ウダンアプリ',
+    sub: 'マンションの住民をつなぐコミュニティアプリ',
+    confirm: '確認',
+    ui: {
+      login: 'ログイン', join: '新規登録',
+      loginTitle: 'ログイン', loginSub: 'ニックネームとパスワードを入力してください',
+      joinTitle: '新規登録', joinSub: 'ニックネームとマンションを選択してください',
+      nick: 'ニックネーム', pw: 'パスワード (数字4桁)',
+      danjiLabel: 'マンション検索', danjiBtn: '📍 住所で検索する',
+      selectedDanji: '選択中のマンション', back: '戻る', joinBtn: '登録完了',
+      tabMain: '取引', tabTalent: 'スキル', tabComm: '落とし物',
+      tabChat: 'チャット', tabHelp: 'お手伝い', tabMy: 'マイページ',
+      talentTitle: '近隣スキルシェア', helpTitle: 'お手伝い募集',
+      commTitle: 'マンションの情報', chatTitle: 'チャット',
+      searchPlaceholder: '🔍 商品を検索',
+      sectionTrade: '取引活動', sectionSetting: '設定',
+      menuItems: '出品した商品', menuTalents: '近隣スキル',
+      menuHelps: 'お手伝い依頼', menuWish: 'お気に入り',
+      menuChat: 'チャット履歴', menuNick: 'ニックネーム変更',
+      menuLogout: 'ログアウト', menuWithdraw: 'アカウント削除',
+      writeTitle: '商品を出品する', cancel: '← キャンセル', submit: '登録',
+      detailTitle: '商品詳細', nickTitle: 'ニックネーム変更',
+      nickLabel: '新しいニックネーム', nickBtn: '変更完了'
+    },
+    features: [
+      { icon: '⚡', title: '簡単登録', desc: '住所（部屋番号不要）・ニックネーム・PINで30秒登録。<br>リアルタイム1:1チャットですぐ取引！' },
+      { icon: '🛍️', title: 'マンション内フリマ', desc: '同じマンションの住民だけで取引。<br>送料0円、直接会って安全に！' },
+      { icon: '🔧', title: '近隣スキルシェア', desc: '家電修理・育児・教育・生活サービスなど。<br>住民のスキルをマンション内でシェア！' },
+      { icon: '🙋', title: 'お手伝い募集', desc: '引越し・修理・生活のお困りごとを近隣に依頼。<br>適切な報酬で解決しましょう！' },
+      { icon: '🔍', title: '落とし物を探す', desc: 'マンション内の落とし物を住民と一緒に探します。' }
+    ]
+  },
+  zh: {
+    title: '우단App',
+    sub: '连接小区邻居的社区应用',
+    confirm: '确认',
+    ui: {
+      login: '登录', join: '注册',
+      loginTitle: '登录', loginSub: '请输入昵称和密码',
+      joinTitle: '注册', joinSub: '请选择昵称和小区',
+      nick: '昵称', pw: '密码 (4位数字)',
+      danjiLabel: '小区搜索', danjiBtn: '📍 按地址搜索',
+      selectedDanji: '已选小区', back: '返回', joinBtn: '完成注册',
+      tabMain: '交易', tabTalent: '技能', tabComm: '失物',
+      tabChat: '聊天', tabHelp: '求助', tabMy: '我的',
+      talentTitle: '邻居技能市场', helpTitle: '需要帮助',
+      commTitle: '小区动态', chatTitle: '聊天',
+      searchPlaceholder: '🔍 搜索商品',
+      sectionTrade: '交易活动', sectionSetting: '设置',
+      menuItems: '我的商品', menuTalents: '我的技能',
+      menuHelps: '我的求助', menuWish: '收藏夹',
+      menuChat: '聊天记录', menuNick: '修改昵称',
+      menuLogout: '退出登录', menuWithdraw: '注销账号',
+      writeTitle: '出售商品', cancel: '← 取消', submit: '发布',
+      detailTitle: '商品详情', nickTitle: '修改昵称',
+      nickLabel: '新昵称', nickBtn: '确认修改'
+    },
+    features: [
+      { icon: '⚡', title: '快速注册', desc: '用地址（无需门牌号）、昵称和密码30秒完成注册。<br>实时1对1聊天，马上交易！' },
+      { icon: '🛍️', title: '小区二手市场', desc: '只与同小区居民交易。<br>零运费，面对面安全交易！' },
+      { icon: '🔧', title: '邻居技能市场', desc: '家电维修、育儿、教育、生活服务等。<br>在小区内分享邻居的技能！' },
+      { icon: '🙋', title: '需要帮助', desc: '向邻居寻求搬家、维修、生活问题的帮助。<br>支付合理报酬解决问题！' },
+      { icon: '🔍', title: '寻找失物', desc: '和邻居一起寻找小区内的失物。' }
+    ]
+  }
+};
+function setLang(lang) {
+  window._currentLang = lang;
+  const t = introTexts[lang];
+  document.getElementById('intro-title').textContent = t.title;
+  document.getElementById('intro-sub').textContent = t.sub;
+  document.getElementById('intro-confirm').textContent = t.confirm;
+  document.getElementById('intro-features').innerHTML = t.features.map(f => `
+    <div style="background:rgba(255,255,255,0.12);border-radius:14px;padding:14px 16px;display:flex;align-items:flex-start;gap:12px;">
+      <span style="font-size:24px;">${f.icon}</span>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:white;margin-bottom:3px;">${f.title}</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.75);line-height:1.5;">${f.desc}</div>
+      </div>
+    </div>`).join('');
+  document.querySelectorAll('[id^="langBtn-"]').forEach(b => {
+    b.style.background = 'rgba(255,255,255,0.25)';
+    b.style.color = 'white';
+  });
+  document.getElementById('langBtn-' + lang).style.background = 'white';
+  document.getElementById('langBtn-' + lang).style.color = '#A51C30';
+
+  if (!t.ui) return;
+  const ui = t.ui;
+  const set = (id, txt) => { const el = document.getElementById(id); if(el) el.textContent = txt; };
+  const setph = (id, txt) => { const el = document.getElementById(id); if(el) el.placeholder = txt; };
+
+  set('splash-login-btn', ui.login);
+  set('splash-join-btn', ui.join);
+  set('login-title', ui.loginTitle);
+  set('login-sub', ui.loginSub);
+  set('login-nick-label', ui.nick);
+  set('login-pw-label', ui.pw);
+  set('login-back-btn', ui.back);
+  set('login-btn', ui.login);
+  set('join-title', ui.joinTitle);
+  set('join-sub', ui.joinSub);
+  set('join-nick-label', ui.nick);
+  set('join-pw-label', ui.pw);
+  set('join-danji-label', ui.danjiLabel);
+  set('join-danji-btn', ui.danjiBtn);
+  set('join-selected-label', ui.selectedDanji);
+  set('join-back-btn', ui.back);
+  set('join-btn', ui.joinBtn);
+  set('tab-lbl-main', ui.tabMain);
+  set('tab-lbl-talent', ui.tabTalent);
+  set('tab-lbl-comm', ui.tabComm);
+  set('tab-lbl-chat', ui.tabChat);
+  set('tab-lbl-help', ui.tabHelp);
+  set('tab-lbl-my', ui.tabMy);
+  set('talent-title', ui.talentTitle);
+  set('help-title', ui.helpTitle);
+  set('comm-title', ui.commTitle);
+  set('chat-title', ui.chatTitle);
+  set('my-section-trade', ui.sectionTrade);
+  set('my-section-setting', ui.sectionSetting);
+  set('my-menu-items', ui.menuItems);
+  set('my-menu-talents', ui.menuTalents);
+  set('my-menu-helps', ui.menuHelps);
+  set('my-menu-wish', ui.menuWish);
+  set('my-menu-chat', ui.menuChat);
+  set('my-menu-nick', ui.menuNick);
+  set('my-menu-logout', ui.menuLogout);
+  set('my-menu-withdraw', ui.menuWithdraw);
+  set('write-title', ui.writeTitle);
+  set('write-cancel-btn', ui.cancel);
+  set('write-submit-btn', ui.submit);
+  set('detail-title', ui.detailTitle);
+  set('nick-title', ui.nickTitle);
+  set('nick-label', ui.nickLabel);
+  set('nick-btn', ui.nickBtn);
+  setph('main-search-input', ui.searchPlaceholder);
+}
+document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
+</script>
 <div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div></div>
 <div class="toast" id="toast"></div>
 
@@ -208,39 +421,39 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
   </div>
   <div class="splash-title"><span style="color:#DC143C;font-size:34px;">우</span><span style="color:#DC143C;font-size:34px;">단</span><span style="color:#DC143C;font-size:34px;">앱</span></div>
-  <div class="splash-sub"><span style="color:#DC143C;font-weight:700;font-size:18px;">우</span>리 <span style="color:#DC143C;font-weight:700;font-size:18px;">단</span>지 중고거래<span style="color:#DC143C;font-weight:700;font-size:18px;">앱</span><br>배송비 0원 직거래<br><span style="font-size:13px;color:#999;">별명, 도로명주소로 가입<br>(동호수 불필요)</span></div>
-  <button class="btn-primary" onclick="showSection('loginSection')">로그인</button>
-  <button class="btn-secondary" onclick="showSection('joinSection')">처음이에요 (회원가입)</button>
+  <div class="splash-sub" id="splash-sub"><span style="color:#DC143C;font-weight:700;font-size:18px;">우</span>리 <span style="color:#DC143C;font-weight:700;font-size:18px;">단</span>지 중고거래<span style="color:#DC143C;font-weight:700;font-size:18px;">앱</span><br>배송비 0원 직거래<br><span style="font-size:13px;color:#999;">별명, 도로명주소로 가입<br>(동호수 불필요)</span></div>
+  <button class="btn-primary" id="splash-login-btn" onclick="showSection('loginSection')">로그인</button>
+  <button class="btn-secondary" id="splash-join-btn" onclick="showSection('joinSection')">처음이에요 (회원가입)</button>
 </div>
 
 <!-- LOGIN -->
 <div id="loginSection">
-  <div class="form-header"><h2>로그인</h2><p>별명과 비밀번호를 입력해주세요</p></div>
+  <div class="form-header"><h2 id="login-title">로그인</h2><p id="login-sub">별명과 비밀번호를 입력해주세요</p></div>
   <div class="form-body">
-    <div class="field"><label>별명</label><input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off" oninput="filterNickList()" onfocus="showNickList()"><div id="nickDropdown" style="display:none;border:1.5px solid var(--border);border-radius:10px;margin-top:4px;background:#fff;overflow:hidden;"></div></div>
-    <div class="field"><label>비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="loginPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
+    <div class="field"><label id="login-nick-label">별명</label><input type="text" id="loginNick" placeholder="별명 입력" autocomplete="off" oninput="filterNickList()" onfocus="showNickList()"><div id="nickDropdown" style="display:none;border:1.5px solid var(--border);border-radius:10px;margin-top:4px;background:#fff;overflow:hidden;"></div></div>
+    <div class="field"><label id="login-pw-label">비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="loginPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
   </div>
   <div class="form-footer">
-    <button class="back-btn" onclick="showSection('splashSection')">이전</button>
-    <button class="btn-primary" onclick="fbLogin()">로그인</button>
+    <button class="back-btn" id="login-back-btn" onclick="showSection('splashSection')">이전</button>
+    <button class="btn-primary" onclick="fbLogin()" id="login-btn">로그인</button>
   </div>
 </div>
 
 <!-- JOIN -->
 <div id="joinSection">
-  <div class="form-header"><h2>회원가입</h2><p>별명과 우리 단지를 선택해주세요</p></div>
+  <div class="form-header"><h2 id="join-title">회원가입</h2><p id="join-sub">별명과 우리 단지를 선택해주세요</p></div>
   <div class="form-body">
-    <div class="field"><label>별명</label><input type="text" id="joinNick" placeholder="예: 하늘별 / 곰돌이" autocomplete="off" maxlength="10"></div>
-    <div class="field"><label>비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="joinPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
+    <div class="field"><label id="join-nick-label">별명</label><input type="text" id="joinNick" placeholder="예: 하늘별 / 곰돌이" autocomplete="off" maxlength="10"></div>
+    <div class="field"><label id="join-pw-label">비밀번호 (숫자 4자리)</label><input type="text" inputmode="numeric" id="joinPw" placeholder="0000" maxlength="4" autocomplete="off"></div>
     <div class="field">
-      <label>아파트 단지 검색</label>
-      <button type="button" onclick="openDanjiSearch()"
+      <label id="join-danji-label">아파트 단지 검색</label>
+      <button type="button" id="join-danji-btn" onclick="openDanjiSearch()"
         style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:14px 16px;font-size:16px;color:var(--text2);background:#fff;text-align:left;cursor:pointer;">
         📍 주소로 단지 검색하기
       </button>
     </div>
     <div class="field" id="danjiSelectedField" style="display:none;">
-      <label>선택된 단지</label>
+      <label id="join-selected-label">선택된 단지</label>
       <div id="danjiSelectedBox"
         style="border:1.5px solid var(--orange);border-radius:10px;padding:14px 16px;font-size:15px;color:var(--text);background:var(--orange-light);">
       </div>
@@ -251,8 +464,8 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <input type="hidden" id="joinDong">
   </div>
   <div class="form-footer">
-    <button class="back-btn" onclick="showSection('splashSection')">이전</button>
-    <button class="btn-primary" onclick="fbJoin()">가입 완료</button>
+    <button class="back-btn" id="join-back-btn" onclick="showSection('splashSection')">이전</button>
+    <button class="btn-primary" id="join-btn" onclick="fbJoin()">가입 완료</button>
   </div>
 </div>
 
@@ -265,17 +478,17 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     </div>
     <span class="topbar-badge" id="danjiLabel">단지 로딩중</span>
   </div>
-  <div style="padding:12px 16px 0;"><input type="text" id="searchInput" placeholder="🔍 단지 내 매물 검색" oninput="filterItems(this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:15px;outline:none;background:#fff;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'"></div>
-  <div class="list-section"><div id="itemList"><div class="empty-state"><div class="ico">📦</div><p>아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div></div></div>
+  <div style="padding:12px 16px 0;"><input type="text" id="searchInput" placeholder="🔍 단지 내 매물 검색" oninput="filterItems(this.value)" style="width:100%;border:1.5px solid var(--border);border-radius:10px;padding:12px 16px;font-size:15px;outline:none;background:#fff;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" id="main-search-input"></div>
+  <div class="list-section"><div id="itemList"><div class="empty-state"><div class="ico">📦</div><p id="main-empty-txt">아직 등록된 물건이 없어요.<br>첫 번째로 올려보세요!</p></div></div></div>
   <button class="fab" onclick="showSection('writeSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
 </div>
 
 <!-- WRITE -->
 <div id="writeSection" class="section">
   <div class="topbar">
-    <button class="back-btn" style="margin:0" onclick="showSection('mainSection')">← 취소</button>
-    <span class="topbar-title">내 물건 팔기</span>
-    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitItem()">등록</button>
+    <button class="back-btn" style="margin:0" onclick="showSection('mainSection')" id="write-cancel-btn">← 취소</button>
+    <span class="topbar-title" id="write-title">내 물건 팔기</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitItem()" id="write-submit-btn">등록</button>
   </div>
   <div class="write-body">
     <input type="file" id="photoInput" accept="image/*" multiple style="display:none;" onchange="addPhotos(this)">
@@ -307,7 +520,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <div id="detailSection" class="section">
   <div class="topbar">
     <button class="icon-btn" onclick="showSection('mainSection')">←</button>
-    <span class="topbar-title">상품 상세</span>
+    <span class="topbar-title" id="detail-title">상품 상세</span>
     <button class="icon-btn" onclick="shareItem()">⋯</button>
   </div>
   <div id="detailContent"></div>
@@ -315,7 +528,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 
 <!-- CHAT LIST -->
 <div id="chatSection" class="section">
-  <div class="topbar"><div class="topbar-title">채팅</div></div>
+  <div class="topbar"><div class="topbar-title" id="chat-title">채팅</div></div>
   <div id="chatList"><div class="empty-state"><div class="ico">💬</div><p>아직 채팅 내역이 없어요.</p></div></div>
 </div>
 
@@ -335,7 +548,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 
 <!-- TALENT -->
 <div id="talentSection" class="section">
-  <div class="topbar"><div class="topbar-title">단지 재능마켓</div></div>
+  <div class="topbar"><div class="topbar-title" id="talent-title">단지 재능마켓</div></div>
   <div style="padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:8px;" id="talentCatFilter">
     <button class="comm-tab-btn active" onclick="filterTalent(this,'')">전체</button>
     <button class="comm-tab-btn" onclick="filterTalent(this,'가전수리')">🔌 가전수리</button>
@@ -382,7 +595,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 
 <!-- HELP -->
 <div id="helpSection" class="section">
-  <div class="topbar"><div class="topbar-title">도움이 필요해요</div></div>
+  <div class="topbar"><div class="topbar-title" id="help-title">도움이 필요해요</div></div>
   <div style="padding:12px 16px 0;display:flex;flex-wrap:wrap;gap:8px;" id="helpCatFilter">
     <button class="comm-tab-btn active" onclick="filterHelp(this,'')">전체</button>
     <button class="comm-tab-btn" onclick="filterHelp(this,'가전수리')">🔌 가전수리</button>
@@ -432,7 +645,7 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 
 <!-- COMMUNITY -->
 <div id="commSection" class="section">
-  <div class="topbar"><div class="topbar-title">우리 단지 소식</div></div>
+  <div class="topbar"><div class="topbar-title" id="comm-title">우리 단지 소식</div></div>
   <div style="padding:12px 16px 0;display:flex;gap:8px;">
     <button class="comm-tab-btn active" id="commTab-lost" onclick="switchCommTab('lost')">🔍 분실물</button>
   </div>
@@ -495,11 +708,11 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
 <div id="nickSection" class="section">
   <div class="topbar">
     <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
-    <span class="topbar-title">별명 변경</span>
+    <span class="topbar-title" id="nick-title">별명 변경</span>
   </div>
   <div class="form-body">
-    <div class="field"><label>새 별명</label><input type="text" id="newNick" placeholder="새 별명 입력 (4자 이내)" autocomplete="off" maxlength="4"></div>
-    <button class="btn-primary" onclick="changeNick()">변경 완료</button>
+    <div class="field"><label id="nick-label">새 별명</label><input type="text" id="newNick" placeholder="새 별명 입력 (4자 이내)" autocomplete="off" maxlength="4"></div>
+    <button class="btn-primary" id="nick-btn" onclick="changeNick()">변경 완료</button>
   </div>
 </div>
 
@@ -510,31 +723,31 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:var(--bg);co
     <div class="my-name" id="myName">-</div>
     <div class="my-unit">단지: <span id="myDanji">-</span></div>
   </div>
-  <div class="menu-section-title">거래 활동</div>
+  <div class="menu-section-title" id="my-section-trade">거래 활동</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt">내가 올린 물건</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt">나의 재능마켓</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="openMyHelps()"><span class="menu-ico">🙋</span><span class="menu-txt">나의 도움요청</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt">관심 목록</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt">채팅 내역</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt" id="my-menu-items">내가 올린 물건</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt" id="my-menu-talents">나의 재능마켓</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyHelps()"><span class="menu-ico">🙋</span><span class="menu-txt" id="my-menu-helps">나의 도움요청</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt" id="my-menu-wish">관심 목록</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt" id="my-menu-chat">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
-  <div class="menu-section-title">설정</div>
+  <div class="menu-section-title" id="my-section-setting">설정</div>
   <div class="menu-list">
-    <div class="menu-item" onclick="showSection('nickSection')"><span class="menu-ico">✏️</span><span class="menu-txt">별명 변경</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="fbLogout()"><span class="menu-ico">🚪</span><span class="menu-txt" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="fbWithdraw()"><span class="menu-ico">❌</span><span class="menu-txt" style="color:#FF4757;">회원탈퇴</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="showSection('nickSection')"><span class="menu-ico">✏️</span><span class="menu-txt" id="my-menu-nick">별명 변경</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="fbLogout()"><span class="menu-ico">🚪</span><span class="menu-txt" id="my-menu-logout" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="fbWithdraw()"><span class="menu-ico">❌</span><span class="menu-txt" id="my-menu-withdraw" style="color:#FF4757;">회원탈퇴</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openAdmin()" style="opacity:0.3;"><span class="menu-ico">⚙️</span><span class="menu-txt" style="color:#999;">관리자</span><span class="menu-arrow">›</span></div>
   </div>
 </div>
 
 <!-- TABBAR -->
 <nav class="tabbar" id="tabbar" style="display:none;">
-  <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl">거래</span></button>
-  <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl">재능마켓</span></button>
-  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl">분실물</span></button>
-  <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl">채팅</span></button>
-  <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl">도움요청</span></button>
-  <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl">내정보</span></button>
+  <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl" id="tab-lbl-main">거래</span></button>
+  <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl" id="tab-lbl-talent">재능마켓</span></button>
+  <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl" id="tab-lbl-comm">분실물</span></button>
+  <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl" id="tab-lbl-chat">채팅</span></button>
+  <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl" id="tab-lbl-help">도움요청</span></button>
+  <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl" id="tab-lbl-my">내정보</span></button>
 </nav>
 
 <script type="module">
@@ -1126,7 +1339,7 @@ function formatTime(date) {
 </script>
 
 <script>
-setTimeout(() => { document.getElementById('introScreen').style.display = 'none'; }, 3000);
+
 window.addEventListener('popstate', function() {
   history.pushState(null, '', location.href);
   if (document.getElementById('chatRoomSection').classList.contains('active')) {
