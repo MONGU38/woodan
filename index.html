@@ -716,6 +716,35 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
   </div>
 </div>
 
+<!-- 함께먹어요 -->
+<div id="togetherSection" class="section">
+  <div class="topbar"><div class="topbar-title">🍽️ 함께 먹어요</div></div>
+  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px 24px;text-align:center;">
+    <div style="font-size:72px;margin-bottom:24px;">🍕🍗🍜</div>
+    <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:12px;letter-spacing:-0.5px;">같이 시켜요, 배달비 나눠요!</div>
+    <div style="font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:32px;">
+      같은 단지 이웃과 함께 배달 주문하고<br>배달비를 n빵으로 나눠보세요.<br>
+      <span style="color:var(--orange);font-weight:700;">배달비 최대 절반 절감!</span>
+    </div>
+    <div style="background:var(--orange-light);border:2px solid var(--orange);border-radius:16px;padding:20px 24px;margin-bottom:28px;width:100%;">
+      <div style="font-size:13px;font-weight:800;color:var(--orange);margin-bottom:8px;">⚙️ 서비스 준비 중</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.7;">
+        현재 공동배달 모집 기능을 개발하고 있어요.<br>
+        곧 단지 이웃과 함께 주문할 수 있어요!
+      </div>
+    </div>
+    <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 20px;width:100%;text-align:left;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">✅ 오픈 예정 기능</div>
+      <div style="font-size:13px;color:var(--text2);line-height:2;">
+        📋 배달 모집 게시글 올리기<br>
+        🙋 참여 신청 & 채팅으로 조율<br>
+        📍 단지 내 픽업 장소 지정<br>
+        💰 배달비 n빵 계산기
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- MYPAGE -->
 <div id="mypageSection" class="section">
   <div class="my-header">
@@ -743,10 +772,11 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- TABBAR -->
 <nav class="tabbar" id="tabbar" style="display:none;">
   <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl" id="tab-lbl-main">거래</span></button>
+  <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl" id="tab-lbl-help">도움요청</span></button>
   <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl" id="tab-lbl-talent">재능마켓</span></button>
+  <button class="tab-btn" id="tab-together" onclick="switchTab('togetherSection')"><span class="tab-ico">🍽️</span><span class="tab-lbl">함께먹어요</span></button>
   <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl" id="tab-lbl-comm">분실물</span></button>
   <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl" id="tab-lbl-chat">채팅</span></button>
-  <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl" id="tab-lbl-help">도움요청</span></button>
   <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl" id="tab-lbl-my">내정보</span></button>
 </nav>
 
@@ -1356,7 +1386,7 @@ window.addEventListener('popstate', function() {
     switchTab('chatSection');
     return;
   }
-  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','chatSection','mypageSection','mainSection'];
+  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherSection','chatSection','mypageSection','mainSection'];
   for (const id of sections) {
     const el = document.getElementById(id);
     if (el && el.classList.contains('active')) {
@@ -1365,7 +1395,7 @@ window.addEventListener('popstate', function() {
       if (id === 'lostWriteSection') { showSection('commSection'); return; }
       if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection') { showSection('mypageSection'); return; }
       if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
-      if (id === 'talentSection' || id === 'commSection' || id === 'chatSection' || id === 'mypageSection') { switchTab('mainSection'); return; }
+      if (id === 'talentSection' || id === 'commSection' || id === 'togetherSection' || id === 'chatSection' || id === 'mypageSection') { switchTab('mainSection'); return; }
       if (id === 'mainSection') { if (confirm('앱을 종료할까요?')) { history.back(); } return; }
       return;
     }
@@ -1426,7 +1456,7 @@ function switchTab(id) {
   history.pushState({section: id}, '', location.href);
   showSection(id);
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const map = {mainSection:'tab-main',talentSection:'tab-talent',helpSection:'tab-help',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my'};
+  const map = {mainSection:'tab-main',talentSection:'tab-talent',helpSection:'tab-help',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my',togetherSection:'tab-together'};
   if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
 window.selectCat = function(el, cat) {
