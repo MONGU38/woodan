@@ -231,7 +231,7 @@ const introTexts = {
       nickLabel: '새 별명', nickBtn: '변경 완료'
     },
     features: [
-      { icon: '⚡', title: '간편 가입', desc: '도로명 주소만으로 단지 식구가 되요.<br>(동호수 불필요)<br>별명, 비번으로 30초 가입. 1:1 실시간 채팅으로 바로 거래해요!' },
+      { icon: '⚡', title: '간편 가입', desc: '도로명 주소만으로 단지 식구가 되요.<br>(동호수 불필요)<br>별명, 비번으로 30초 가입.<br>1:1 실시간 채팅으로 바로 거래해요!' },
       { icon: '🛍️', title: '단지 내 중고거래', desc: '같은 단지 주민끼리만 거래해요.<br>배송비 0원, 직접 만나서 안전하게!' },
       { icon: '🔧', title: '이웃 재능마켓', desc: '가전수리, 돌봄, 교육, 생활서비스까지.<br>이웃의 재능을 우리 단지에서 나눠요!' },
       { icon: '🙋', title: '도와주세요', desc: '이사, 수리, 생활 문제를 이웃에게 부탁하고<br>적절한 보수로 해결해보세요!' },
@@ -755,8 +755,9 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
   <div class="menu-section-title" id="my-section-trade">거래 활동</div>
   <div class="menu-list">
     <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt" id="my-menu-items">내가 올린 물건</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt" id="my-menu-talents">나의 재능마켓</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openMyHelps()"><span class="menu-ico">🙋</span><span class="menu-txt" id="my-menu-helps">나의 도움요청</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt" id="my-menu-talents">나의 재능마켓</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="switchTab('togetherSection')"><span class="menu-ico">🍽️</span><span class="menu-txt">함께먹어요</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt" id="my-menu-wish">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt" id="my-menu-chat">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
