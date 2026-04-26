@@ -421,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
   </div>
   <div class="splash-title"><span style="color:#DC143C;font-size:34px;">우</span><span style="color:#DC143C;font-size:34px;">단</span><span style="color:#DC143C;font-size:34px;">앱</span></div>
-  <div class="splash-sub" id="splash-sub"><span style="color:#DC143C;font-weight:700;font-size:18px;">우</span>리 <span style="color:#DC143C;font-weight:700;font-size:18px;">단</span>지 중고거래<span style="color:#DC143C;font-weight:700;font-size:18px;">앱</span><br>배송비 0원 직거래<br><span style="font-size:13px;color:#999;">별명, 도로명주소로 가입<br>(동호수 불필요)</span></div>
+  <div class="splash-sub" id="splash-sub"><span style="color:#DC143C;font-weight:700;font-size:18px;">우</span>리 <span style="color:#DC143C;font-weight:700;font-size:18px;">단</span>지 중고거래<span style="color:#DC143C;font-weight:700;font-size:18px;">앱</span><br>배송비 0원 직거래<br><span style="font-size:13px;color:#999;">별명, 도로명주소로 가입<br>(동호수 불필요)<br>실명·전화번호·개인정보 불필요</span></div>
   <button class="btn-primary" id="splash-login-btn" onclick="showSection('loginSection')">로그인</button>
   <button class="btn-secondary" id="splash-join-btn" onclick="showSection('joinSection')">처음이에요 (회원가입)</button>
 </div>
@@ -986,7 +986,15 @@ window.toggleWish = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
-window.shareItem = function() { showToast('공유 기능 준비중 📤'); };
+window.shareItem = function() {
+  const title = document.querySelector('#detailContent .detail-title')?.textContent || '';
+  const url = window.location.href;
+  if (navigator.share) {
+    navigator.share({ title: title, url: url }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(url).then(() => showToast('링크가 복사됐어요 📋')).catch(() => showToast('공유 기능을 지원하지 않는 브라우저예요'));
+  }
+};
 window.switchCommTab = function(tab) {
   document.querySelectorAll('.comm-tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('commTab-' + tab).classList.add('active');
