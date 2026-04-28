@@ -217,14 +217,14 @@ const introTexts = {
       danjiLabel: '아파트 단지 검색', danjiBtn: '📍 주소로 단지 검색하기',
       selectedDanji: '선택된 단지', back: '이전', joinBtn: '가입 완료',
       tabMain: '거래', tabTalent: '재능마켓', tabComm: '분실물',
-      tabChat: '채팅', tabHelp: '도움요청', tabMy: '내정보',
+      tabChat: '채팅', tabHelp: '도움요청', tabMy: '내정보', tabTogether: '함께주문해요', tabLend: '빌려드려요',
       talentTitle: '단지 재능마켓', helpTitle: '도움이 필요해요',
       commTitle: '우리 단지 소식', chatTitle: '채팅',
       searchPlaceholder: '🔍 단지 내 매물 검색',
       sectionTrade: '거래 활동', sectionSetting: '설정',
       menuItems: '내가 올린 물건', menuTalents: '나의 재능마켓',
       menuHelps: '나의 도움요청', menuWish: '관심 목록',
-      menuChat: '채팅 내역', menuNick: '별명 변경',
+      menuChat: '채팅 내역', menuTogether: '함께주문해요', menuLend: '빌려드려요', menuNick: '별명 변경',
       menuLogout: '로그아웃', menuWithdraw: '회원탈퇴',
       writeTitle: '내 물건 팔기', cancel: '← 취소', submit: '등록',
       detailTitle: '상품 상세', nickTitle: '별명 변경',
@@ -250,14 +250,14 @@ const introTexts = {
       danjiLabel: 'Apartment Search', danjiBtn: '📍 Search by address',
       selectedDanji: 'Selected Apartment', back: 'Back', joinBtn: 'Complete',
       tabMain: 'Trade', tabTalent: 'Skills', tabComm: 'Lost', 
-      tabChat: 'Chat', tabHelp: 'Help', tabMy: 'My',
+      tabChat: 'Chat', tabHelp: 'Help', tabMy: 'My', tabTogether: 'Order Together', tabLend: 'Lend',
       talentTitle: 'Neighbor Skills', helpTitle: 'Need Help',
       commTitle: 'Complex News', chatTitle: 'Chat',
       searchPlaceholder: '🔍 Search items',
       sectionTrade: 'Trade Activity', sectionSetting: 'Settings',
       menuItems: 'My Listings', menuTalents: 'My Skills',
       menuHelps: 'My Help Requests', menuWish: 'Wishlist',
-      menuChat: 'Chat History', menuNick: 'Change Nickname',
+      menuChat: 'Chat History', menuTogether: 'Order Together', menuLend: 'Lend Items', menuNick: 'Change Nickname',
       menuLogout: 'Logout', menuWithdraw: 'Delete Account',
       writeTitle: 'Sell My Item', cancel: '← Cancel', submit: 'Post',
       detailTitle: 'Item Detail', nickTitle: 'Change Nickname',
@@ -283,14 +283,14 @@ const introTexts = {
       danjiLabel: 'マンション検索', danjiBtn: '📍 住所で検索する',
       selectedDanji: '選択中のマンション', back: '戻る', joinBtn: '登録完了',
       tabMain: '取引', tabTalent: 'スキル', tabComm: '落とし物',
-      tabChat: 'チャット', tabHelp: 'お手伝い', tabMy: 'マイページ',
+      tabChat: 'チャット', tabHelp: 'お手伝い', tabMy: 'マイページ', tabTogether: '一緒に注文', tabLend: '貸します',
       talentTitle: '近隣スキルシェア', helpTitle: 'お手伝い募集',
       commTitle: 'マンションの情報', chatTitle: 'チャット',
       searchPlaceholder: '🔍 商品を検索',
       sectionTrade: '取引活動', sectionSetting: '設定',
       menuItems: '出品した商品', menuTalents: '近隣スキル',
       menuHelps: 'お手伝い依頼', menuWish: 'お気に入り',
-      menuChat: 'チャット履歴', menuNick: 'ニックネーム変更',
+      menuChat: 'チャット履歴', menuTogether: '一緒に注文', menuLend: '貸します', menuNick: 'ニックネーム変更',
       menuLogout: 'ログアウト', menuWithdraw: 'アカウント削除',
       writeTitle: '商品を出品する', cancel: '← キャンセル', submit: '登録',
       detailTitle: '商品詳細', nickTitle: 'ニックネーム変更',
@@ -316,14 +316,14 @@ const introTexts = {
       danjiLabel: '小区搜索', danjiBtn: '📍 按地址搜索',
       selectedDanji: '已选小区', back: '返回', joinBtn: '完成注册',
       tabMain: '交易', tabTalent: '技能', tabComm: '失物',
-      tabChat: '聊天', tabHelp: '求助', tabMy: '我的',
+      tabChat: '聊天', tabHelp: '求助', tabMy: '我的', tabTogether: '一起点餐', tabLend: '借给你',
       talentTitle: '邻居技能市场', helpTitle: '需要帮助',
       commTitle: '小区动态', chatTitle: '聊天',
       searchPlaceholder: '🔍 搜索商品',
       sectionTrade: '交易活动', sectionSetting: '设置',
       menuItems: '我的商品', menuTalents: '我的技能',
       menuHelps: '我的求助', menuWish: '收藏夹',
-      menuChat: '聊天记录', menuNick: '修改昵称',
+      menuChat: '聊天记录', menuTogether: '一起点餐', menuLend: '借给你', menuNick: '修改昵称',
       menuLogout: '退出登录', menuWithdraw: '注销账号',
       writeTitle: '出售商品', cancel: '← 取消', submit: '发布',
       detailTitle: '商品详情', nickTitle: '修改昵称',
@@ -387,6 +387,8 @@ function setLang(lang) {
   set('tab-lbl-chat', ui.tabChat);
   set('tab-lbl-help', ui.tabHelp);
   set('tab-lbl-my', ui.tabMy);
+  set('tab-lbl-together', ui.tabTogether);
+  set('tab-lbl-lend', ui.tabLend);
   set('talent-title', ui.talentTitle);
   set('help-title', ui.helpTitle);
   set('comm-title', ui.commTitle);
@@ -398,6 +400,8 @@ function setLang(lang) {
   set('my-menu-helps', ui.menuHelps);
   set('my-menu-wish', ui.menuWish);
   set('my-menu-chat', ui.menuChat);
+  set('my-menu-together', ui.menuTogether);
+  set('my-menu-lend', ui.menuLend);
   set('my-menu-nick', ui.menuNick);
   set('my-menu-logout', ui.menuLogout);
   set('my-menu-withdraw', ui.menuWithdraw);
@@ -716,32 +720,60 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
   </div>
 </div>
 
-<!-- 함께먹어요 -->
+<!-- 함께주문해요 -->
 <div id="togetherSection" class="section">
-  <div class="topbar"><div class="topbar-title">🍽️ 함께 먹어요</div></div>
-  <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:70vh;padding:32px 24px;text-align:center;">
-    <div style="font-size:72px;margin-bottom:24px;">🍕🍗🍜</div>
-    <div style="font-size:22px;font-weight:800;color:var(--text);margin-bottom:12px;letter-spacing:-0.5px;">같이 시켜요, 배달비 나눠요!</div>
-    <div style="font-size:15px;color:var(--text2);line-height:1.8;margin-bottom:32px;">
-      같은 단지 이웃과 함께 배달 주문하고<br>배달비를 n빵으로 나눠보세요.<br>
-      <span style="color:var(--orange);font-weight:700;">배달비 최대 절반 절감!</span>
+  <div class="topbar"><div class="topbar-title">🍽️ 함께 주문해요</div></div>
+  <div id="togetherList" style="padding:12px 0;"><div class="empty-state"><div class="ico">🍽️</div><p>아직 모집 중인 주문이 없어요.<br>첫 번째로 올려보세요!</p></div></div>
+  <button class="fab" onclick="showSection('togetherWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
+</div>
+
+<!-- 함께주문해요 WRITE -->
+<div id="togetherWriteSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('togetherSection')">←</button>
+    <span class="topbar-title">공동주문 모집</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitTogether()">등록</button>
+  </div>
+  <div class="write-body">
+    <input class="write-input" id="togetherStore" placeholder="가게 이름 (예: BBQ치킨 목동점)" maxlength="40">
+    <input class="write-input" id="togetherMenu" placeholder="메뉴 (예: 황금올리브 1마리)" maxlength="40" style="margin-top:8px;">
+    <input class="write-input" id="togetherPrice" placeholder="가격 (예: 20,000원)" maxlength="20" style="margin-top:8px;">
+    <input class="write-input" id="togetherPickup" placeholder="픽업 장소 (예: 101동 입구)" maxlength="40" style="margin-top:8px;">
+    <input class="write-input" id="togetherDeadline" placeholder="마감 시간 (예: 오후 6시)" maxlength="20" style="margin-top:8px;">
+    <textarea class="write-textarea" id="togetherDesc" placeholder="추가 설명 (배달비, 인원 등)" rows="3"></textarea>
+  </div>
+</div>
+
+<!-- 빌려드려요 -->
+<div id="lendSection" class="section">
+  <div class="topbar"><div class="topbar-title">🔑 빌려드려요</div></div>
+  <div id="lendList" style="padding:12px 0;"><div class="empty-state"><div class="ico">🔑</div><p>아직 등록된 대여 물품이 없어요.<br>첫 번째로 올려보세요!</p></div></div>
+  <button class="fab" onclick="showSection('lendWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
+</div>
+
+<!-- 빌려드려요 WRITE -->
+<div id="lendWriteSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('lendSection')">←</button>
+    <span class="topbar-title">물품 대여 등록</span>
+    <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitLend()">등록</button>
+  </div>
+  <div class="write-body">
+    <input class="write-input" id="lendTitle" placeholder="물품명 (예: 텐트, 전동드릴, 유모차)" maxlength="40">
+    <div class="write-label">카테고리</div>
+    <div class="cat-tags" id="lendCatTags">
+      <button class="cat-tag" onclick="selectLendCat(this,'유아/육아')">🧸 유아/육아</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'캠핑/레저')">⛺ 캠핑/레저</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'공구/DIY')">🔧 공구/DIY</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'생활가전')">🏠 생활가전</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'여행/이동')">🧳 여행/이동</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'운동기구')">💪 운동기구</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'IT/전자')">💻 IT/전자</button>
+      <button class="cat-tag" onclick="selectLendCat(this,'기타')">📦 기타</button>
     </div>
-    <div style="background:var(--orange-light);border:2px solid var(--orange);border-radius:16px;padding:20px 24px;margin-bottom:28px;width:100%;">
-      <div style="font-size:13px;font-weight:800;color:var(--orange);margin-bottom:8px;">⚙️ 서비스 준비 중</div>
-      <div style="font-size:13px;color:var(--text2);line-height:1.7;">
-        현재 공동배달 모집 기능을 개발하고 있어요.<br>
-        곧 단지 이웃과 함께 주문할 수 있어요!
-      </div>
-    </div>
-    <div style="background:#fff;border:1.5px solid var(--border);border-radius:14px;padding:16px 20px;width:100%;text-align:left;">
-      <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">✅ 오픈 예정 기능</div>
-      <div style="font-size:13px;color:var(--text2);line-height:2;">
-        📋 배달 모집 게시글 올리기<br>
-        🙋 참여 신청 & 채팅으로 조율<br>
-        📍 단지 내 픽업 장소 지정<br>
-        💰 배달비 n빵 계산기
-      </div>
-    </div>
+    <input class="write-input" id="lendFee" placeholder="대여료 (예: 무료, 1만원/1일)" maxlength="30" style="margin-top:16px;">
+    <input class="write-input" id="lendPeriod" placeholder="대여 가능 기간 (예: 최대 3일)" maxlength="30" style="margin-top:8px;">
+    <textarea class="write-textarea" id="lendDesc" placeholder="물품 상태, 주의사항 등 상세 설명" rows="3"></textarea>
   </div>
 </div>
 
@@ -757,7 +789,8 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <div class="menu-item" onclick="openMyItems()"><span class="menu-ico">📦</span><span class="menu-txt" id="my-menu-items">내가 올린 물건</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openMyHelps()"><span class="menu-ico">🙋</span><span class="menu-txt" id="my-menu-helps">나의 도움요청</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt" id="my-menu-talents">나의 재능마켓</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="switchTab('togetherSection')"><span class="menu-ico">🍽️</span><span class="menu-txt">함께먹어요</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="switchTab('togetherSection')"><span class="menu-ico">🍽️</span><span class="menu-txt" id="my-menu-together">함께주문해요</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="switchTab('lendSection')"><span class="menu-ico">🔑</span><span class="menu-txt" id="my-menu-lend">빌려드려요</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt" id="my-menu-wish">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt" id="my-menu-chat">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
@@ -775,9 +808,10 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
   <button class="tab-btn active" id="tab-main" onclick="switchTab('mainSection')"><span class="tab-ico">🏠</span><span class="tab-lbl" id="tab-lbl-main">거래</span></button>
   <button class="tab-btn" id="tab-help" onclick="switchTab('helpSection')"><span class="tab-ico">🙋</span><span class="tab-lbl" id="tab-lbl-help">도움요청</span></button>
   <button class="tab-btn" id="tab-talent" onclick="switchTab('talentSection')"><span class="tab-ico">🔧</span><span class="tab-lbl" id="tab-lbl-talent">재능마켓</span></button>
-  <button class="tab-btn" id="tab-together" onclick="switchTab('togetherSection')"><span class="tab-ico">🍽️</span><span class="tab-lbl">함께먹어요</span></button>
+  <button class="tab-btn" id="tab-together" onclick="switchTab('togetherSection')"><span class="tab-ico">🍽️</span><span class="tab-lbl" id="tab-lbl-together">함께주문해요</span></button>
   <button class="tab-btn" id="tab-comm" onclick="switchTab('commSection')"><span class="tab-ico">🔍</span><span class="tab-lbl" id="tab-lbl-comm">분실물</span></button>
   <button class="tab-btn" id="tab-chat" onclick="switchTab('chatSection')"><span class="tab-ico">💬</span><span class="tab-lbl" id="tab-lbl-chat">채팅</span></button>
+  <button class="tab-btn" id="tab-lend" onclick="switchTab('lendSection')"><span class="tab-ico">🔑</span><span class="tab-lbl" id="tab-lbl-lend">빌려드려요</span></button>
   <button class="tab-btn" id="tab-my" onclick="switchTab('mypageSection')"><span class="tab-ico">👤</span><span class="tab-lbl" id="tab-lbl-my">내정보</span></button>
 </nav>
 
@@ -1343,6 +1377,132 @@ window.deleteHelp = async function(itemId) {
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
 };
+window.loadTogetherList = async function() {
+  if (!fbProfile.danjiKey) return;
+  const q = query(collection(db, 'together'), where('danjiKey', '==', fbProfile.danjiKey), orderBy('createdAt', 'desc'));
+  onSnapshot(q, snap => {
+    if (snap.empty) { document.getElementById('togetherList').innerHTML = '<div class="empty-state"><div class="ico">🍽️</div><p>아직 모집 중인 주문이 없어요.<br>첫 번째로 올려보세요!</p></div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openTogetherDetail('${d.id}')"><span class="comm-type free">🍽️ 공동주문</span><div class="comm-title">${it.store} · ${it.menu}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.price} · 마감 ${it.deadline}</div><div class="comm-meta">${it.nick} · 픽업 ${it.pickup} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();deleteTogether('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}</div>`;
+    });
+    document.getElementById('togetherList').innerHTML = html;
+  });
+};
+window.submitTogether = async function() {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const store = document.getElementById('togetherStore').value.trim();
+  const menu = document.getElementById('togetherMenu').value.trim();
+  const price = document.getElementById('togetherPrice').value.trim();
+  const pickup = document.getElementById('togetherPickup').value.trim();
+  const deadline = document.getElementById('togetherDeadline').value.trim();
+  const desc = document.getElementById('togetherDesc').value.trim();
+  if (!store || !menu || !pickup || !deadline) { showToast('가게명, 메뉴, 픽업장소, 마감시간을 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await addDoc(collection(db, 'together'), {
+      store, menu, price, pickup, deadline, desc,
+      nick: fbProfile.nick, uid: fbUser.uid,
+      danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
+      createdAt: serverTimestamp()
+    });
+    showToast('공동주문 모집 등록 완료 🍽️');
+    document.getElementById('togetherStore').value = '';
+    document.getElementById('togetherMenu').value = '';
+    document.getElementById('togetherPrice').value = '';
+    document.getElementById('togetherPickup').value = '';
+    document.getElementById('togetherDeadline').value = '';
+    document.getElementById('togetherDesc').value = '';
+    showSection('togetherSection');
+  } catch(e) { showToast('등록 실패: '+e.message); }
+  showLoading(false);
+};
+window.openTogetherDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'together', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🍽️ 공동주문</div><div class="detail-title">${it.store}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.menu} · ${it.price}</div><div class="detail-desc" style="margin-top:12px;"><b>픽업 장소:</b> ${it.pickup}<br><b>마감 시간:</b> ${it.deadline}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('togetherSection')">목록으로</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#FF4757;" onclick="deleteTogether('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('together_${itemId}','${it.uid}','${it.nick}','${it.store} ${it.menu}','${it.price}','🍽️')">참여할게요</button>`}</div>`;
+  showLoading(false);
+  showSection('detailSection');
+};
+window.deleteTogether = async function(itemId) {
+  if (!confirm('공동주문 모집을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'together', itemId));
+    showToast('삭제됐어요');
+    showSection('togetherSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
+};
+window.loadLendList = async function() {
+  if (!fbProfile.danjiKey) return;
+  const q = query(collection(db, 'lend'), where('danjiKey', '==', fbProfile.danjiKey), orderBy('createdAt', 'desc'));
+  onSnapshot(q, snap => {
+    if (snap.empty) { document.getElementById('lendList').innerHTML = '<div class="empty-state"><div class="ico">🔑</div><p>아직 등록된 대여 물품이 없어요.<br>첫 번째로 올려보세요!</p></div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openLendDetail('${d.id}')"><span class="comm-type lost" style="background:#F0FFF0;color:#2E8B57;">🔑 ${it.cat}</span><div class="comm-title">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.fee||'무료'} · ${it.period}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();deleteLend('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}</div>`;
+    });
+    document.getElementById('lendList').innerHTML = html;
+  });
+};
+window.selectLendCat = function(el, cat) {
+  document.querySelectorAll('#lendCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  window.selectedLendCat = cat;
+};
+window.submitLend = async function() {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const title = document.getElementById('lendTitle').value.trim();
+  const fee = document.getElementById('lendFee').value.trim();
+  const period = document.getElementById('lendPeriod').value.trim();
+  const desc = document.getElementById('lendDesc').value.trim();
+  if (!window.selectedLendCat) { showToast('카테고리를 선택해주세요'); return; }
+  if (!title || !period) { showToast('물품명과 대여 기간을 입력해주세요'); return; }
+  showLoading(true);
+  try {
+    await addDoc(collection(db, 'lend'), {
+      title, fee, period, desc, cat: window.selectedLendCat,
+      nick: fbProfile.nick, uid: fbUser.uid,
+      danjiKey: fbProfile.danjiKey, danji: fbProfile.danji,
+      createdAt: serverTimestamp()
+    });
+    showToast('대여 물품 등록 완료 🔑');
+    document.getElementById('lendTitle').value = '';
+    document.getElementById('lendFee').value = '';
+    document.getElementById('lendPeriod').value = '';
+    document.getElementById('lendDesc').value = '';
+    window.selectedLendCat = '';
+    document.querySelectorAll('#lendCatTags .cat-tag').forEach(b => b.classList.remove('on'));
+    showSection('lendSection');
+  } catch(e) { showToast('등록 실패: '+e.message); }
+  showLoading(false);
+};
+window.openLendDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'lend', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔑 ${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.fee||'무료'} · ${it.period}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('lendSection')">목록으로</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#FF4757;" onclick="deleteLend('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lend_${itemId}','${it.uid}','${it.nick}','${it.title}','${it.fee||'무료'}','🔑')">빌릴게요</button>`}</div>`;
+  showLoading(false);
+  showSection('detailSection');
+};
+window.deleteLend = async function(itemId) {
+  if (!confirm('대여 물품을 삭제할까요?')) return;
+  showLoading(true);
+  try {
+    await deleteDoc(doc(db, 'lend', itemId));
+    showToast('삭제됐어요');
+    showSection('lendSection');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+  showLoading(false);
+};
 window.filterItems = function(val) {
   const cards = document.querySelectorAll('#itemList .item-card');
   cards.forEach(card => {
@@ -1387,7 +1547,7 @@ window.addEventListener('popstate', function() {
     switchTab('chatSection');
     return;
   }
-  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherSection','chatSection','mypageSection','mainSection'];
+  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherWriteSection','togetherSection','lendWriteSection','lendSection','chatSection','mypageSection','mainSection'];
   for (const id of sections) {
     const el = document.getElementById(id);
     if (el && el.classList.contains('active')) {
@@ -1396,7 +1556,9 @@ window.addEventListener('popstate', function() {
       if (id === 'lostWriteSection') { showSection('commSection'); return; }
       if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection') { showSection('mypageSection'); return; }
       if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
-      if (id === 'talentSection' || id === 'commSection' || id === 'togetherSection' || id === 'chatSection' || id === 'mypageSection') { switchTab('mainSection'); return; }
+      if (id === 'togetherWriteSection') { showSection('togetherSection'); return; }
+      if (id === 'lendWriteSection') { showSection('lendSection'); return; }
+      if (id === 'talentSection' || id === 'commSection' || id === 'togetherSection' || id === 'lendSection' || id === 'chatSection' || id === 'mypageSection') { switchTab('mainSection'); return; }
       if (id === 'mainSection') { if (confirm('앱을 종료할까요?')) { history.back(); } return; }
       return;
     }
@@ -1439,6 +1601,8 @@ function showSection(id) {
   if (id === 'commSection') { if(typeof loadCommList === 'function') loadCommList('lost'); }
   if (id === 'talentSection') { if(typeof loadTalentList === 'function') loadTalentList(''); }
   if (id === 'helpSection') { if(typeof loadHelpList === 'function') loadHelpList(''); }
+  if (id === 'togetherSection') { if(typeof loadTogetherList === 'function') loadTogetherList(); }
+  if (id === 'lendSection') { if(typeof loadLendList === 'function') loadLendList(); }
   if (id === 'helpWriteSection') {
     window.selectedHelpCat = '';
     document.querySelectorAll('#helpCatTags .cat-tag').forEach(b => b.classList.remove('on'));
@@ -1457,7 +1621,7 @@ function switchTab(id) {
   history.pushState({section: id}, '', location.href);
   showSection(id);
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  const map = {mainSection:'tab-main',talentSection:'tab-talent',helpSection:'tab-help',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my',togetherSection:'tab-together'};
+  const map = {mainSection:'tab-main',talentSection:'tab-talent',helpSection:'tab-help',commSection:'tab-comm',chatSection:'tab-chat',mypageSection:'tab-my',togetherSection:'tab-together',lendSection:'tab-lend'};
   if (map[id]) document.getElementById(map[id]).classList.add('active');
 }
 window.selectCat = function(el, cat) {
@@ -1509,6 +1673,7 @@ window.filterNickList = function() {
 window.selectNick = function(nick) {
   document.getElementById('loginNick').value = nick;
   document.getElementById('nickDropdown').style.display = 'none';
+  document.getElementById('loginPw').focus();
 };
 window.deleteNick = function(nick) {
   const nicks = getSavedNicks().filter(n => n !== nick);
