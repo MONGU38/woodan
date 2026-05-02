@@ -13,7 +13,7 @@
 :root{
   --orange:#A51C30;
   --orange-light:#FCEAEC;
-  --orange-dark:#7A1020;
+  --orange-dark:#7A1020; 
   --bg:#FAFAFA;
   --card:#FFFFFF;
   --text:#1A1A1A;
@@ -218,7 +218,7 @@ const introTexts = {
       selectedDanji: '선택된 단지', back: '이전', joinBtn: '가입 완료',
       tabMain: '거래', tabTalent: '재능마켓', tabComm: '분실물',
       tabChat: '채팅', tabHelp: '도움요청', tabMy: '내정보', tabTogether: '함께주문해요', tabLend: '빌려드려요',
-      talentTitle: '단지 재능마켓', helpTitle: '도움이 필요해요', togetherTitle: '🍽️ 함께 주문해요', lendTitle: '🔑 빌려드려요',
+      talentTitle: '단지 재능마켓', helpTitle: '도움이 필요해요', togetherTitle: '🍽️ 함께 주문해요(테스트중)', lendTitle: '🔑 빌려드려요',
       commTitle: '우리 단지 소식', chatTitle: '채팅',
       searchPlaceholder: '🔍 단지 내 매물 검색',
       sectionTrade: '거래 활동', sectionSetting: '설정',
@@ -533,7 +533,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- DETAIL -->
 <div id="detailSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('mainSection')">←</button>
+    <button class="icon-btn" onclick="switchTab('mainSection')">🏠</button>
     <span class="topbar-title" id="detail-title">상품 상세</span>
     <button class="icon-btn" onclick="shareItem()">⋯</button>
   </div>
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- TALENT DETAIL -->
 <div id="talentDetailSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('talentSection')">←</button>
+    <button class="icon-btn" onclick="switchTab('mainSection')">🏠</button>
     <span class="topbar-title">재능마켓 상세</span>
   </div>
   <div id="talentDetailContent"></div>
@@ -651,7 +651,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- HELP DETAIL -->
 <div id="helpDetailSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('helpSection')">←</button>
+    <button class="icon-btn" onclick="switchTab('mainSection')">🏠</button>
     <span class="topbar-title">도움 요청 상세</span>
   </div>
   <div id="helpDetailContent"></div>
@@ -685,7 +685,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- MY HELPS -->
 <div id="myHelpsSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <button class="icon-btn" onclick="showSection('mypageSection')">🏠</button>
     <span class="topbar-title">나의 도움요청</span>
   </div>
   <div class="list-section" id="myHelpList"><div class="empty-state"><div class="ico">🙋</div><p>등록된 도움요청이 없어요.</p></div></div>
@@ -694,7 +694,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- MY TALENTS -->
 <div id="myTalentsSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <button class="icon-btn" onclick="showSection('mypageSection')">🏠</button>
     <span class="topbar-title">나의 재능마켓</span>
   </div>
   <div class="list-section" id="myTalentList"><div class="empty-state"><div class="ico">🔧</div><p>등록된 재능이 없어요.</p></div></div>
@@ -703,10 +703,19 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <!-- MY ITEMS -->
 <div id="myItemsSection" class="section">
   <div class="topbar">
-    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <button class="icon-btn" onclick="showSection('mypageSection')">🏠</button>
     <span class="topbar-title">내가 올린 물건</span>
   </div>
   <div class="list-section" id="myItemList"><div class="empty-state"><div class="ico">📦</div><p>올린 물건이 없어요.</p></div></div>
+</div>
+
+<!-- MY LOSTS -->
+<div id="myLostsSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">🏠</button>
+    <span class="topbar-title">나의 분실물</span>
+  </div>
+  <div class="list-section" id="myLostList"><div class="empty-state"><div class="ico">🔍</div><p>등록된 분실물이 없어요.</p></div></div>
 </div>
 
 <!-- WISH LIST -->
@@ -811,6 +820,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <div class="menu-item" onclick="openMyTalents()"><span class="menu-ico">🔧</span><span class="menu-txt" id="my-menu-talents">나의 재능마켓</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('togetherSection')"><span class="menu-ico">🍽️</span><span class="menu-txt" id="my-menu-together">함께주문해요</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('lendSection')"><span class="menu-ico">🔑</span><span class="menu-txt" id="my-menu-lend">빌려드려요</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openMyLosts()"><span class="menu-ico">🔍</span><span class="menu-txt" id="my-menu-losts">나의 분실물</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="openWishList()"><span class="menu-ico">❤️</span><span class="menu-txt" id="my-menu-wish">관심 목록</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="switchTab('chatSection')"><span class="menu-ico">💬</span><span class="menu-txt" id="my-menu-chat">채팅 내역</span><span class="menu-arrow">›</span></div>
   </div>
@@ -1113,7 +1123,7 @@ window.loadCommList = async function(tab) {
       const it = d.data();
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const lostWished = (JSON.parse(localStorage.getItem('wishes_lost_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span><div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${it.where} · ${timeAgo(t)}</div><button data-lost-wish-id="${d.id}" onclick="event.stopPropagation();toggleLostWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lostWished?'#FF4757':'#ccc'};">${lostWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">찾았어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${it.where} · ${timeAgo(t)}</div><button data-lost-wish-id="${d.id}" onclick="event.stopPropagation();toggleLostWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lostWished?'#FF4757':'#ccc'};">${lostWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('commList').innerHTML = html;
   });
@@ -1148,9 +1158,10 @@ window.openLostDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const lostWished2 = (JSON.parse(localStorage.getItem('wishes_lost_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔍 분실물</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;"><b>장소:</b> ${it.where}<br><b>일시:</b> ${it.when||'미기재'}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('commSection')">목록으로</button><button class="btn-wish ${lostWished2?'on':''}" id="lostWishBtn" onclick="toggleLostWishDetail('${itemId}')">${lostWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editLost('${itemId}','${it.title}','${it.where}','${it.when||''}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLost('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lost_${itemId}','${it.uid}','${it.nick}','${it.title}','분실물','🔍')">채팅하기</button>`}</div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🔍 분실물</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;"><b>장소:</b> ${it.where}<br><b>일시:</b> ${it.when||'미기재'}<br><br>${it.desc||''}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="lostCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="lostCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitLostComment('${itemId}');}"></textarea><button onclick="submitLostComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('commSection')">목록으로</button><button class="btn-wish ${lostWished2?'on':''}" id="lostWishBtn" onclick="toggleLostWishDetail('${itemId}')">${lostWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};" onclick="toggleLostStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?'찾는중으로변경':'찾았어요 ✅'}</button><button class="btn-chat" style="background:#555;" onclick="editLost('${itemId}','${it.title}','${it.where}','${it.when||''}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLost('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lost_${itemId}','${it.uid}','${it.nick}','${it.title}','분실물','🔍')">채팅하기</button>`}</div>`;
   showLoading(false);
   showSection('detailSection');
+  loadLostComments(itemId);
 };
 window.editLost = async function(itemId, title, where, when) {
   showLoading(true);
@@ -1254,6 +1265,16 @@ window.toggleLostWishDetail = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
+window.toggleLostStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'active' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'lost', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '찾았어요 ✅' : '찾는중으로 변경됐어요');
+    openLostDetail(itemId);
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 window.deleteLost = async function(itemId) {
   if (!confirm('분실물 게시글을 삭제할까요?')) return;
   showLoading(true);
@@ -1263,6 +1284,39 @@ window.deleteLost = async function(itemId) {
     showSection('commSection');
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
+};
+window.loadLostComments = async function(itemId) {
+  const q = query(collection(db, 'lost', itemId, 'comments'), orderBy('createdAt'));
+  onSnapshot(q, snap => {
+    const list = document.getElementById('lostCommentList');
+    if (!list) return;
+    if (snap.empty) { list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:8px 0;">아직 댓글이 없어요.</div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const t = c.createdAt?.toDate ? c.createdAt.toDate() : new Date();
+      const canDelete = fbUser && fbUser.uid === c.uid;
+      html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${c.nick} <span style="font-size:11px;font-weight:400;color:var(--text3);">${timeAgo(t)}</span></div><div style="font-size:14px;color:var(--text2);">${c.text}</div></div>${canDelete?`<button onclick="deleteLostComment('${itemId}','${d.id}')" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;flex-shrink:0;margin-left:8px;">삭제</button>`:''}</div>`;
+    });
+    list.innerHTML = html;
+  });
+};
+window.submitLostComment = async function(itemId) {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const input = document.getElementById('lostCommentInput');
+  const text = input.value.trim();
+  if (!text) { showToast('댓글을 입력해주세요'); return; }
+  try {
+    await addDoc(collection(db, 'lost', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    input.value = '';
+  } catch(e) { showToast('등록 실패: '+e.message); }
+};
+window.deleteLostComment = async function(itemId, commentId) {
+  if (!confirm('댓글을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'lost', itemId, 'comments', commentId));
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
 };
 let currentTalentCat = '';
 window.filterTalent = function(el, cat) {
@@ -1282,7 +1336,7 @@ window.loadTalentList = async function(cat) {
       if (cat && it.cat !== cat) return;
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const talentWished = (JSON.parse(localStorage.getItem('wishes_talent_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span><div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editTalent('${d.id}','${it.cat}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteTalent('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}<button data-talent-wish-id="${d.id}" onclick="event.stopPropagation();toggleTalentWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${talentWished?'#FF4757':'#ccc'};">${talentWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">완료됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-talent-wish-id="${d.id}" onclick="event.stopPropagation();toggleTalentWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${talentWished?'#FF4757':'#ccc'};">${talentWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('talentList').innerHTML = html || '<div class="empty-state"><div class="ico">🔧</div><p>해당 카테고리에 등록된 재능이 없어요.</p></div>';
   });
@@ -1321,9 +1375,10 @@ window.openTalentDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const talentWished2 = (JSON.parse(localStorage.getItem('wishes_talent_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('talentDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('talentSection')">목록으로</button><button class="btn-wish ${talentWished2?'on':''}" id="talentWishBtn" onclick="toggleTalentWishDetail('${itemId}')">${talentWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editTalent('${itemId}','${it.cat}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteTalent('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('talent_${itemId}','${it.uid}','${it.nick}','${it.title}','재능마켓','🔧')">채팅하기</button>`}</div>`;
+  document.getElementById('talentDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="talentCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="talentCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitTalentComment('${itemId}');}"></textarea><button onclick="submitTalentComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('talentSection')">목록으로</button><button class="btn-wish ${talentWished2?'on':''}" id="talentWishBtn" onclick="toggleTalentWishDetail('${itemId}')">${talentWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editTalent('${itemId}','${it.cat}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteTalent('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('talent_${itemId}','${it.uid}','${it.nick}','${it.title}','재능마켓','🔧')">채팅하기</button>`}</div>`;
   showLoading(false);
   showSection('talentDetailSection');
+  loadTalentComments(itemId);
 };
 window.editTalent = async function(itemId, cat) {
   showLoading(true);
@@ -1383,6 +1438,15 @@ window.toggleTalentWishDetail = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
+window.toggleTalentStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'active' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'talents', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '완료됐어요 ✅' : '활성으로 변경됐어요');
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 window.deleteTalent = async function(itemId) {
   if (!confirm('재능마켓 글을 삭제할까요?')) return;
   showLoading(true);
@@ -1393,6 +1457,40 @@ window.deleteTalent = async function(itemId) {
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
 };
+window.loadTalentComments = async function(itemId) {
+  const q = query(collection(db, 'talents', itemId, 'comments'), orderBy('createdAt'));
+  onSnapshot(q, snap => {
+    const list = document.getElementById('talentCommentList');
+    if (!list) return;
+    if (snap.empty) { list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:8px 0;">아직 댓글이 없어요.</div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const t = c.createdAt?.toDate ? c.createdAt.toDate() : new Date();
+      const canDelete = fbUser && fbUser.uid === c.uid;
+      html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${c.nick} <span style="font-size:11px;font-weight:400;color:var(--text3);">${timeAgo(t)}</span></div><div style="font-size:14px;color:var(--text2);">${c.text}</div></div>${canDelete?`<button onclick="deleteTalentComment('${itemId}','${d.id}')" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;flex-shrink:0;margin-left:8px;">삭제</button>`:''}</div>`;
+    });
+    list.innerHTML = html;
+  });
+};
+window.submitTalentComment = async function(itemId) {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const input = document.getElementById('talentCommentInput');
+  const text = input.value.trim();
+  if (!text) { showToast('댓글을 입력해주세요'); return; }
+  try {
+    await addDoc(collection(db, 'talents', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    input.value = '';
+  } catch(e) { showToast('등록 실패: '+e.message); }
+};
+window.deleteTalentComment = async function(itemId, commentId) {
+  if (!confirm('댓글을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'talents', itemId, 'comments', commentId));
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+};
+
 window.filterHelp = function(el, cat) {
   document.querySelectorAll('#helpCatFilter .comm-tab-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
@@ -1409,7 +1507,7 @@ window.loadHelpList = async function(cat) {
       if (cat && it.cat !== cat) return;
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const helpWished = (JSON.parse(localStorage.getItem('wishes_help_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span><div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editHelp('${d.id}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteHelp('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}<button data-help-wish-id="${d.id}" onclick="event.stopPropagation();toggleHelpWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${helpWished?'#FF4757':'#ccc'};">${helpWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">해결됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-help-wish-id="${d.id}" onclick="event.stopPropagation();toggleHelpWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${helpWished?'#FF4757':'#ccc'};">${helpWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('helpList').innerHTML = html || '<div class="empty-state"><div class="ico">🙋</div><p>해당 카테고리에 도움 요청이 없어요.</p></div>';
   });
@@ -1445,9 +1543,10 @@ window.openHelpDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const helpWished2 = (JSON.parse(localStorage.getItem('wishes_help_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('helpDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.reward||'보수 협의'}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('helpSection')">목록으로</button><button class="btn-wish ${helpWished2?'on':''}" id="helpWishBtn" onclick="toggleHelpWishDetail('${itemId}')">${helpWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editHelp('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteHelp('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('help_${itemId}','${it.uid}','${it.nick}','${it.title}','도움요청','🙋')">채팅하기</button>`}</div>`;
+  document.getElementById('helpDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.reward||'보수 협의'}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="helpCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="helpCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitHelpComment('${itemId}');}"></textarea><button onclick="submitHelpComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('helpSection')">목록으로</button><button class="btn-wish ${helpWished2?'on':''}" id="helpWishBtn" onclick="toggleHelpWishDetail('${itemId}')">${helpWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};" onclick="toggleHelpStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?'활성으로변경':'해결됐어요 ✅'}</button><button class="btn-chat" style="background:#555;" onclick="editHelp('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteHelp('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('help_${itemId}','${it.uid}','${it.nick}','${it.title}','도움요청','🙋')">채팅하기</button>`}</div>`;
   showLoading(false);
   showSection('helpDetailSection');
+  loadHelpComments(itemId);
 };
 window.editHelp = async function(itemId) {
   showLoading(true);
@@ -1509,6 +1608,15 @@ window.toggleHelpWishDetail = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
+window.toggleHelpStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'active' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'helps', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '해결됐어요 ✅' : '활성으로 변경됐어요');
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 window.deleteHelp = async function(itemId) {
   if (!confirm('도움 요청을 삭제할까요?')) return;
   showLoading(true);
@@ -1518,6 +1626,39 @@ window.deleteHelp = async function(itemId) {
     showSection('helpSection');
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
+};
+window.loadHelpComments = async function(itemId) {
+  const q = query(collection(db, 'helps', itemId, 'comments'), orderBy('createdAt'));
+  onSnapshot(q, snap => {
+    const list = document.getElementById('helpCommentList');
+    if (!list) return;
+    if (snap.empty) { list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:8px 0;">아직 댓글이 없어요.</div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const t = c.createdAt?.toDate ? c.createdAt.toDate() : new Date();
+      const canDelete = fbUser && fbUser.uid === c.uid;
+      html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${c.nick} <span style="font-size:11px;font-weight:400;color:var(--text3);">${timeAgo(t)}</span></div><div style="font-size:14px;color:var(--text2);">${c.text}</div></div>${canDelete?`<button onclick="deleteHelpComment('${itemId}','${d.id}')" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;flex-shrink:0;margin-left:8px;">삭제</button>`:''}</div>`;
+    });
+    list.innerHTML = html;
+  });
+};
+window.submitHelpComment = async function(itemId) {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const input = document.getElementById('helpCommentInput');
+  const text = input.value.trim();
+  if (!text) { showToast('댓글을 입력해주세요'); return; }
+  try {
+    await addDoc(collection(db, 'helps', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    input.value = '';
+  } catch(e) { showToast('등록 실패: '+e.message); }
+};
+window.deleteHelpComment = async function(itemId, commentId) {
+  if (!confirm('댓글을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'helps', itemId, 'comments', commentId));
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
 };
 window.loadTogetherList = async function() {
   if (!fbProfile.danjiKey) return;
@@ -1529,7 +1670,7 @@ window.loadTogetherList = async function() {
       const it = d.data();
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const togetherWished = (JSON.parse(localStorage.getItem('wishes_together_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;" onclick="openTogetherDetail('${d.id}')"><span class="comm-type free">🍽️ 공동주문</span><div class="comm-title" style="padding-right:28px;">${it.store} · ${it.menu}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.price} · 마감 ${it.deadline}</div><div class="comm-meta">${it.nick} · 픽업 ${it.pickup} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editTogether('${d.id}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteTogether('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}<button data-together-wish-id="${d.id}" onclick="event.stopPropagation();toggleTogetherWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${togetherWished?'#FF4757':'#ccc'};">${togetherWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTogetherDetail('${d.id}')"><span class="comm-type free">🍽️ 공동주문</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">마감됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.store} · ${it.menu}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.price} · 마감 ${it.deadline}</div><div class="comm-meta">${it.nick} · 픽업 ${it.pickup} · ${timeAgo(t)}</div><button data-together-wish-id="${d.id}" onclick="event.stopPropagation();toggleTogetherWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${togetherWished?'#FF4757':'#ccc'};">${togetherWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('togetherList').innerHTML = html;
   });
@@ -1568,9 +1709,10 @@ window.openTogetherDetail = async function(itemId) {
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const togetherWished2 = (JSON.parse(localStorage.getItem('wishes_together_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🍽️ 공동주문</div><div class="detail-title">${it.store}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.menu} · ${it.price}</div><div class="detail-desc" style="margin-top:12px;"><b>픽업 장소:</b> ${it.pickup}<br><b>마감 시간:</b> ${it.deadline}<br><br>${it.desc||''}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('togetherSection')">목록으로</button><button class="btn-wish ${togetherWished2?'on':''}" id="togetherWishBtn" onclick="toggleTogetherWishDetail('${itemId}')">${togetherWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editTogether('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteTogether('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('together_${itemId}','${it.uid}','${it.nick}','${it.store} ${it.menu}','${it.price}','🍽️')">참여할게요</button>`}</div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">🍽️ 공동주문</div><div class="detail-title">${it.store}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.menu} · ${it.price}</div><div class="detail-desc" style="margin-top:12px;"><b>픽업 장소:</b> ${it.pickup}<br><b>마감 시간:</b> ${it.deadline}<br><br>${it.desc||''}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="togetherCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="togetherCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitTogetherComment('${itemId}');}"></textarea><button onclick="submitTogetherComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('togetherSection')">목록으로</button><button class="btn-wish ${togetherWished2?'on':''}" id="togetherWishBtn" onclick="toggleTogetherWishDetail('${itemId}')">${togetherWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};" onclick="toggleTogetherStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?'모집중으로변경':'마감됐어요 ✅'}</button><button class="btn-chat" style="background:#555;" onclick="editTogether('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteTogether('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('together_${itemId}','${it.uid}','${it.nick}','${it.store} ${it.menu}','${it.price}','🍽️')">참여할게요</button>`}</div>`;
   showLoading(false);
   showSection('detailSection');
+  loadTogetherComments(itemId);
 };
 window.editTogether = async function(itemId) {
   showLoading(true);
@@ -1634,6 +1776,15 @@ window.toggleTogetherWishDetail = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
+window.toggleTogetherStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'active' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'together', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '마감됐어요 ✅' : '모집중으로 변경됐어요');
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 window.deleteTogether = async function(itemId) {
   if (!confirm('공동주문 모집을 삭제할까요?')) return;
   showLoading(true);
@@ -1643,6 +1794,39 @@ window.deleteTogether = async function(itemId) {
     showSection('togetherSection');
   } catch(e) { showToast('삭제 실패: '+e.message); }
   showLoading(false);
+};
+window.loadTogetherComments = async function(itemId) {
+  const q = query(collection(db, 'together', itemId, 'comments'), orderBy('createdAt'));
+  onSnapshot(q, snap => {
+    const list = document.getElementById('togetherCommentList');
+    if (!list) return;
+    if (snap.empty) { list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:8px 0;">아직 댓글이 없어요.</div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const t = c.createdAt?.toDate ? c.createdAt.toDate() : new Date();
+      const canDelete = fbUser && fbUser.uid === c.uid;
+      html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${c.nick} <span style="font-size:11px;font-weight:400;color:var(--text3);">${timeAgo(t)}</span></div><div style="font-size:14px;color:var(--text2);">${c.text}</div></div>${canDelete?`<button onclick="deleteTogetherComment('${itemId}','${d.id}')" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;flex-shrink:0;margin-left:8px;">삭제</button>`:''}</div>`;
+    });
+    list.innerHTML = html;
+  });
+};
+window.submitTogetherComment = async function(itemId) {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const input = document.getElementById('togetherCommentInput');
+  const text = input.value.trim();
+  if (!text) { showToast('댓글을 입력해주세요'); return; }
+  try {
+    await addDoc(collection(db, 'together', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    input.value = '';
+  } catch(e) { showToast('등록 실패: '+e.message); }
+};
+window.deleteTogetherComment = async function(itemId, commentId) {
+  if (!confirm('댓글을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'together', itemId, 'comments', commentId));
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
 };
 window.loadLendList = async function(type) {
   if (!fbProfile.danjiKey) return;
@@ -1658,7 +1842,7 @@ window.loadLendList = async function(type) {
       const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : '🔑 빌려드려요';
       const typeStyle = lendType === 'want' ? 'background:#EEF4FF;color:#3B6FD4;' : 'background:#F0FFF0;color:#2E8B57;';
       const lendWished = (JSON.parse(localStorage.getItem('wishes_lend_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;" onclick="openLendDetail('${d.id}')"><span class="comm-type lost" style="${typeStyle}">${typeLabel} · ${it.cat}</span><div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.fee||'무료'} · ${it.period}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div>${fbUser&&fbUser.uid===it.uid?`<div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editLend('${d.id}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteLend('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div>`:''}<button data-lend-wish-id="${d.id}" onclick="event.stopPropagation();toggleLendWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lendWished?'#FF4757':'#ccc'};">${lendWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLendDetail('${d.id}')"><span class="comm-type lost" style="${typeStyle}">${typeLabel} · ${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">대여완료</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.fee||'무료'} · ${it.period}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-lend-wish-id="${d.id}" onclick="event.stopPropagation();toggleLendWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lendWished?'#FF4757':'#ccc'};">${lendWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('lendList').innerHTML = html || '<div class="empty-state"><div class="ico">🔑</div><p>해당 유형의 물품이 없어요.</p></div>';
   });
@@ -1713,9 +1897,10 @@ window.openLendDetail = async function(itemId) {
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
   const typeLabel = (it.type || 'give') === 'want' ? '🙏 빌려주세요' : '🔑 빌려드려요';
   const lendWished2 = (JSON.parse(localStorage.getItem('wishes_lend_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${typeLabel} · ${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.fee||'무료'} · ${it.period}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('lendSection')">목록으로</button><button class="btn-wish ${lendWished2?'on':''}" id="lendWishBtn" onclick="toggleLendWishDetail('${itemId}')">${lendWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;" onclick="editLend('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLend('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lend_${itemId}','${it.uid}','${it.nick}','${it.title}','${it.fee||'무료'}','🔑')">빌릴게요</button>`}</div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${typeLabel} · ${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.fee||'무료'} · ${it.period}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="lendCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="lendCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitLendComment('${itemId}');}"></textarea><button onclick="submitLendComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('lendSection')">목록으로</button><button class="btn-wish ${lendWished2?'on':''}" id="lendWishBtn" onclick="toggleLendWishDetail('${itemId}')">${lendWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};" onclick="toggleLendStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?'대여가능으로변경':'대여완료 ✅'}</button><button class="btn-chat" style="background:#555;" onclick="editLend('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLend('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lend_${itemId}','${it.uid}','${it.nick}','${it.title}','${it.fee||'무료'}','🔑')">빌릴게요</button>`}</div>`;
   showLoading(false);
   showSection('detailSection');
+  loadLendComments(itemId);
 };
 window.editLend = async function(itemId) {
   showLoading(true);
@@ -1783,6 +1968,48 @@ window.toggleLendWishDetail = function(id) {
   }
   localStorage.setItem(key, JSON.stringify(wishes));
 };
+window.loadLendComments = async function(itemId) {
+  const q = query(collection(db, 'lend', itemId, 'comments'), orderBy('createdAt'));
+  onSnapshot(q, snap => {
+    const list = document.getElementById('lendCommentList');
+    if (!list) return;
+    if (snap.empty) { list.innerHTML = '<div style="font-size:13px;color:var(--text3);text-align:center;padding:8px 0;">아직 댓글이 없어요.</div>'; return; }
+    let html = '';
+    snap.forEach(d => {
+      const c = d.data();
+      const t = c.createdAt?.toDate ? c.createdAt.toDate() : new Date();
+      const canDelete = fbUser && fbUser.uid === c.uid;
+      html += `<div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;">${c.nick} <span style="font-size:11px;font-weight:400;color:var(--text3);">${timeAgo(t)}</span></div><div style="font-size:14px;color:var(--text2);">${c.text}</div></div>${canDelete?`<button onclick="deleteLendComment('${itemId}','${d.id}')" style="background:none;border:none;color:var(--text3);font-size:12px;cursor:pointer;flex-shrink:0;margin-left:8px;">삭제</button>`:''}</div>`;
+    });
+    list.innerHTML = html;
+  });
+};
+window.submitLendComment = async function(itemId) {
+  if (!fbUser) { showToast('로그인이 필요해요'); return; }
+  const input = document.getElementById('lendCommentInput');
+  const text = input.value.trim();
+  if (!text) { showToast('댓글을 입력해주세요'); return; }
+  try {
+    await addDoc(collection(db, 'lend', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    input.value = '';
+  } catch(e) { showToast('등록 실패: '+e.message); }
+};
+window.deleteLendComment = async function(itemId, commentId) {
+  if (!confirm('댓글을 삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, 'lend', itemId, 'comments', commentId));
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
+};
+window.toggleLendStatus = async function(itemId, currentStatus) {
+  const newStatus = currentStatus === 'done' ? 'active' : 'done';
+  showLoading(true);
+  try {
+    await updateDoc(doc(db, 'lend', itemId), { status: newStatus });
+    showToast(newStatus === 'done' ? '대여완료 ✅' : '대여가능으로 변경됐어요');
+  } catch(e) { showToast('변경 실패: '+e.message); }
+  showLoading(false);
+};
 window.deleteLend = async function(itemId) {
   if (!confirm('대여 물품을 삭제할까요?')) return;
   showLoading(true);
@@ -1837,14 +2064,14 @@ window.addEventListener('popstate', function() {
     switchTab('chatSection');
     return;
   }
-  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherWriteSection','togetherSection','lendWriteSection','lendSection','chatSection','mypageSection','mainSection'];
+  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','myLostsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherWriteSection','togetherSection','lendWriteSection','lendSection','chatSection','mypageSection','mainSection'];
   for (const id of sections) {
     const el = document.getElementById(id);
     if (el && el.classList.contains('active')) {
       if (id === 'talentDetailSection') { showSection('talentSection'); return; }
       if (id === 'talentWriteSection') { showSection('talentSection'); return; }
       if (id === 'lostWriteSection') { showSection('commSection'); return; }
-      if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection') { showSection('mypageSection'); return; }
+      if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection' || id === 'myLostsSection') { showSection('mypageSection'); return; }
       if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
       if (id === 'togetherWriteSection') { showSection('togetherSection'); return; }
       if (id === 'lendWriteSection') { showSection('lendSection'); return; }
@@ -2050,6 +2277,24 @@ window.toggleWishCard = function(id, btn) {
     document.querySelectorAll(`[data-wish-id="${id}"]`).forEach(b => { b.textContent = '♥'; b.style.color = '#FF4757'; });
   }
   localStorage.setItem(key, JSON.stringify(wishes));
+};
+window.openMyLosts = async function() {
+  function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  showSection('myLostsSection');
+  showLoading(true);
+  try {
+    const q = window._fbQuery(window._fbCollection(window._db, 'lost'), window._fbWhere('uid', '==', window.fbUser.uid));
+    const snap = await window._fbGetDocs(q);
+    if (snap.empty) { document.getElementById('myLostList').innerHTML = '<div class="empty-state"><div class="ico">🔍</div><p>등록된 분실물이 없어요.</p></div>'; showLoading(false); return; }
+    let html = '';
+    snap.forEach(d => {
+      const it = d.data();
+      const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+      html += `<div class="comm-item" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span><div class="comm-title">${it.title}</div><div class="comm-meta">${it.where} · ${timeAgo(t)}</div><div style="display:flex;gap:8px;margin-top:10px;"><button onclick="event.stopPropagation();editLost('${d.id}','${it.title}','${it.where}','${it.when||''}')" style="flex:1;background:#555;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">수정</button><button onclick="event.stopPropagation();deleteLost('${d.id}')" style="flex:1;background:#FF4757;color:white;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:600;cursor:pointer;">삭제</button></div></div>`;
+    });
+    document.getElementById('myLostList').innerHTML = html;
+  } catch(e) { console.log(e); }
+  showLoading(false);
 };
 window.openWishList = async function() {
   function timeAgo(date) { const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금 전'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
