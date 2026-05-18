@@ -770,6 +770,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <button class="comm-tab-btn active" onclick="filterLendType(this,'')">전체</button>
     <button class="comm-tab-btn" onclick="filterLendType(this,'give')">🔑 빌려드려요</button>
     <button class="comm-tab-btn" onclick="filterLendType(this,'want')">🙏 빌려주세요</button>
+    <button class="comm-tab-btn" onclick="filterLendType(this,'exchange')">🔄 교환해요</button>
   </div>
   <div id="lendList" style="padding:12px 0;"><div class="empty-state"><div class="ico">🔑</div><p>아직 등록된 대여 물품이 없어요.<br>첫 번째로 올려보세요!</p></div></div>
   <button class="fab" onclick="showSection('lendWriteSection')"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg></button>
@@ -779,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
 <div id="lendWriteSection" class="section">
   <div class="topbar">
     <button class="icon-btn" onclick="showSection('lendSection')">←</button>
-    <span class="topbar-title">물품 대여 등록</span>
+    <span class="topbar-title" id="lendWriteTitle">물품 대여 등록</span>
     <button class="btn-primary" style="width:auto;padding:8px 18px;font-size:14px;" onclick="submitLend()">등록</button>
   </div>
   <div class="write-body">
@@ -787,6 +788,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <div class="cat-tags" id="lendTypeTags">
       <button class="cat-tag" onclick="selectLendType(this,'give')">🔑 빌려드려요</button>
       <button class="cat-tag" onclick="selectLendType(this,'want')">🙏 빌려주세요</button>
+      <button class="cat-tag" onclick="selectLendType(this,'exchange')">🔄 교환해요</button>
     </div>
     <input class="write-input" id="lendTitle" placeholder="물품명 (예: 텐트, 전동드릴, 유모차)" maxlength="40" style="margin-top:8px;">
     <div class="write-label">카테고리</div>
@@ -800,8 +802,8 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
       <button class="cat-tag" onclick="selectLendCat(this,'IT/전자')">💻 IT/전자</button>
       <button class="cat-tag" onclick="selectLendCat(this,'기타')">📦 기타</button>
     </div>
-    <input class="write-input" id="lendFee" placeholder="대여료 (예: 무료, 1만원/1일)" maxlength="30" style="margin-top:16px;">
-    <input class="write-input" id="lendPeriod" placeholder="대여 가능 기간 (예: 최대 3일)" maxlength="30" style="margin-top:8px;">
+    <div id="lendFeeRow" style="margin-top:16px;"><input class="write-input" id="lendFee" placeholder="대여료 (예: 무료, 1만원/1일)" maxlength="30"></div>
+    <div id="lendPeriodRow" style="margin-top:8px;"><input class="write-input" id="lendPeriod" placeholder="대여 가능 기간 (예: 최대 3일)" maxlength="30"></div>
     <textarea class="write-textarea" id="lendDesc" placeholder="물품 상태, 주의사항 등 상세 설명" rows="3"></textarea>
   </div>
 </div>
@@ -1123,9 +1125,18 @@ window.loadCommList = async function(tab) {
       const it = d.data();
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const lostWished = (JSON.parse(localStorage.getItem('wishes_lost_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">찾았어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${it.where} · ${timeAgo(t)}</div><button data-lost-wish-id="${d.id}" onclick="event.stopPropagation();toggleLostWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lostWished?'#FF4757':'#ccc'};">${lostWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" id="lost-card-${d.id}" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLostDetail('${d.id}')"><span class="comm-type lost">🔍 분실물</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">찾았어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${it.where} · ${timeAgo(t)}</div><span id="lost-comment-badge-${d.id}" style="font-size:12px;color:#666;margin-top:4px;display:none;">💬 0</span><button data-lost-wish-id="${d.id}" onclick="event.stopPropagation();toggleLostWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lostWished?'#FF4757':'#ccc'};">${lostWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('commList').innerHTML = html;
+    snap.forEach(d => {
+      getDocs(collection(db, 'lost', d.id, 'comments')).then(cSnap => {
+        const badge = document.getElementById('lost-comment-badge-' + d.id);
+        if (badge && cSnap.size > 0) {
+          badge.textContent = '💬 ' + cSnap.size;
+          badge.style.display = 'inline-block';
+        }
+      });
+    });
   });
 };
 window.submitLost = async function() {
@@ -1336,9 +1347,19 @@ window.loadTalentList = async function(cat) {
       if (cat && it.cat !== cat) return;
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const talentWished = (JSON.parse(localStorage.getItem('wishes_talent_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">완료됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-talent-wish-id="${d.id}" onclick="event.stopPropagation();toggleTalentWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${talentWished?'#FF4757':'#ccc'};">${talentWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" id="talent-card-${d.id}" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTalentDetail('${d.id}')"><span class="comm-type lost" style="background:#FFF0EB;color:#FF6B35;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">완료됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><span id="talent-comment-badge-${d.id}" style="font-size:12px;color:#666;margin-top:4px;display:none;">💬 0</span><button data-talent-wish-id="${d.id}" onclick="event.stopPropagation();toggleTalentWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${talentWished?'#FF4757':'#ccc'};">${talentWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('talentList').innerHTML = html || '<div class="empty-state"><div class="ico">🔧</div><p>해당 카테고리에 등록된 재능이 없어요.</p></div>';
+    snap.forEach(d => {
+      if (cat && d.data().cat !== cat) return;
+      getDocs(collection(db, 'talents', d.id, 'comments')).then(cSnap => {
+        const badge = document.getElementById('talent-comment-badge-' + d.id);
+        if (badge && cSnap.size > 0) {
+          badge.textContent = '💬 ' + cSnap.size;
+          badge.style.display = 'inline-block';
+        }
+      });
+    });
   });
 };
 window.selectTalentCat = function(el, cat) {
@@ -1507,9 +1528,19 @@ window.loadHelpList = async function(cat) {
       if (cat && it.cat !== cat) return;
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const helpWished = (JSON.parse(localStorage.getItem('wishes_help_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">해결됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-help-wish-id="${d.id}" onclick="event.stopPropagation();toggleHelpWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${helpWished?'#FF4757':'#ccc'};">${helpWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" id="help-card-${d.id}" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openHelpDetail('${d.id}')"><span class="comm-type lost" style="background:#EEF4FF;color:#3B6FD4;">${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">해결됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.reward||'보수 협의'}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><span id="help-comment-badge-${d.id}" style="font-size:12px;color:#666;margin-top:4px;display:none;">💬 0</span><button data-help-wish-id="${d.id}" onclick="event.stopPropagation();toggleHelpWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${helpWished?'#FF4757':'#ccc'};">${helpWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('helpList').innerHTML = html || '<div class="empty-state"><div class="ico">🙋</div><p>해당 카테고리에 도움 요청이 없어요.</p></div>';
+    snap.forEach(d => {
+      if (cat && d.data().cat !== cat) return;
+      getDocs(collection(db, 'helps', d.id, 'comments')).then(cSnap => {
+        const badge = document.getElementById('help-comment-badge-' + d.id);
+        if (badge && cSnap.size > 0) {
+          badge.textContent = '💬 ' + cSnap.size;
+          badge.style.display = 'inline-block';
+        }
+      });
+    });
   });
 };
 window.selectHelpCat = function(el, cat) {
@@ -1670,9 +1701,19 @@ window.loadTogetherList = async function() {
       const it = d.data();
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const togetherWished = (JSON.parse(localStorage.getItem('wishes_together_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTogetherDetail('${d.id}')"><span class="comm-type free">🍽️ 공동주문</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">마감됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.store} · ${it.menu}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.price} · 마감 ${it.deadline}</div><div class="comm-meta">${it.nick} · 픽업 ${it.pickup} · ${timeAgo(t)}</div><button data-together-wish-id="${d.id}" onclick="event.stopPropagation();toggleTogetherWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${togetherWished?'#FF4757':'#ccc'};">${togetherWished?'♥':'♡'}</button></div>`;
+      const itemEl = d.id;
+      html += `<div class="comm-item" id="together-card-${d.id}" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openTogetherDetail('${d.id}')"><span class="comm-type free">🍽️ 공동주문</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">마감됐어요</span>':''}<div class="comm-title" style="padding-right:28px;">${it.store} · ${it.menu}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.price} · 마감 ${it.deadline}</div><div class="comm-meta">${it.nick} · 픽업 ${it.pickup} · ${timeAgo(t)}</div><span id="together-comment-badge-${d.id}" style="font-size:12px;color:#666;margin-top:4px;display:none;">💬 0</span><button data-together-wish-id="${d.id}" onclick="event.stopPropagation();toggleTogetherWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${togetherWished?'#FF4757':'#ccc'};">${togetherWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('togetherList').innerHTML = html;
+    snap.forEach(d => {
+      getDocs(collection(db, 'together', d.id, 'comments')).then(cSnap => {
+        const badge = document.getElementById('together-comment-badge-' + d.id);
+        if (badge && cSnap.size > 0) {
+          badge.textContent = '💬 ' + cSnap.size;
+          badge.style.display = 'inline-block';
+        }
+      });
+    });
   });
 };
 window.submitTogether = async function() {
@@ -1818,6 +1859,9 @@ window.submitTogetherComment = async function(itemId) {
   if (!text) { showToast('댓글을 입력해주세요'); return; }
   try {
     await addDoc(collection(db, 'together', itemId, 'comments'), { text, nick: fbProfile.nick, uid: fbUser.uid, createdAt: serverTimestamp() });
+    const snap = await getDoc(doc(db, 'together', itemId));
+    const current = snap.data()?.commentCount || 0;
+    await updateDoc(doc(db, 'together', itemId), { commentCount: current + 1 });
     input.value = '';
   } catch(e) { showToast('등록 실패: '+e.message); }
 };
@@ -1825,6 +1869,9 @@ window.deleteTogetherComment = async function(itemId, commentId) {
   if (!confirm('댓글을 삭제할까요?')) return;
   try {
     await deleteDoc(doc(db, 'together', itemId, 'comments', commentId));
+    const snap = await getDoc(doc(db, 'together', itemId));
+    const current = snap.data()?.commentCount || 0;
+    if (current > 0) await updateDoc(doc(db, 'together', itemId), { commentCount: current - 1 });
     showToast('삭제됐어요');
   } catch(e) { showToast('삭제 실패: '+e.message); }
 };
@@ -1839,12 +1886,22 @@ window.loadLendList = async function(type) {
       if (type && (it.type || 'give') !== type) return;
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const lendType = it.type || 'give';
-      const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : '🔑 빌려드려요';
-      const typeStyle = lendType === 'want' ? 'background:#EEF4FF;color:#3B6FD4;' : 'background:#F0FFF0;color:#2E8B57;';
+      const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : lendType === 'exchange' ? '🔄 교환해요' : '🔑 빌려드려요';
+      const typeStyle = lendType === 'want' ? 'background:#EEF4FF;color:#3B6FD4;' : lendType === 'exchange' ? 'background:#FFF8E1;color:#F59E0B;' : 'background:#F0FFF0;color:#2E8B57;';
       const lendWished = (JSON.parse(localStorage.getItem('wishes_lend_'+(fbUser?.uid||'')) || '[]')).includes(d.id);
-      html += `<div class="comm-item" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLendDetail('${d.id}')"><span class="comm-type lost" style="${typeStyle}">${typeLabel} · ${it.cat}</span>${it.status==='done'?'<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">대여완료</span>':''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.fee||'무료'} · ${it.period}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button data-lend-wish-id="${d.id}" onclick="event.stopPropagation();toggleLendWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lendWished?'#FF4757':'#ccc'};">${lendWished?'♥':'♡'}</button></div>`;
+      html += `<div class="comm-item" id="lend-card-${d.id}" style="position:relative;opacity:${it.status==='done'?'0.65':'1'};" onclick="openLendDetail('${d.id}')"><span class="comm-type lost" style="${typeStyle}">${typeLabel} · ${it.cat}</span>${it.status==='done'?`<span class="badge done" style="margin-left:6px;background:#FF4757;color:white;">${lendType==='exchange'?'교환완료':'대여완료'}</span>`:''}<div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${lendType==='exchange'?'🔄 교환':`${it.fee||'무료'} · ${it.period}`}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><span id="lend-comment-badge-${d.id}" style="font-size:12px;color:#666;margin-top:4px;display:none;">💬 0</span><button data-lend-wish-id="${d.id}" onclick="event.stopPropagation();toggleLendWish('${d.id}',this)" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:${lendWished?'#FF4757':'#ccc'};">${lendWished?'♥':'♡'}</button></div>`;
     });
     document.getElementById('lendList').innerHTML = html || '<div class="empty-state"><div class="ico">🔑</div><p>해당 유형의 물품이 없어요.</p></div>';
+    snap.forEach(d => {
+      if (type && (d.data().type || 'give') !== type) return;
+      getDocs(collection(db, 'lend', d.id, 'comments')).then(cSnap => {
+        const badge = document.getElementById('lend-comment-badge-' + d.id);
+        if (badge && cSnap.size > 0) {
+          badge.textContent = '💬 ' + cSnap.size;
+          badge.style.display = 'inline-block';
+        }
+      });
+    });
   });
 };
 window.selectLendCat = function(el, cat) {
@@ -1856,10 +1913,15 @@ window.selectLendType = function(el, type) {
   document.querySelectorAll('#lendTypeTags .cat-tag').forEach(b => b.classList.remove('on'));
   el.classList.add('on');
   window.selectedLendType = type;
+  const isExchange = type === 'exchange';
+  document.getElementById('lendWriteTitle').textContent = isExchange ? '물물교환 등록' : '물품 대여 등록';
+  document.getElementById('lendFeeRow').style.display = isExchange ? 'none' : 'block';
+  document.getElementById('lendPeriodRow').style.display = isExchange ? 'none' : 'block';
 };
 window.filterLendType = function(el, type) {
   document.querySelectorAll('#lendTypeFilter .comm-tab-btn').forEach(b => b.classList.remove('active'));
   el.classList.add('active');
+  window._currentLendFilter = type;
   loadLendList(type);
 };
 window.submitLend = async function() {
@@ -1870,7 +1932,8 @@ window.submitLend = async function() {
   const desc = document.getElementById('lendDesc').value.trim();
   if (!window.selectedLendType) { showToast('유형을 선택해주세요'); return; }
   if (!window.selectedLendCat) { showToast('카테고리를 선택해주세요'); return; }
-  if (!title || !period) { showToast('물품명과 대여 기간을 입력해주세요'); return; }
+  if (!title) { showToast('물품명을 입력해주세요'); return; }
+  if (window.selectedLendType !== 'exchange' && !period) { showToast('대여 가능 기간을 입력해주세요'); return; }
   showLoading(true);
   try {
     await addDoc(collection(db, 'lend'), {
@@ -1895,9 +1958,10 @@ window.openLendDetail = async function(itemId) {
   const snap = await getDoc(doc(db, 'lend', itemId));
   const it = snap.data();
   const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
-  const typeLabel = (it.type || 'give') === 'want' ? '🙏 빌려주세요' : '🔑 빌려드려요';
+  const lendType = it.type || 'give';
+  const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : lendType === 'exchange' ? '🔄 교환해요' : '🔑 빌려드려요';
   const lendWished2 = (JSON.parse(localStorage.getItem('wishes_lend_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
-  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${typeLabel} · ${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.fee||'무료'} · ${it.period}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="lendCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="lendCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitLendComment('${itemId}');}"></textarea><button onclick="submitLendComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions"><button class="btn-chat" style="background:#333;" onclick="showSection('lendSection')">목록으로</button><button class="btn-wish ${lendWished2?'on':''}" id="lendWishBtn" onclick="toggleLendWishDetail('${itemId}')">${lendWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};" onclick="toggleLendStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?'대여가능으로변경':'대여완료 ✅'}</button><button class="btn-chat" style="background:#555;" onclick="editLend('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;" onclick="deleteLend('${itemId}')">삭제</button>`:`<button class="btn-chat" onclick="startChat('lend_${itemId}','${it.uid}','${it.nick}','${it.title}','${it.fee||'무료'}','🔑')">빌릴게요</button>`}</div>`;
+  document.getElementById('detailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${typeLabel} · ${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div style="font-size:18px;font-weight:700;color:#A51C30;margin-bottom:8px;">${it.fee||'무료'} · ${it.period}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="lendCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="lendCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitLendComment('${itemId}');}"></textarea><button onclick="submitLendComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions" style="flex-wrap:wrap;gap:6px;padding:10px 16px;"><button class="btn-chat" style="background:#333;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="showSection('lendSection')">목록으로</button><button class="btn-wish ${lendWished2?'on':''}" id="lendWishBtn" style="padding:10px 12px;font-size:16px;border-radius:10px;" onclick="toggleLendWishDetail('${itemId}')">${lendWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:${it.status==='done'?'#ccc':'#2E8B57'};font-size:13px;padding:10px 12px;border-radius:10px;" onclick="toggleLendStatus('${itemId}','${it.status||'active'}')">${it.status==='done'?(lendType==='exchange'?'교환가능으로변경':'대여가능으로변경'):(lendType==='exchange'?'교환완료 ✅':'대여완료 ✅')}</button><button class="btn-chat" style="background:#555;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="editLend('${itemId}')">수정</button><button class="btn-chat" style="background:#FF4757;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="deleteLend('${itemId}')">삭제</button>`:`<button class="btn-chat" style="font-size:13px;padding:10px 12px;border-radius:10px;" onclick="startChat('lend_${itemId}','${it.uid}','${it.nick}','${it.title}','${it.fee||'무료'}','🔑')">빌릴게요</button>`}</div>`;
   showLoading(false);
   showSection('detailSection');
   loadLendComments(itemId);
@@ -1911,7 +1975,7 @@ window.editLend = async function(itemId) {
   window.selectedLendType = it.type || 'give';
   window.selectedLendCat = it.cat || '';
   document.querySelectorAll('#lendTypeTags .cat-tag').forEach(b => {
-    b.classList.toggle('on', (b.textContent.includes('빌려드려요') && it.type === 'give') || (b.textContent.includes('빌려주세요') && it.type === 'want'));
+    b.classList.toggle('on', (b.textContent.includes('빌려드려요') && it.type === 'give') || (b.textContent.includes('빌려주세요') && it.type === 'want') || (b.textContent.includes('교환해요') && it.type === 'exchange'));
   });
   document.querySelectorAll('#lendCatTags .cat-tag').forEach(b => {
     b.classList.toggle('on', b.textContent.includes(it.cat));
@@ -1920,6 +1984,10 @@ window.editLend = async function(itemId) {
   document.getElementById('lendFee').value = it.fee || '';
   document.getElementById('lendPeriod').value = it.period || '';
   document.getElementById('lendDesc').value = it.desc || '';
+  const isExchange = (it.type || 'give') === 'exchange';
+  document.getElementById('lendWriteTitle').textContent = isExchange ? '물물교환 등록' : '물품 대여 등록';
+  document.getElementById('lendFeeRow').style.display = isExchange ? 'none' : 'block';
+  document.getElementById('lendPeriodRow').style.display = isExchange ? 'none' : 'block';
   document.querySelector('#lendWriteSection .topbar .btn-primary').onclick = async function() {
     const newTitle = document.getElementById('lendTitle').value.trim();
     const newFee = document.getElementById('lendFee').value.trim();
@@ -2142,6 +2210,20 @@ function showSection(id) {
     document.getElementById('lendFee').value = '';
     document.getElementById('lendPeriod').value = '';
     document.getElementById('lendDesc').value = '';
+    const initType = window._currentLendFilter || '';
+    if (initType === 'exchange') {
+      window.selectedLendType = 'exchange';
+      document.querySelectorAll('#lendTypeTags .cat-tag').forEach(b => {
+        if (b.textContent.includes('교환해요')) b.classList.add('on');
+      });
+      document.getElementById('lendWriteTitle').textContent = '물물교환 등록';
+      document.getElementById('lendFeeRow').style.display = 'none';
+      document.getElementById('lendPeriodRow').style.display = 'none';
+    } else {
+      document.getElementById('lendWriteTitle').textContent = '물품 대여 등록';
+      document.getElementById('lendFeeRow').style.display = 'block';
+      document.getElementById('lendPeriodRow').style.display = 'block';
+    }
   }
 }
 function switchTab(id) {
@@ -2346,8 +2428,8 @@ window.openWishList = async function() {
       const it = snap.data();
       const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
       const lendType = it.type || 'give';
-      const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : '🔑 빌려드려요';
-      const typeStyle = lendType === 'want' ? 'background:#EEF4FF;color:#3B6FD4;' : 'background:#F0FFF0;color:#2E8B57;';
+      const typeLabel = lendType === 'want' ? '🙏 빌려주세요' : lendType === 'exchange' ? '🔄 교환해요' : '🔑 빌려드려요';
+      const typeStyle = lendType === 'want' ? 'background:#EEF4FF;color:#3B6FD4;' : lendType === 'exchange' ? 'background:#FFF8E1;color:#F59E0B;' : 'background:#F0FFF0;color:#2E8B57;';
       html += `<div class="comm-item" style="position:relative;" onclick="openLendDetail('${snap.id}')"><span class="comm-type lost" style="${typeStyle}">${typeLabel}</span><div class="comm-title" style="padding-right:28px;">${it.title}</div><div style="font-size:13px;color:#A51C30;font-weight:600;margin:4px 0;">${it.fee||'무료'} · ${it.period}</div><div class="comm-meta">${it.nick} · ${timeAgo(t)}</div><button onclick="event.stopPropagation();toggleLendWish('${snap.id}',this);this.closest('.comm-item').style.opacity='0.3';setTimeout(()=>this.closest('.comm-item').remove(),400);" style="position:absolute;top:10px;right:10px;background:none;border:none;font-size:20px;cursor:pointer;color:#FF4757;">♥</button></div>`;
     }
     const lostWishes = JSON.parse(localStorage.getItem('wishes_lost_' + window.fbUser.uid) || '[]');
