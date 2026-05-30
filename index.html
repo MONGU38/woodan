@@ -224,7 +224,7 @@ const introTexts = {
       sectionTrade: '거래 활동', sectionSetting: '설정',
       menuItems: '내가 올린 물건', menuTalents: '나의 재능마켓',
       menuHelps: '나의 도움요청', menuWish: '관심 목록',
-      menuChat: '채팅 내역', menuTogether: '함께주문해요', menuLend: '빌려드려요', menuNick: '별명 변경',
+      menuChat: '채팅 내역', menuTogether: '함께주문해요', menuLend: '빌려드려요', menuLosts: '나의 분실물', menuNick: '별명 변경',
       menuLogout: '로그아웃', menuWithdraw: '회원탈퇴',
       writeTitle: '내 물건 팔기', cancel: '← 취소', submit: '등록',
       detailTitle: '상품 상세', nickTitle: '별명 변경',
@@ -259,7 +259,7 @@ const introTexts = {
       sectionTrade: 'Trade Activity', sectionSetting: 'Settings',
       menuItems: 'My Listings', menuTalents: 'My Skills',
       menuHelps: 'My Help Requests', menuWish: 'Wishlist',
-      menuChat: 'Chat History', menuTogether: 'Order Together', menuLend: 'Lend Items', menuNick: 'Change Nickname',
+      menuChat: 'Chat History', menuTogether: 'Order Together', menuLend: 'Lend Items', menuLosts: 'My Lost Items', menuNick: 'Change Nickname',
       menuLogout: 'Logout', menuWithdraw: 'Delete Account',
       writeTitle: 'Sell My Item', cancel: '← Cancel', submit: 'Post',
       detailTitle: 'Item Detail', nickTitle: 'Change Nickname',
@@ -294,7 +294,7 @@ const introTexts = {
       sectionTrade: '取引活動', sectionSetting: '設定',
       menuItems: '出品した商品', menuTalents: '近隣スキル',
       menuHelps: 'お手伝い依頼', menuWish: 'お気に入り',
-      menuChat: 'チャット履歴', menuTogether: '一緒に注文', menuLend: '貸します', menuNick: 'ニックネーム変更',
+      menuChat: 'チャット履歴', menuTogether: '一緒に注文', menuLend: '貸します', menuLosts: '落とし物リスト', menuNick: 'ニックネーム変更',
       menuLogout: 'ログアウト', menuWithdraw: 'アカウント削除',
       writeTitle: '商品を出品する', cancel: '← キャンセル', submit: '登録',
       detailTitle: '商品詳細', nickTitle: 'ニックネーム変更',
@@ -329,7 +329,7 @@ const introTexts = {
       sectionTrade: '交易活动', sectionSetting: '设置',
       menuItems: '我的商品', menuTalents: '我的技能',
       menuHelps: '我的求助', menuWish: '收藏夹',
-      menuChat: '聊天记录', menuTogether: '一起点餐', menuLend: '借给你', menuNick: '修改昵称',
+      menuChat: '聊天记录', menuTogether: '一起点餐', menuLend: '借给你', menuLosts: '我的失物', menuNick: '修改昵称',menuChat: '聊天记录', menuTogether: '一起点餐', menuLend: '借给你', menuLosts: '我的失物', menuNick: '修改昵称',
       menuLogout: '退出登录', menuWithdraw: '注销账号',
       writeTitle: '出售商品', cancel: '← 取消', submit: '发布',
       detailTitle: '商品详情', nickTitle: '修改昵称',
@@ -412,6 +412,7 @@ function setLang(lang) {
   set('my-menu-chat', ui.menuChat);
   set('my-menu-together', ui.menuTogether);
   set('my-menu-lend', ui.menuLend);
+  set('my-menu-losts', ui.menuLosts);
   set('my-menu-nick', ui.menuNick);
   set('my-menu-logout', ui.menuLogout);
   set('my-menu-withdraw', ui.menuWithdraw);
@@ -1500,6 +1501,18 @@ window.deleteTalentComment = async function(itemId, commentId) {
     await deleteDoc(doc(db, 'talents', itemId, 'comments', commentId));
     showToast('삭제됐어요');
   } catch(e) { showToast('삭제 실패: '+e.message); }
+};
+
+window.openTalentDetail = async function(itemId) {
+  showLoading(true);
+  const snap = await getDoc(doc(db, 'talents', itemId));
+  const it = snap.data();
+  const t = it.createdAt?.toDate ? it.createdAt.toDate() : new Date();
+  const talentWished2 = (JSON.parse(localStorage.getItem('wishes_talent_'+(fbUser?.uid||'')) || '[]')).includes(itemId);
+  document.getElementById('talentDetailContent').innerHTML = `<div class="detail-body"><div class="detail-cat">${it.cat}</div><div class="detail-title">${it.title}</div><div class="detail-meta">${it.nick} · ${timeAgo(t)}</div><div class="detail-desc" style="margin-top:12px;">${it.desc||'설명이 없어요.'}</div><div style="margin-top:20px;border-top:1px solid var(--border);padding-top:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">💬 댓글</div><div id="talentCommentList" style="margin-bottom:12px;"></div><div style="display:flex;gap:8px;"><textarea id="talentCommentInput" placeholder="댓글을 입력해주세요" style="flex:1;border:1.5px solid var(--border);border-radius:10px;padding:10px;font-size:14px;resize:none;height:60px;outline:none;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitTalentComment('${itemId}');}"></textarea><button onclick="submitTalentComment('${itemId}')" style="background:var(--orange);color:white;border:none;border-radius:10px;padding:0 16px;font-size:14px;font-weight:600;cursor:pointer;">등록</button></div></div></div><div style="height:140px;"></div><div class="detail-actions" style="flex-wrap:wrap;gap:6px;padding:10px 16px;"><button class="btn-chat" style="background:#333;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="showSection('talentSection')">목록으로</button><button class="btn-wish ${talentWished2?'on':''}" id="talentWishBtn" style="padding:10px 12px;font-size:16px;border-radius:10px;" onclick="toggleTalentWishDetail('${itemId}')">${talentWished2?'♥':'♡'}</button>${fbUser&&fbUser.uid===it.uid?`<button class="btn-chat" style="background:#555;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="editTalent('${itemId}','${it.cat}')">수정</button><button class="btn-chat" style="background:#FF4757;font-size:13px;padding:10px 12px;border-radius:10px;" onclick="deleteTalent('${itemId}')">삭제</button>`:`<button class="btn-chat" style="font-size:13px;padding:10px 12px;border-radius:10px;" onclick="startChat('talent_${itemId}','${it.uid}','${it.nick}','${it.title}','재능마켓','🔧')">채팅하기</button>`}</div>`;
+  showLoading(false);
+  showSection('talentDetailSection');
+  loadTalentComments(itemId);
 };
 
 window.filterHelp = function(el, cat) {
