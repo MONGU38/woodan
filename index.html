@@ -1819,7 +1819,7 @@ window.submitLend = async function() {
   if (!window.selectedLendType) { showToast('유형을 선택해주세요'); return; }
   if (!window.selectedLendCat) { showToast('카테고리를 선택해주세요'); return; }
   if (!title) { showToast('물품명을 입력해주세요'); return; }
-  
+  if (window.selectedLendType !== 'exchange' && !period) { showToast('대여 가능 기간을 입력해주세요'); return; }
   showLoading(true);
   try {
     await addDoc(collection(db, 'lend'), {
@@ -1879,7 +1879,7 @@ window.editLend = async function(itemId) {
     const newFee = document.getElementById('lendFee').value.trim();
     const newPeriod = document.getElementById('lendPeriod').value.trim();
     const newDesc = document.getElementById('lendDesc').value.trim();
-    
+    if (!newTitle || !newPeriod) { showToast('물품명과 대여 기간을 입력해주세요'); return; }
     showLoading(true);
     try {
       await updateDoc(doc(db, 'lend', itemId), { title: newTitle, fee: newFee, period: newPeriod, desc: newDesc, cat: window.selectedLendCat, type: window.selectedLendType });
