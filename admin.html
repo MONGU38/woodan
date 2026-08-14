@@ -9,7 +9,6 @@
 body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:#111;color:#eee;min-height:100vh;}
 .topbar{background:#A51C30;padding:16px 20px;display:flex;align-items:center;gap:12px;}
 .topbar h1{font-size:18px;font-weight:700;color:white;}
-.topbar span{font-size:12px;color:rgba(255,255,255,0.7);}
 .tabs{display:flex;background:#1a1a1a;border-bottom:1px solid #333;overflow-x:auto;}
 .tab{padding:14px 20px;font-size:13px;font-weight:600;color:#888;cursor:pointer;white-space:nowrap;border-bottom:2px solid transparent;}
 .tab.active{color:#A51C30;border-bottom-color:#A51C30;}
@@ -32,28 +31,30 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:#111;color:#
 .badge-done{background:#222;color:#666;}
 .del-btn{background:#FF4757;color:white;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;}
 .loading{text-align:center;padding:40px;color:#666;}
-.access-denied{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;}
-.access-denied h2{font-size:24px;font-weight:700;color:#A51C30;margin-bottom:8px;}
-.access-denied p{color:#666;}
 .danji-tag{font-size:10px;background:#222;color:#aaa;padding:2px 8px;border-radius:10px;margin-left:6px;}
-#accessDenied{display:none;}
+#pwScreen{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;}
 #adminContent{display:none;}
 .empty{text-align:center;padding:40px;color:#555;font-size:14px;}
 </style>
 </head>
 <body>
 
-<div id="accessDenied" class="access-denied">
-  <h2>🚫 접근 거부</h2>
-  <p>관리자만 접근할 수 있어요.</p>
+<div id="pwScreen">
+  <h2 style="font-size:22px;font-weight:800;color:#A51C30;margin-bottom:28px;">🏠 우단앱 관리자</h2>
+  <input type="password" id="pwInput" maxlength="4" inputmode="numeric" placeholder="0000"
+    style="border:1.5px solid #333;border-radius:10px;padding:16px 20px;font-size:28px;text-align:center;background:#1a1a1a;color:#eee;outline:none;width:160px;letter-spacing:10px;"
+    onkeydown="if(event.key==='Enter')checkPw()">
+  <button onclick="checkPw()"
+    style="margin-top:16px;background:#A51C30;color:white;border:none;border-radius:10px;padding:14px 48px;font-size:16px;font-weight:700;cursor:pointer;">
+    입력
+  </button>
+  <p id="pwError" style="color:#FF4757;font-size:13px;margin-top:14px;display:none;">비번이 틀렸어요</p>
 </div>
 
 <div id="adminContent">
   <div class="topbar">
     <h1>🏠 우단앱 관리자</h1>
-    <span id="adminEmail"></span>
   </div>
-
   <div class="tabs">
     <div class="tab active" onclick="switchTab('items')">거래</div>
     <div class="tab" onclick="switchTab('talents')">재능마켓</div>
@@ -63,9 +64,8 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:#111;color:#
     <div class="tab" onclick="switchTab('lend')">빌려드려요</div>
     <div class="tab" onclick="switchTab('users')">회원</div>
   </div>
-
   <div class="content">
-    <div class="stats" id="statsRow">
+    <div class="stats">
       <div class="stat-card"><div class="stat-num" id="stat-items">-</div><div class="stat-lbl">거래글</div></div>
       <div class="stat-card"><div class="stat-num" id="stat-users">-</div><div class="stat-lbl">회원수</div></div>
       <div class="stat-card"><div class="stat-num" id="stat-danji">-</div><div class="stat-lbl">단지수</div></div>
@@ -77,10 +77,9 @@ body{font-family:-apple-system,'Noto Sans KR',sans-serif;background:#111;color:#
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 import { getFirestore, collection, getDocs, deleteDoc, doc, orderBy, query } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
-const ADMIN_UID = 'euG6JLgvUWZMf6QAYLvEd1eZuNW2';
+const ADMIN_PW = '1234';
 
 const firebaseConfig = {
   apiKey: "AIzaSyBZwxLXSTjkZkOJt7nKkcxd5j8gulKF5Yk",
@@ -92,23 +91,23 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
 let currentTab = 'items';
 let allData = [];
 let currentFilter = '';
 
-onAuthStateChanged(auth, async (user) => {
-  if (!user || user.uid !== ADMIN_UID) {
-    document.getElementById('accessDenied').style.display = 'flex';
-    return;
+window.checkPw = function() {
+  const input = document.getElementById('pwInput').value.trim();
+  if (input === ADMIN_PW) {
+    document.getElementById('pwScreen').style.display = 'none';
+    document.getElementById('adminContent').style.display = 'block';
+    loadStats();
+    loadTab('items');
+  } else {
+    document.getElementById('pwError').style.display = 'block';
   }
-  document.getElementById('adminContent').style.display = 'block';
-  document.getElementById('adminEmail').textContent = user.email;
-  loadStats();
-  loadTab('items');
-});
+};
 
 async function loadStats() {
   const [itemsSnap, usersSnap] = await Promise.all([
@@ -133,13 +132,10 @@ window.switchTab = function(tab) {
 async function loadTab(tab) {
   document.getElementById('listArea').innerHTML = '<div class="loading">로딩중...</div>';
   document.getElementById('filterRow').innerHTML = '';
-  
   try {
     const snap = await getDocs(query(collection(db, tab), orderBy('createdAt', 'desc')));
     allData = [];
     snap.forEach(d => allData.push({ id: d.id, ...d.data() }));
-
-    // 단지 필터 생성
     const danjiSet = new Set(allData.map(d => d.danji).filter(Boolean));
     const filterRow = document.getElementById('filterRow');
     filterRow.innerHTML = `<button class="filter-btn active" onclick="applyFilter('')">전체 (${allData.length})</button>`;
@@ -147,7 +143,6 @@ async function loadTab(tab) {
       const count = allData.filter(d => d.danji === danji).length;
       filterRow.innerHTML += `<button class="filter-btn" onclick="applyFilter('${danji}')">${danji.substring(0,10)} (${count})</button>`;
     });
-
     renderList(allData, tab);
   } catch(e) {
     document.getElementById('listArea').innerHTML = `<div class="empty">오류: ${e.message}</div>`;
@@ -173,92 +168,24 @@ function timeAgo(ts) {
 }
 
 function renderList(data, tab) {
-  if (!data.length) {
-    document.getElementById('listArea').innerHTML = '<div class="empty">데이터 없음</div>';
-    return;
-  }
-
+  if (!data.length) { document.getElementById('listArea').innerHTML = '<div class="empty">데이터 없음</div>'; return; }
   let html = '';
   data.forEach(it => {
     if (tab === 'items') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.title||''}</div>
-            <div class="card-meta">${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-        <div class="card-price">${it.isFree?'나눔':(it.price||0).toLocaleString()+'원'}</div>
-        <div style="margin-top:6px;"><span class="badge ${it.status==='sale'?'badge-sale':'badge-done'}">${it.status==='sale'?'판매중':'거래완료'}</span></div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.title||''}</div><div class="card-meta">${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div><div class="card-price">${it.isFree?'나눔':(it.price||0).toLocaleString()+'원'}</div><div style="margin-top:6px;"><span class="badge ${it.status==='sale'?'badge-sale':'badge-done'}">${it.status==='sale'?'판매중':'거래완료'}</span></div></div>`;
     } else if (tab === 'users') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||'단지없음'}</div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.nick||''}</div>
-            <div class="card-meta">${it.sido||''} ${it.sigungu||''} · 가입 ${timeAgo(it.createdAt)}</div>
-          </div>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||'단지없음'}</div><div class="card-header"><div><div class="card-title">${it.nick||''}</div><div class="card-meta">${it.sido||''} ${it.sigungu||''} · 가입 ${timeAgo(it.createdAt)}</div></div></div></div>`;
     } else if (tab === 'talents') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.title||''}</div>
-            <div class="card-meta">${it.cat||''} · ${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.title||''}</div><div class="card-meta">${it.cat||''} · ${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div></div>`;
     } else if (tab === 'helps') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.title||''}</div>
-            <div class="card-meta">${it.cat||''} · ${it.reward||'보수협의'} · ${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.title||''}</div><div class="card-meta">${it.cat||''} · ${it.reward||'보수협의'} · ${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div></div>`;
     } else if (tab === 'lost') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.title||''}</div>
-            <div class="card-meta">${it.where||''} · ${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.title||''}</div><div class="card-meta">${it.where||''} · ${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div></div>`;
     } else if (tab === 'together') {
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.store||''} · ${it.menu||''}</div>
-            <div class="card-meta">${it.price||''} · 마감 ${it.deadline||''} · ${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.store||''} · ${it.menu||''}</div><div class="card-meta">${it.price||''} · 마감 ${it.deadline||''} · ${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div></div>`;
     } else if (tab === 'lend') {
       const typeLabel = it.type==='want'?'🙏 빌려주세요':it.type==='exchange'?'🔄 교환해요':'🔑 빌려드려요';
-      html += `<div class="card">
-        <div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div>
-        <div class="card-header">
-          <div>
-            <div class="card-title">${it.title||''}</div>
-            <div class="card-meta">${typeLabel} · ${it.cat||''} · ${timeAgo(it.createdAt)}</div>
-          </div>
-          <button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button>
-        </div>
-      </div>`;
+      html += `<div class="card"><div class="card-danji">${it.danji||''} <span class="danji-tag">${it.nick||''}</span></div><div class="card-header"><div><div class="card-title">${it.title||''}</div><div class="card-meta">${typeLabel} · ${it.cat||''} · ${timeAgo(it.createdAt)}</div></div><button class="del-btn" onclick="deleteItem('${it.id}','${tab}')">삭제</button></div></div>`;
     }
   });
   document.getElementById('listArea').innerHTML = html;
