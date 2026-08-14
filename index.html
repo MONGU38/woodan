@@ -691,6 +691,32 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
   </div>
 </div>
 
+<!-- ADMIN -->
+<div id="adminSection" class="section">
+  <div class="topbar">
+    <button class="icon-btn" onclick="showSection('mypageSection')">←</button>
+    <span class="topbar-title">관리자</span>
+  </div>
+  <div style="padding:16px;">
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;">
+      <div style="background:#fff;border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border);"><div style="font-size:24px;font-weight:800;color:var(--orange);" id="adm-stat-items">-</div><div style="font-size:11px;color:var(--text3);margin-top:4px;">거래글</div></div>
+      <div style="background:#fff;border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border);"><div style="font-size:24px;font-weight:800;color:var(--orange);" id="adm-stat-users">-</div><div style="font-size:11px;color:var(--text3);margin-top:4px;">회원수</div></div>
+      <div style="background:#fff;border-radius:12px;padding:16px;text-align:center;border:1px solid var(--border);"><div style="font-size:24px;font-weight:800;color:var(--orange);" id="adm-stat-danji">-</div><div style="font-size:11px;color:var(--text3);margin-top:4px;">단지수</div></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;" id="adm-tabs">
+      <button class="comm-tab-btn active" onclick="admSwitchTab(this,'items')">거래</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'talents')">재능마켓</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'helps')">도움요청</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'lost')">분실물</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'together')">공동주문</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'lend')">빌려드려요</button>
+      <button class="comm-tab-btn" onclick="admSwitchTab(this,'users')">회원</button>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;" id="adm-filter"></div>
+    <div id="adm-list"><div class="empty-state"><div class="ico">⏳</div><p>로딩중...</p></div></div>
+  </div>
+</div>
+
 <!-- MYPAGE -->
 <div id="mypageSection" class="section">
   <div class="my-header">
@@ -714,7 +740,7 @@ document.addEventListener('DOMContentLoaded', function() { setLang('ko'); });
     <div class="menu-item" onclick="showSection('nickSection')"><span class="menu-ico">✏️</span><span class="menu-txt" id="my-menu-nick">별명 변경</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="fbLogout()"><span class="menu-ico">🚪</span><span class="menu-txt" id="my-menu-logout" style="color:#FF4757;">로그아웃</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="fbWithdraw()"><span class="menu-ico">❌</span><span class="menu-txt" id="my-menu-withdraw" style="color:#FF4757;">회원탈퇴</span><span class="menu-arrow">›</span></div>
-    <div class="menu-item" onclick="openAdmin()" style="opacity:0.3;"><span class="menu-ico">⚙️</span><span class="menu-txt" style="color:#999;">관리자</span><span class="menu-arrow">›</span></div>
+    <div class="menu-item" onclick="openAdmin()"><span class="menu-ico">⚙️</span><span class="menu-txt" style="color:#999;">관리자</span><span class="menu-arrow">›</span></div>
     <div class="menu-item" onclick="navigator.clipboard.writeText('fbi1588@hanmail.net').then(()=>showToast('이메일 주소가 복사됐어요 📋'))"><span class="menu-ico">✉️</span><span class="menu-txt">이의 제기 · fbi1588@hanmail.net</span><span class="menu-arrow">📋</span></div>
   </div>
 </div>
@@ -2018,14 +2044,14 @@ window.addEventListener('popstate', function() {
     switchTab('chatSection');
     return;
   }
-  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','myLostsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherWriteSection','togetherSection','lendWriteSection','lendSection','chatSection','mypageSection','mainSection'];
+  const sections = ['talentDetailSection','talentWriteSection','lostWriteSection','myTalentsSection','myItemsSection','myLostsSection','wishSection','nickSection','detailSection','writeSection','talentSection','commSection','togetherWriteSection','togetherSection','lendWriteSection','lendSection','chatSection','adminSection','mypageSection','mainSection'];
   for (const id of sections) {
     const el = document.getElementById(id);
     if (el && el.classList.contains('active')) {
       if (id === 'talentDetailSection') { showSection('talentSection'); return; }
       if (id === 'talentWriteSection') { showSection('talentSection'); return; }
       if (id === 'lostWriteSection') { showSection('commSection'); return; }
-      if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection' || id === 'myLostsSection') { showSection('mypageSection'); return; }
+      if (id === 'myTalentsSection' || id === 'myItemsSection' || id === 'wishSection' || id === 'nickSection' || id === 'myLostsSection' || id === 'adminSection') { showSection('mypageSection'); return; }
       if (id === 'detailSection' || id === 'writeSection') { showSection('mainSection'); return; }
       if (id === 'togetherWriteSection') { showSection('togetherSection'); return; }
       if (id === 'lendWriteSection') { showSection('lendSection'); return; }
@@ -2331,7 +2357,104 @@ window.openWishList = async function() {
   showLoading(false);
 };
 window.openAdmin = function() {
-  window.open('admin.html', '_blank');
+  const pw = prompt('관리자 비번 4자리:');
+  if (pw === '1234') {
+    showSection('adminSection');
+    admLoadStats();
+    admLoadTab('items');
+  } else {
+    showToast('비번이 틀렸어요');
+  }
+};
+
+let admCurrentTab = 'items';
+let admAllData = [];
+let admCurrentFilter = '';
+
+window.admSwitchTab = function(el, tab) {
+  admCurrentTab = tab;
+  admCurrentFilter = '';
+  document.querySelectorAll('#adm-tabs .comm-tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  admLoadTab(tab);
+};
+
+window.admLoadStats = async function() {
+  const [itemsSnap, usersSnap] = await Promise.all([
+    window._fbGetDocs(window._fbQuery(window._fbCollection(window._db, 'items'))),
+    window._fbGetDocs(window._fbQuery(window._fbCollection(window._db, 'users')))
+  ]);
+  document.getElementById('adm-stat-items').textContent = itemsSnap.size;
+  document.getElementById('adm-stat-users').textContent = usersSnap.size;
+  const danjiSet = new Set();
+  usersSnap.forEach(d => { if(d.data().danjiKey) danjiSet.add(d.data().danjiKey); });
+  document.getElementById('adm-stat-danji').textContent = danjiSet.size;
+};
+
+window.admLoadTab = async function(tab) {
+  document.getElementById('adm-list').innerHTML = '<div class="empty-state"><div class="ico">⏳</div><p>로딩중...</p></div>';
+  document.getElementById('adm-filter').innerHTML = '';
+  try {
+    const snap = await window._fbGetDocs(window._fbQuery(window._fbCollection(window._db, tab), window._fbOrderBy('createdAt', 'desc')));
+    admAllData = [];
+    snap.forEach(d => admAllData.push({ id: d.id, ...d.data() }));
+    const danjiSet = new Set(admAllData.map(d => d.danji).filter(Boolean));
+    let filterHtml = `<button class="comm-tab-btn active" onclick="admApplyFilter('')">전체 (${admAllData.length})</button>`;
+    danjiSet.forEach(danji => {
+      const count = admAllData.filter(d => d.danji === danji).length;
+      filterHtml += `<button class="comm-tab-btn" onclick="admApplyFilter('${danji}')">${danji.substring(0,8)} (${count})</button>`;
+    });
+    document.getElementById('adm-filter').innerHTML = filterHtml;
+    admRenderList(admAllData, tab);
+  } catch(e) {
+    document.getElementById('adm-list').innerHTML = `<div class="empty-state"><div class="ico">❌</div><p>오류: ${e.message}</p></div>`;
+  }
+};
+
+window.admApplyFilter = function(danji) {
+  admCurrentFilter = danji;
+  document.querySelectorAll('#adm-filter .comm-tab-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  const filtered = danji ? admAllData.filter(d => d.danji === danji) : admAllData;
+  admRenderList(filtered, admCurrentTab);
+};
+
+window.admRenderList = function(data, tab) {
+  if (!data.length) { document.getElementById('adm-list').innerHTML = '<div class="empty-state"><div class="ico">📭</div><p>데이터 없음</p></div>'; return; }
+  function timeAgo(ts) { if(!ts) return ''; const date=ts.toDate?ts.toDate():new Date(ts); const s=Math.floor((Date.now()-date)/1000); if(s<60) return '방금'; if(s<3600) return Math.floor(s/60)+'분 전'; if(s<86400) return Math.floor(s/3600)+'시간 전'; return Math.floor(s/86400)+'일 전'; }
+  let html = '';
+  data.forEach(it => {
+    const delBtn = tab !== 'users' ? `<button onclick="admDelete('${it.id}','${tab}')" style="background:#FF4757;color:white;border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0;">삭제</button>` : '';
+    let title = '', meta = '';
+    if (tab==='items') { title=it.title||''; meta=`${it.isFree?'나눔':(it.price||0).toLocaleString()+'원'} · ${it.status==='sale'?'판매중':'거래완료'} · ${timeAgo(it.createdAt)}`; }
+    else if (tab==='users') { title=it.nick||''; meta=`${it.sido||''} ${it.sigungu||''} · 가입 ${timeAgo(it.createdAt)}`; }
+    else if (tab==='talents') { title=it.title||''; meta=`${it.cat||''} · ${timeAgo(it.createdAt)}`; }
+    else if (tab==='helps') { title=it.title||''; meta=`${it.cat||''} · ${it.reward||'보수협의'} · ${timeAgo(it.createdAt)}`; }
+    else if (tab==='lost') { title=it.title||''; meta=`${it.where||''} · ${timeAgo(it.createdAt)}`; }
+    else if (tab==='together') { title=`${it.store||''} · ${it.menu||''}`; meta=`${it.price||''} · 마감 ${it.deadline||''} · ${timeAgo(it.createdAt)}`; }
+    else if (tab==='lend') { const tl=it.type==='want'?'빌려주세요':it.type==='exchange'?'교환해요':'빌려드려요'; title=it.title||''; meta=`${tl} · ${it.cat||''} · ${timeAgo(it.createdAt)}`; }
+    html += `<div class="comm-item" style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:11px;color:var(--orange);font-weight:600;margin-bottom:3px;">${it.danji||''} <span style="font-size:10px;background:var(--border);color:var(--text3);padding:1px 6px;border-radius:8px;margin-left:4px;">${it.nick||''}</span></div>
+        <div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${title}</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:2px;">${meta}</div>
+      </div>
+      ${delBtn}
+    </div>`;
+  });
+  document.getElementById('adm-list').innerHTML = html;
+};
+
+window.admDelete = async function(id, tab) {
+  if (!confirm('삭제할까요?')) return;
+  try {
+    await deleteDoc(doc(db, tab, id));
+    admAllData = admAllData.filter(d => d.id !== id);
+    const filtered = admCurrentFilter ? admAllData.filter(d => d.danji === admCurrentFilter) : admAllData;
+    admRenderList(filtered, tab);
+    admLoadStats();
+    showToast('삭제됐어요');
+  } catch(e) { showToast('삭제 실패: '+e.message); }
 };
 window.changeNick = async function() {
   const newNick = document.getElementById('newNick').value.trim();
